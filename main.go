@@ -28,7 +28,6 @@ import (
 
 var log *golog.Logger
 
-
 func init() {
 	viper.SetConfigName("config.local")
 	viper.SetConfigType("yaml")
@@ -50,13 +49,10 @@ func main() {
 	log.Info("config file is: ")
 	log.Info(string(configString))
 
-
 	// register controller
 	app := iris.New()
-	service := service2.NewService(cfg)
-	controller.NewController(app, service)
+	networkService := service2.NewNetworkService(cfg)
+	controller.NewController(app, networkService)
 	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Rosetta.Host, cfg.Rosetta.Port)))
 
 }
-
-

@@ -18,19 +18,19 @@ package controller
 
 import (
 	service2 "github.com/Zilliqa/zilliqa-rosetta/service"
+	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/iris"
 )
 
-
 type Controller struct {
-	app     *iris.Application
-	service *service2.Service
+	app            *iris.Application
+	networkService *service2.NetWorkService
 }
 
-func NewController(app *iris.Application, service *service2.Service) *Controller {
+func NewController(app *iris.Application, networkService *service2.NetWorkService) *Controller {
 	c := &Controller{
-		app:     app,
-		service: service,
+		app:            app,
+		networkService: networkService,
 	}
 
 	app.Get("/ping", func(ctx iris.Context) {
@@ -38,5 +38,23 @@ func NewController(app *iris.Application, service *service2.Service) *Controller
 			"message": "pong",
 		})
 	})
+
+	app.Post("/network/list", c.NetworkList)
 	return c
+}
+
+// Get List of Available Networks
+func (c *Controller) NetworkList(ctx iris.Context) {
+	var req types.MetadataRequest
+
+	if err := ctx.ReadJSON(&req); err != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+	_, _ = ctx.JSON(&types.NetworkListResponse{NetworkIdentifiers: c.networkService.Networks})
 }

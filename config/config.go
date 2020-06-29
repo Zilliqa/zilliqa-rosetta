@@ -22,20 +22,19 @@ import (
 )
 
 type Rosetta struct {
-	Host string
-	Port int
+	Host    string
+	Port    int
 	Version string
 }
 
 type Network struct {
-	Type string
-	API string
+	Type    string
+	API     string
 	ChainId int
 }
 
-
 type Config struct {
-	Rosetta Rosetta
+	Rosetta  Rosetta
 	Networks []Network
 }
 
@@ -52,18 +51,18 @@ func ParseConfig() (*Config, error) {
 		api := v["api"].(string)
 		chainId := v["chainid"].(int)
 		nw := Network{
-			Type: key,
+			Type:    key,
 			API:     api,
 			ChainId: chainId,
 		}
 
-		networks = append(networks,nw)
+		networks = append(networks, nw)
 	}
 
-	r := Rosetta{Host: host,Port: port,Version: version}
+	r := Rosetta{Host: host, Port: port, Version: version}
 
 	return &Config{
-		r,networks,
+		r, networks,
 	}, nil
 }
 
