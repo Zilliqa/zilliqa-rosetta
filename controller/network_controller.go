@@ -22,13 +22,13 @@ import (
 	"github.com/kataras/iris"
 )
 
-type Controller struct {
+type NetworkController struct {
 	app            *iris.Application
 	networkService *service2.NetWorkService
 }
 
-func NewController(app *iris.Application, networkService *service2.NetWorkService) *Controller {
-	c := &Controller{
+func NewNetworkController(app *iris.Application, networkService *service2.NetWorkService) *NetworkController {
+	c := &NetworkController{
 		app:            app,
 		networkService: networkService,
 	}
@@ -44,7 +44,7 @@ func NewController(app *iris.Application, networkService *service2.NetWorkServic
 }
 
 // Get List of Available Networks
-func (c *Controller) NetworkList(ctx iris.Context) {
+func (c *NetworkController) NetworkList(ctx iris.Context) {
 	var req types.MetadataRequest
 
 	if err := ctx.ReadJSON(&req); err != nil {

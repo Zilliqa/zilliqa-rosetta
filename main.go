@@ -52,7 +52,7 @@ func main() {
 	// register controller
 	app := iris.New()
 	networkService := service2.NewNetworkService(cfg)
-	controller.NewController(app, networkService)
+	controller.NewNetworkController(app, networkService)
 	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Rosetta.Host, cfg.Rosetta.Port)))
 
 }
