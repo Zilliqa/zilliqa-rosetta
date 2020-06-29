@@ -48,6 +48,51 @@ Based on rosetta protocol, zilliqa-rosetta node provides following Restful APIs:
 
 ### Network
 
+**/network/list**
+
+*Get List of Available Networks*
+
+Request:
+
+```json
+{
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "network_identifiers": [
+        {
+            "blockchain": "zilliqa",
+            "network": "testnet",
+            "sub_network_identifier": {
+                "network": "",
+                "metadata": {
+                    "api": "https://dev-api.zilliqa.com",
+                    "chainId": 333
+                }
+            }
+        },
+        {
+            "blockchain": "zilliqa",
+            "network": "mainnet",
+            "sub_network_identifier": {
+                "network": "",
+                "metadata": {
+                    "api": "https://api.zilliqa.com",
+                    "chainId": 1
+                }
+            }
+        }
+    ]
+}
+```
+
 ### Account
 
 ### Block
