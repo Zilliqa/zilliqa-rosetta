@@ -20,28 +20,34 @@ rosetta:
  host: "0.0.0.0"
  port: 8080
  version: "1.3.1"
+ middleware_version: "0.0.1"
+
 networks:
  mainnet:
     api: "https://api.zilliqa.com"
-    chainid: 1
+    chain_id: 1
+    node_version: "v6.3.0-alpha.0"
  testnet:
     api: "https://dev-api.zilliqa.com"
-    chainid: 333
+    chain_id: 333
+    node_version: "v6.3.0-alpha.0"
 ```
 
 * rosetta:
   * host: rosetta restful api host
   * port: resetta restful api port
   * version: rosetta sdk version
+  * middleware_version: middleware version
 * networks:
   * mainnet:
     * api: api endpoint of mainnet
-    * chainid: chainid of mainnet
+    * chain_id: chain id of mainnet
+    * node_version: zilliqa node verion
   * testnet:
     * api: api endpoint of community testnet
-    * chainid: chainid of community testnet
-
-
+    * chain_id: chain id of community testnet
+    * node_version: zilliqa node verion
+    
 ## Restful API
 
 Based on rosetta protocol, zilliqa-rosetta node provides following Restful APIs:
