@@ -55,7 +55,7 @@ func main() {
 	app := iris.New()
 	service := service2.NewService(cfg)
 	controller.NewController(app, service)
-	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)))
+	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Rosetta.Host, cfg.Rosetta.Port)))
 
 }
 

@@ -16,12 +16,30 @@ sh ./build_docker.sh
 The default configuration file is config.local.yaml
 
 ```shell script
-Host: "0.0.0.0"
-Port: 8080
+rosetta:
+ host: "0.0.0.0"
+ port: 8080
+ version: "1.3.1"
+networks:
+ mainnet:
+    api: "https://api.zilliqa.com"
+    chainid: 1
+ testnet:
+    api: "https://dev-api.zilliqa.com"
+    chainid: 333
 ```
 
-* Host : rosetta restful api host
-* Port : resetta restful api port
+* rosetta:
+  * host: rosetta restful api host
+  * port: resetta restful api port
+  * version: rosetta sdk version
+* networks:
+  * mainnet:
+    * api: api endpoint of mainnet
+    * chainid: chainid of mainnet
+  * testnet:
+    * api: api endpoint of community testnet
+    * chainid: chainid of community testnet
 
 
 ## Restful API
