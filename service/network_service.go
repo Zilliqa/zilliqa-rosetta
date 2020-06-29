@@ -23,6 +23,7 @@ import (
 
 type NetWorkService struct {
 	Networks []*types.NetworkIdentifier
+	Config   *config.Config
 }
 
 func NewNetworkService(cfg *config.Config) *NetWorkService {
@@ -43,5 +44,25 @@ func NewNetworkService(cfg *config.Config) *NetWorkService {
 	}
 	return &NetWorkService{
 		Networks: networks,
+		Config:   cfg,
 	}
+}
+
+func (s NetWorkService) ContainsIdentifier(identifier *types.NetworkIdentifier) bool {
+	for _, network := range s.Networks {
+		if network.Blockchain == identifier.Blockchain && network.Network == identifier.Network {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (s NetWorkService) NodeVersion(network string) string {
+	for _, nw := range s.Config.Networks {
+		if nw.Type == network {
+			return nw.NodeVersion
+		}
+	}
+	return ""
 }

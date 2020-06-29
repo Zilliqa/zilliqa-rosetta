@@ -17,6 +17,7 @@
 package controller
 
 import (
+	"github.com/Zilliqa/zilliqa-rosetta/config"
 	service2 "github.com/Zilliqa/zilliqa-rosetta/service"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/iris"
@@ -40,6 +41,7 @@ func NewNetworkController(app *iris.Application, networkService *service2.NetWor
 	})
 
 	app.Post("/network/list", c.NetworkList)
+	app.Post("/network/options", c.NetworkOptions)
 	return c
 }
 
@@ -57,4 +59,70 @@ func (c *NetworkController) NetworkList(ctx iris.Context) {
 		return
 	}
 	_, _ = ctx.JSON(&types.NetworkListResponse{NetworkIdentifiers: c.networkService.Networks})
+}
+
+// Get Network Options
+func (c *NetworkController) NetworkOptions(ctx iris.Context)  {
+	var req types.NetworkRequest
+
+	if err := ctx.ReadJSON(&req); err != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+
+	if !c.networkService.ContainsIdentifier(req.NetworkIdentifier) {
+		_, _ = ctx.JSON(&config.NETWORK_IDENTIFIER_ERROR)
+		return
+	}
+
+	version := &types.Version{
+		RosettaVersion:    c.networkService.Config.Rosetta.Version,
+		NodeVersion:       c.networkService.NodeVersion(req.NetworkIdentifier.Network),
+		MiddlewareVersion: nil,
+		Metadata:          nil,
+	}
+
+	optstatus := []*types.OperationStatus{
+		config.STATUS_SUCCESS,
+		config.STATUS_FAILED,
+	}
+
+	operationTypes := []string{config.OP_TYPE_TRANSFER}
+
+	errors := []*types.Error{
+		config.NETWORK_IDENTIFIER_ERROR,
+		config.BLOCK_IDENTIFIER_NIL,
+		config.BLOCK_NUMBER_INVALID,
+		config.GET_BLOCK_FAILED,
+		config.BLOCK_HASH_INVALID,
+		config.GET_TRANSACTION_FAILED,
+		config.SIGNED_TX_INVALID,
+		config.COMMIT_TX_FAILED,
+		config.TXHASH_INVALID,
+		config.UNKNOWN_BLOCK,
+		config.SERVER_NOT_SUPPORT,
+		config.ADDRESS_INVALID,
+		config.BALANCE_ERROR,
+		config.PARSE_INT_ERROR,
+		config.JSON_MARSHAL_ERROR,
+		config.INVALID_PAYLOAD,
+		config.CURRENCY_NOT_CONFIG,
+		config.PARAMS_ERROR,
+		config.CONTRACT_ADDRESS_ERROR,
+		config.PRE_EXECUTE_ERROR,
+		config.QUERY_BALANCE_ERROR,
+	}
+
+	allow := &types.Allow{
+		OperationStatuses: optstatus,
+		OperationTypes:    operationTypes,
+		Errors:            errors,
+	}
+
+	_, _ = ctx.JSON(&types.NetworkOptionsResponse{Version: version, Allow: allow})
 }
