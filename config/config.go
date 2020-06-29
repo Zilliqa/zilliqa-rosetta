@@ -22,9 +22,13 @@ import (
 )
 
 type Rosetta struct {
-	Host    string
-	Port    int
+	Host string
+	Port int
+	// rosetta sepc version
 	Version string
+	// zilliqa node version
+	NodeVersion   string
+	MiddleVersion string
 }
 
 type Network struct {
@@ -43,13 +47,15 @@ func ParseConfig() (*Config, error) {
 	host := rosetta["host"].(string)
 	port := rosetta["port"].(int)
 	version := rosetta["version"].(string)
+	nodeVersion := rosetta["node_version"].(string)
+	middleVersion := rosetta["middleware_version"].(string)
 
 	var networks []Network
 	nws := viper.Get("networks").(map[string]interface{})
 	for key, value := range nws {
 		v := value.(map[string]interface{})
 		api := v["api"].(string)
-		chainId := v["chainid"].(int)
+		chainId := v["chain_id"].(int)
 		nw := Network{
 			Type:    key,
 			API:     api,
@@ -59,7 +65,7 @@ func ParseConfig() (*Config, error) {
 		networks = append(networks, nw)
 	}
 
-	r := Rosetta{Host: host, Port: port, Version: version}
+	r := Rosetta{Host: host, Port: port, Version: version, NodeVersion: nodeVersion, MiddleVersion: middleVersion}
 
 	return &Config{
 		r, networks,
