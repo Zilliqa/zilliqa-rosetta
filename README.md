@@ -289,6 +289,53 @@ Sample
 
 ### Account
 
+**/account/balance**
+
+*Get an Account Balance*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+        }
+    },
+    "account_identifier": {
+        "address": "2141bf8b6d2213d4d7204e2ddab92653dc245c5f",
+        "sub_account": {
+        },
+        "metadata": {}
+    },
+    "block_identifier": {
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "block_identifier": {
+        "index": 0,
+        "hash": ""
+    },
+    "balances": [
+        {
+            "value": "979976864000000000",
+            "currency": {
+                "symbol": "ZIL",
+                "decimals": 12
+            }
+        }
+    ]
+}
+```
+
 ### Block
 
 ### Construction
