@@ -164,7 +164,7 @@ var (
 	}
 )
 
-const OP_TYPE_TRANSFER = "transfer"
+const OpTypeTransfer = "transfer"
 
 type Rosetta struct {
 	Host string

@@ -94,7 +94,7 @@ func (c *NetworkController) NetworkOptions(ctx iris.Context) {
 		config.StatusFailed,
 	}
 
-	operationTypes := []string{config.OP_TYPE_TRANSFER}
+	operationTypes := []string{config.OpTypeTransfer}
 
 	errors := []*types.Error{
 		config.NetworkIdentifierError,
