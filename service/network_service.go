@@ -23,7 +23,7 @@ import (
 
 type NetWorkService struct {
 	Networks []*types.NetworkIdentifier
-	Config   *config.Config
+	Service
 }
 
 func NewNetworkService(cfg *config.Config) *NetWorkService {
@@ -44,7 +44,9 @@ func NewNetworkService(cfg *config.Config) *NetWorkService {
 	}
 	return &NetWorkService{
 		Networks: networks,
-		Config:   cfg,
+		Service: Service{
+			Config: cfg,
+		},
 	}
 }
 
@@ -62,6 +64,15 @@ func (s NetWorkService) NodeVersion(network string) string {
 	for _, nw := range s.Config.Networks {
 		if nw.Type == network {
 			return nw.NodeVersion
+		}
+	}
+	return ""
+}
+
+func (s NetWorkService) NodeAPI(network string) string {
+	for _, nw := range s.Config.Networks {
+		if nw.Type == network {
+			return nw.API
 		}
 	}
 	return ""

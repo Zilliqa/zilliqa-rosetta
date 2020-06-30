@@ -17,22 +17,23 @@
 package controller
 
 import (
+	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	service2 "github.com/Zilliqa/zilliqa-rosetta/service"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/iris"
+	"strconv"
 )
 
 type NetworkController struct {
-	app            *iris.Application
-	networkService *service2.NetWorkService
+	Controller
 }
 
 func NewNetworkController(app *iris.Application, networkService *service2.NetWorkService) *NetworkController {
-	c := &NetworkController{
-		app:            app,
-		networkService: networkService,
-	}
+	c := &NetworkController{Controller{
+		App:            app,
+		NetworkService: networkService,
+	}}
 
 	app.Get("/ping", func(ctx iris.Context) {
 		_, _ = ctx.JSON(iris.Map{
@@ -42,6 +43,7 @@ func NewNetworkController(app *iris.Application, networkService *service2.NetWor
 
 	app.Post("/network/list", c.NetworkList)
 	app.Post("/network/options", c.NetworkOptions)
+	app.Post("/network/status", c.NetworkStatus)
 	return c
 }
 
@@ -58,11 +60,11 @@ func (c *NetworkController) NetworkList(ctx iris.Context) {
 
 		return
 	}
-	_, _ = ctx.JSON(&types.NetworkListResponse{NetworkIdentifiers: c.networkService.Networks})
+	_, _ = ctx.JSON(&types.NetworkListResponse{NetworkIdentifiers: c.NetworkService.Networks})
 }
 
 // Get Network Options
-func (c *NetworkController) NetworkOptions(ctx iris.Context)  {
+func (c *NetworkController) NetworkOptions(ctx iris.Context) {
 	var req types.NetworkRequest
 
 	if err := ctx.ReadJSON(&req); err != nil {
@@ -75,14 +77,14 @@ func (c *NetworkController) NetworkOptions(ctx iris.Context)  {
 		return
 	}
 
-	if !c.networkService.ContainsIdentifier(req.NetworkIdentifier) {
+	if !c.NetworkService.ContainsIdentifier(req.NetworkIdentifier) {
 		_, _ = ctx.JSON(&config.NETWORK_IDENTIFIER_ERROR)
 		return
 	}
 
 	version := &types.Version{
-		RosettaVersion:    c.networkService.Config.Rosetta.Version,
-		NodeVersion:       c.networkService.NodeVersion(req.NetworkIdentifier.Network),
+		RosettaVersion:    c.NetworkService.Config.Rosetta.Version,
+		NodeVersion:       c.NetworkService.NodeVersion(req.NetworkIdentifier.Network),
 		MiddlewareVersion: nil,
 		Metadata:          nil,
 	}
@@ -125,4 +127,74 @@ func (c *NetworkController) NetworkOptions(ctx iris.Context)  {
 	}
 
 	_, _ = ctx.JSON(&types.NetworkOptionsResponse{Version: version, Allow: allow})
+}
+
+func (c *NetworkController) NetworkStatus(ctx iris.Context) {
+	var req types.NetworkRequest
+
+	if err := ctx.ReadJSON(&req); err != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+
+	if !c.NetworkService.ContainsIdentifier(req.NetworkIdentifier) {
+		_, _ = ctx.JSON(&config.NETWORK_IDENTIFIER_ERROR)
+		return
+	}
+
+	api := c.NetworkService.NodeAPI(req.NetworkIdentifier.Network)
+
+	rpcClient := provider.NewProvider(api)
+
+	txBlock, err1 := rpcClient.GetLatestTxBlock()
+	if err1 != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   err1.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+
+	blockHeight, err2 := strconv.ParseInt(txBlock.Header.BlockNum, 10, 64)
+
+	if err2 != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   "parse block height error: " + err2.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+
+	blockIden := &types.BlockIdentifier{
+		Index: blockHeight,
+		Hash:  txBlock.Body.BlockHash,
+	}
+
+	timestamp, err3 := strconv.ParseInt(txBlock.Header.Timestamp, 10, 64)
+
+	if err3 != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   "parse timestamp error: " + err3.Error(),
+			Retriable: true,
+		})
+
+		return
+	}
+
+	// todo peers and genesis tx block
+	_, _ = ctx.JSON(&types.NetworkStatusResponse{
+		CurrentBlockIdentifier: blockIden,
+		CurrentBlockTimestamp:  timestamp,
+	})
+
 }
