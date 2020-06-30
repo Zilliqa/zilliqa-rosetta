@@ -24,4 +24,5 @@ import (
 type Controller struct {
 	App            *iris.Application
 	NetworkService *service2.NetWorkService
+	AccountService *service2.AccountService
 }

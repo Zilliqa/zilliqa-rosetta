@@ -23,10 +23,10 @@ import (
 
 type NetWorkService struct {
 	Networks []*types.NetworkIdentifier
-	Service
+	*Service
 }
 
-func NewNetworkService(cfg *config.Config) *NetWorkService {
+func NewNetworkService(cfg *config.Config, commonService *Service) *NetWorkService {
 	nws := cfg.Networks
 	var networks []*types.NetworkIdentifier
 
@@ -44,9 +44,7 @@ func NewNetworkService(cfg *config.Config) *NetWorkService {
 	}
 	return &NetWorkService{
 		Networks: networks,
-		Service: Service{
-			Config: cfg,
-		},
+		Service:  commonService,
 	}
 }
 

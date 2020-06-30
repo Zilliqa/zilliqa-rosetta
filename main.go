@@ -51,8 +51,20 @@ func main() {
 
 	// register controller
 	app := iris.New()
-	networkService := service2.NewNetworkService(cfg)
-	controller.NewNetworkController(app, networkService)
+	commonService := service2.Service{
+		Config: cfg,
+	}
+	networkService := service2.NewNetworkService(cfg, &commonService)
+	accountService := service2.NewAccountService(cfg, &commonService)
+
+	commonController := &controller.Controller{
+		App:            app,
+		NetworkService: networkService,
+		AccountService: accountService,
+	}
+
+	controller.NewNetworkController(app, commonController)
+	controller.NewAccountController(app, commonController)
 	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Rosetta.Host, cfg.Rosetta.Port)))
 
 }

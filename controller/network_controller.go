@@ -19,21 +19,17 @@ package controller
 import (
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
-	service2 "github.com/Zilliqa/zilliqa-rosetta/service"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/iris"
 	"strconv"
 )
 
 type NetworkController struct {
-	Controller
+	*Controller
 }
 
-func NewNetworkController(app *iris.Application, networkService *service2.NetWorkService) *NetworkController {
-	c := &NetworkController{Controller{
-		App:            app,
-		NetworkService: networkService,
-	}}
+func NewNetworkController(app *iris.Application, commonController *Controller) *NetworkController {
+	c := &NetworkController{commonController}
 
 	app.Get("/ping", func(ctx iris.Context) {
 		_, _ = ctx.JSON(iris.Map{
@@ -191,7 +187,7 @@ func (c *NetworkController) NetworkStatus(ctx iris.Context) {
 		return
 	}
 
-	genesis,err4 := rpcClient.GetTxBlock("0")
+	genesis, err4 := rpcClient.GetTxBlock("0")
 	if err4 != nil {
 		_, _ = ctx.JSON(&types.Error{
 			Code:      0,
@@ -200,7 +196,7 @@ func (c *NetworkController) NetworkStatus(ctx iris.Context) {
 		})
 	}
 
-	genesisBlockNum,_ := strconv.ParseInt(genesis.Header.BlockNum,10,64)
+	genesisBlockNum, _ := strconv.ParseInt(genesis.Header.BlockNum, 10, 64)
 	genesisIden := &types.BlockIdentifier{
 		Index: genesisBlockNum,
 		Hash:  genesis.Body.BlockHash,

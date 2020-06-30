@@ -19,5 +19,5 @@ package service
 import "github.com/Zilliqa/zilliqa-rosetta/config"
 
 type Service struct {
-	Config   *config.Config
+	Config *config.Config
 }
