@@ -191,10 +191,26 @@ func (c *NetworkController) NetworkStatus(ctx iris.Context) {
 		return
 	}
 
-	// todo peers and genesis tx block
+	genesis,err4 := rpcClient.GetTxBlock("0")
+	if err4 != nil {
+		_, _ = ctx.JSON(&types.Error{
+			Code:      0,
+			Message:   "get gensis block error: " + err3.Error(),
+			Retriable: true,
+		})
+	}
+
+	genesisBlockNum,_ := strconv.ParseInt(genesis.Header.BlockNum,10,64)
+	genesisIden := &types.BlockIdentifier{
+		Index: genesisBlockNum,
+		Hash:  genesis.Body.BlockHash,
+	}
+
+	// todo peer info
 	_, _ = ctx.JSON(&types.NetworkStatusResponse{
 		CurrentBlockIdentifier: blockIden,
 		CurrentBlockTimestamp:  timestamp,
+		GenesisBlockIdentifier: genesisIden,
 	})
 
 }

@@ -251,6 +251,41 @@ Sample
 }
 ```
 
+**/network/status**
+
+*Get Network Status*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {}
+    },
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "current_block_identifier": {
+        "index": 1521313,
+        "hash": "0d0a72c50fcfb98962d3a9ac44c3d9eea96e2a808399f3909380890d41b51893"
+    },
+    "current_block_timestamp": 1593478612587324,
+    "genesis_block_identifier": {
+        "index": 0,
+        "hash": "1947718b431d25dd65c226f79f3e0a9cc96a948899dab3422993def1494a9c95"
+    },
+    "peers": null
+}
+```
 
 ### Account
 
