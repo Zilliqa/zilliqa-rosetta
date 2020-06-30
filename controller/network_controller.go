@@ -78,7 +78,7 @@ func (c *NetworkController) NetworkOptions(ctx iris.Context) {
 	}
 
 	if !c.NetworkService.ContainsIdentifier(req.NetworkIdentifier) {
-		_, _ = ctx.JSON(&config.NETWORK_IDENTIFIER_ERROR)
+		_, _ = ctx.JSON(&config.NetworkIdentifierError)
 		return
 	}
 
@@ -90,34 +90,34 @@ func (c *NetworkController) NetworkOptions(ctx iris.Context) {
 	}
 
 	optstatus := []*types.OperationStatus{
-		config.STATUS_SUCCESS,
-		config.STATUS_FAILED,
+		config.StatusSuccess,
+		config.StatusFailed,
 	}
 
 	operationTypes := []string{config.OP_TYPE_TRANSFER}
 
 	errors := []*types.Error{
-		config.NETWORK_IDENTIFIER_ERROR,
-		config.BLOCK_IDENTIFIER_NIL,
-		config.BLOCK_NUMBER_INVALID,
-		config.GET_BLOCK_FAILED,
-		config.BLOCK_HASH_INVALID,
-		config.GET_TRANSACTION_FAILED,
-		config.SIGNED_TX_INVALID,
-		config.COMMIT_TX_FAILED,
-		config.TXHASH_INVALID,
-		config.UNKNOWN_BLOCK,
-		config.SERVER_NOT_SUPPORT,
-		config.ADDRESS_INVALID,
-		config.BALANCE_ERROR,
-		config.PARSE_INT_ERROR,
-		config.JSON_MARSHAL_ERROR,
-		config.INVALID_PAYLOAD,
-		config.CURRENCY_NOT_CONFIG,
-		config.PARAMS_ERROR,
-		config.CONTRACT_ADDRESS_ERROR,
-		config.PRE_EXECUTE_ERROR,
-		config.QUERY_BALANCE_ERROR,
+		config.NetworkIdentifierError,
+		config.BlockIdentifierNil,
+		config.BlockNumberInvalid,
+		config.GetBlockFailed,
+		config.BlockHashInvalid,
+		config.GetTransactionFailed,
+		config.SignedTxInvalid,
+		config.CommitTxFailed,
+		config.TxhashInvalid,
+		config.UnknownBlock,
+		config.ServerNotSupport,
+		config.AddressInvalid,
+		config.BalanceError,
+		config.ParseIntError,
+		config.JsonMarshalError,
+		config.InvalidPayload,
+		config.CurrencyNotConfig,
+		config.ParamsError,
+		config.ContractAddressError,
+		config.PreExecuteError,
+		config.QueryBalanceError,
 	}
 
 	allow := &types.Allow{
@@ -143,7 +143,7 @@ func (c *NetworkController) NetworkStatus(ctx iris.Context) {
 	}
 
 	if !c.NetworkService.ContainsIdentifier(req.NetworkIdentifier) {
-		_, _ = ctx.JSON(&config.NETWORK_IDENTIFIER_ERROR)
+		_, _ = ctx.JSON(&config.NetworkIdentifierError)
 		return
 	}
 
