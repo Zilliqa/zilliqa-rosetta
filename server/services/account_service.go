@@ -12,13 +12,11 @@ import (
 )
 
 type AccountAPIService struct {
-	network *types.NetworkIdentifier
 	Config  *config.Config
 }
 
-func NewAccountAPIService(network *types.NetworkIdentifier, config *config.Config) *AccountAPIService {
+func NewAccountAPIService(config *config.Config) *AccountAPIService {
 	return &AccountAPIService{
-		network: network,
 		Config:  config,
 	}
 }

@@ -29,14 +29,12 @@ import (
 
 // NetworkAPIService implements the server.NetworkAPIServicer interface.
 type NetworkAPIService struct {
-	network *types.NetworkIdentifier
 	Config *config.Config
 }
 
 // NewNetworkAPIService creates a new instance of a NetworkAPIService.
-func NewNetworkAPIService(network *types.NetworkIdentifier, config *config.Config) server.NetworkAPIServicer {
+func NewNetworkAPIService(config *config.Config) server.NetworkAPIServicer {
 	return &NetworkAPIService{
-		network: network,
 		Config: config,
 	}
 }
@@ -47,9 +45,7 @@ func (s *NetworkAPIService) NetworkList(
 	request *types.MetadataRequest,
 ) (*types.NetworkListResponse, *types.Error) {
 	return &types.NetworkListResponse{
-		NetworkIdentifiers: []*types.NetworkIdentifier{
-			s.network,
-		},
+		NetworkIdentifiers: s.Config.GetNetworkIdentifier(),
 	}, nil
 }
 

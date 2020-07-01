@@ -21,7 +21,6 @@ import (
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	router2 "github.com/Zilliqa/zilliqa-rosetta/router"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
-	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/golog"
 	"github.com/spf13/viper"
 	"net/http"
@@ -50,28 +49,16 @@ func main() {
 	log.Info("config file is: ")
 	log.Info(string(configString))
 
-	// todo
-	nws := cfg.Networks
-	var networks []*types.NetworkIdentifier
-	for _, nw := range nws {
-		n := &types.NetworkIdentifier{
-			Blockchain: "zilliqa",
-			Network:    nw.Type,
-			SubNetworkIdentifier: &types.SubNetworkIdentifier{Network: "empty"},
-		}
-
-		networks = append(networks, n)
-	}
-
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
-	asserter, err := asserter.NewServer(networks)
+	networkIdentifier :=  cfg.GetNetworkIdentifier()
+	asserter, err := asserter.NewServer(networkIdentifier)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	router := router2.NewBlockchainRouter(networks[0], asserter,cfg)
+	router := router2.NewBlockchainRouter(networkIdentifier[0], asserter,cfg)
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 

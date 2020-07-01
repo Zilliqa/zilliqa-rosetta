@@ -231,3 +231,18 @@ func (config *Config) NodeAPI(network string) string {
 	}
 	return ""
 }
+
+func (config *Config) GetNetworkIdentifier() []*types.NetworkIdentifier {
+	nws := config.Networks
+	var networks []*types.NetworkIdentifier
+	for _, nw := range nws {
+		n := &types.NetworkIdentifier{
+			Blockchain: "zilliqa",
+			Network:    nw.Type,
+			SubNetworkIdentifier: &types.SubNetworkIdentifier{Network: "empty"},
+		}
+
+		networks = append(networks, n)
+	}
+	return networks
+}

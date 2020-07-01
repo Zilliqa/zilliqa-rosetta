@@ -16,13 +16,13 @@ func NewBlockchainRouter(
 	asserter *asserter.Asserter,
 	cfg *config.Config,
 ) http.Handler {
-	networkAPIService := services.NewNetworkAPIService(network,cfg)
+	networkAPIService := services.NewNetworkAPIService(cfg)
 	networkAPIController := server.NewNetworkAPIController(
 		networkAPIService,
 		asserter,
 	)
 
-	accountAPIService := services.NewAccountAPIService(network,cfg)
+	accountAPIService := services.NewAccountAPIService(cfg)
 	accountAPIController := server.NewAccountAPIController(accountAPIService,asserter)
 
 	return server.NewRouter(networkAPIController,accountAPIController)
