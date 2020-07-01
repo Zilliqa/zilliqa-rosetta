@@ -1,11 +1,12 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/Zilliqa/zilliqa-rosetta/server/services"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/coinbase/rosetta-sdk-go/server"
-	"net/http"
 )
 
 // NewBlockchainRouter creates a Mux http.Handler from a collection
@@ -21,7 +22,10 @@ func NewBlockchainRouter(
 	)
 
 	accountAPIService := services.NewAccountAPIService(cfg)
-	accountAPIController := server.NewAccountAPIController(accountAPIService,asserter)
+	accountAPIController := server.NewAccountAPIController(accountAPIService, asserter)
 
-	return server.NewRouter(networkAPIController,accountAPIController)
+	blockAPIService := services.NewBlockAPIService(cfg)
+	blockAPIController := server.NewBlockAPIController(blockAPIService, asserter)
+
+	return server.NewRouter(networkAPIController, accountAPIController, blockAPIController)
 }
