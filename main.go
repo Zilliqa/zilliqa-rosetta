@@ -58,7 +58,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	router := router2.NewBlockchainRouter(networkIdentifier[0], asserter,cfg)
+	router := router2.NewBlockchainRouter(asserter,cfg)
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 
