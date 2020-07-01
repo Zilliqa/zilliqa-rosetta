@@ -109,8 +109,10 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {}
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
     },
     "metadata": {}
 }
@@ -193,7 +195,7 @@ Sample
             },
             {
                 "code": 500,
-                "message": "service not realize",
+                "message": "services not realize",
                 "retriable": false
             },
             {
@@ -262,7 +264,9 @@ Request:
     "network_identifier": {
         "blockchain": "zilliqa",
         "network": "testnet",
-        "sub_network_identifier": {}
+        "sub_network_identifier": {
+            "network": "empty"
+        }
     },
     "metadata": {}
 }
@@ -301,15 +305,18 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet",
         "sub_network_identifier": {
+            "network": "empty"
         }
     },
     "account_identifier": {
         "address": "2141bf8b6d2213d4d7204e2ddab92653dc245c5f",
         "sub_account": {
+        	"address": "empty"
         },
         "metadata": {}
     },
     "block_identifier": {
+    	"index": 0
     }
 }
 ```

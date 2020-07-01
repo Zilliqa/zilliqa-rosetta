@@ -19,11 +19,12 @@ package main
 import (
 	"fmt"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
-	"github.com/Zilliqa/zilliqa-rosetta/controller"
-	service2 "github.com/Zilliqa/zilliqa-rosetta/service"
+	router2 "github.com/Zilliqa/zilliqa-rosetta/router"
+	"github.com/coinbase/rosetta-sdk-go/asserter"
+	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/kataras/golog"
-	"github.com/kataras/iris"
 	"github.com/spf13/viper"
+	"net/http"
 )
 
 var log *golog.Logger
@@ -49,22 +50,29 @@ func main() {
 	log.Info("config file is: ")
 	log.Info(string(configString))
 
-	// register controller
-	app := iris.New()
-	commonService := service2.Service{
-		Config: cfg,
-	}
-	networkService := service2.NewNetworkService(cfg, &commonService)
-	accountService := service2.NewAccountService(cfg, &commonService)
+	// todo
+	nws := cfg.Networks
+	var networks []*types.NetworkIdentifier
+	for _, nw := range nws {
+		n := &types.NetworkIdentifier{
+			Blockchain: "zilliqa",
+			Network:    nw.Type,
+			SubNetworkIdentifier: &types.SubNetworkIdentifier{Network: "empty"},
+		}
 
-	commonController := &controller.Controller{
-		App:            app,
-		NetworkService: networkService,
-		AccountService: accountService,
+		networks = append(networks, n)
 	}
 
-	controller.NewNetworkController(app, commonController)
-	controller.NewAccountController(app, commonController)
-	_ = app.Run(iris.Addr(fmt.Sprintf("%s:%d", cfg.Rosetta.Host, cfg.Rosetta.Port)))
+	// The asserter automatically rejects incorrectly formatted
+	// requests.
+	asserter, err := asserter.NewServer(networks)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	router := router2.NewBlockchainRouter(networks[0], asserter,cfg)
+	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 
 }

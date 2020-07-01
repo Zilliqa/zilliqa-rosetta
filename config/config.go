@@ -83,7 +83,7 @@ var (
 	}
 	ServerNotSupport = &types.Error{
 		Code:      500,
-		Message:   "service not realize",
+		Message:   "services not realize",
 		Retriable: false,
 	}
 	AddressInvalid = &types.Error{
@@ -221,4 +221,13 @@ func ParseConfig() (*Config, error) {
 
 func (config *Config) Stringify() ([]byte, error) {
 	return json.Marshal(config)
+}
+
+func (config *Config) NodeAPI(network string) string {
+	for _, nw := range config.Networks {
+		if nw.Type == network {
+			return nw.API
+		}
+	}
+	return ""
 }
