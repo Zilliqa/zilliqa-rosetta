@@ -345,6 +345,86 @@ Sample
 
 ### Block
 
+**/block/transaction**
+
+*Get a Block Transaction - Payment Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "block_identifier": {
+    	"index": 1554594,
+    	"hash": "70df5c44b703974e8d3c8affd94e51fb22894dc5d95febbe1b9bce1833190701"
+    },
+    "transaction_identifier": {
+    	"hash": "8a12da8883664b45454de293471c245e75ea55127a02213ef36706d67b1f4147"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction": {
+        "transaction_identifier": {
+            "hash": "8a12da8883664b45454de293471c245e75ea55127a02213ef36706d67b1f4147"
+        },
+        "operations": [
+            {
+                "operation_identifier": {
+                    "index": 0
+                },
+                "type": "transfer",
+                "status": "SUCCESS",
+                "account": {
+                    "address": "9e7542fe226de29721f62d3301e052cdcf4db190"
+                },
+                "amount": {
+                    "value": "500000000000000",
+                    "currency": {
+                        "symbol": "ZIL",
+                        "decimals": 12
+                    }
+                }
+            },
+            {
+                "operation_identifier": {
+                    "index": 1
+                },
+                "related_operations": [
+                    {
+                        "index": 0
+                    }
+                ],
+                "type": "transfer",
+                "status": "SUCCESS",
+                "account": {
+                    "address": "af1fcb9b52e3cd61ad05fdf2e915c70c7ac22fbc"
+                },
+                "amount": {
+                    "value": "500000000000000",
+                    "currency": {
+                        "symbol": "ZIL",
+                        "decimals": 12
+                    }
+                }
+            }
+        ]
+    }
+}
+```
+
 ### Construction
 
 ### Mempool
