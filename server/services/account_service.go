@@ -12,12 +12,12 @@ import (
 )
 
 type AccountAPIService struct {
-	Config  *config.Config
+	Config *config.Config
 }
 
 func NewAccountAPIService(config *config.Config) *AccountAPIService {
 	return &AccountAPIService{
-		Config:  config,
+		Config: config,
 	}
 }
 
@@ -74,7 +74,7 @@ func (s *AccountAPIService) AccountBalance(
 				Metadata: nil,
 			}, nil
 		} else {
-			return nil,&types.Error{
+			return nil, &types.Error{
 				Code:      0,
 				Message:   err1.Error(),
 				Retriable: false,

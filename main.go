@@ -19,6 +19,7 @@ package main
 import (
 	"fmt"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
+	"github.com/Zilliqa/zilliqa-rosetta/mempool"
 	router2 "github.com/Zilliqa/zilliqa-rosetta/router"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/kataras/golog"
@@ -51,14 +52,16 @@ func main() {
 
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
-	networkIdentifier :=  cfg.GetNetworkIdentifier()
+	networkIdentifier := cfg.GetNetworkIdentifier()
 	asserter, err := asserter.NewServer(networkIdentifier)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	router := router2.NewBlockchainRouter(asserter,cfg)
+	router := router2.NewBlockchainRouter(asserter, cfg)
+
+	_ = mempool.NewMemPools(10, 10, cfg)
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 

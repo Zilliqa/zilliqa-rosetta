@@ -49,7 +49,6 @@ func (s *NetworkAPIService) NetworkList(
 	}, nil
 }
 
-
 // NetworkStatus implements the /network/status endpoint.
 func (s *NetworkAPIService) NetworkStatus(
 	ctx context.Context,
@@ -60,7 +59,7 @@ func (s *NetworkAPIService) NetworkStatus(
 	rpcClient := provider.NewProvider(api)
 	txBlock, err := rpcClient.GetLatestTxBlock()
 	if err != nil {
-		return nil,&types.Error{
+		return nil, &types.Error{
 			Code:      0,
 			Message:   err.Error(),
 			Retriable: true,
@@ -69,9 +68,9 @@ func (s *NetworkAPIService) NetworkStatus(
 
 	blockHeight, err1 := strconv.ParseInt(txBlock.Header.BlockNum, 10, 64)
 	if err1 != nil {
-		return nil,&types.Error{
+		return nil, &types.Error{
 			Code:      0,
-			Message:    "parse block height error: " + err1.Error(),
+			Message:   "parse block height error: " + err1.Error(),
 			Retriable: true,
 		}
 	}
@@ -84,7 +83,7 @@ func (s *NetworkAPIService) NetworkStatus(
 	timestamp, err2 := strconv.ParseInt(txBlock.Header.Timestamp, 10, 64)
 
 	if err2 != nil {
-		return nil,&types.Error{
+		return nil, &types.Error{
 			Code:      0,
 			Message:   "parse timestamp error: " + err2.Error(),
 			Retriable: true,
@@ -94,9 +93,9 @@ func (s *NetworkAPIService) NetworkStatus(
 	genesis, err3 := rpcClient.GetTxBlock("0")
 
 	if err3 != nil {
-		return nil,&types.Error{
+		return nil, &types.Error{
 			Code:      0,
-			Message:    "get genesis block error: " + err3.Error(),
+			Message:   "get genesis block error: " + err3.Error(),
 			Retriable: true,
 		}
 	}
@@ -174,7 +173,7 @@ func (s *NetworkAPIService) NetworkOptions(
 		Errors:            errors,
 	}
 	return &types.NetworkOptionsResponse{
-		Version:version,
-		Allow: allow,
+		Version: version,
+		Allow:   allow,
 	}, nil
 }

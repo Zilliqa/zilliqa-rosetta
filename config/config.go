@@ -237,8 +237,8 @@ func (config *Config) GetNetworkIdentifier() []*types.NetworkIdentifier {
 	var networks []*types.NetworkIdentifier
 	for _, nw := range nws {
 		n := &types.NetworkIdentifier{
-			Blockchain: "zilliqa",
-			Network:    nw.Type,
+			Blockchain:           "zilliqa",
+			Network:              nw.Type,
 			SubNetworkIdentifier: &types.SubNetworkIdentifier{Network: "empty"},
 		}
 
