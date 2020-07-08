@@ -22,7 +22,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Zilliqa/gozilliqa-sdk/core"
+	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -93,6 +96,7 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 	api := s.Config.NodeAPI(request.NetworkIdentifier.Network)
 	rpcClient := provider.NewProvider(api)
 	inputTxBlock := fmt.Sprintf("%d", request.BlockIdentifier.Index)
+	inputTxBlockHash := request.BlockIdentifier.Hash
 	inputTransactionHash := request.TransactionIdentifier.Hash
 	txBlock, err := rpcClient.GetTxBlock(inputTxBlock)
 
@@ -104,9 +108,9 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 		}
 	}
 
-	if request.BlockIdentifier.Hash == txBlock.Body.BlockHash {
+	if inputTxBlockHash == txBlock.Body.BlockHash {
 
-		transactions, err1 := rpcClient.GetTransactionsForTxBlock(inputTxBlock)
+		transactionDetails, err1 := rpcClient.GetTransaction(inputTransactionHash)
 
 		if err1 != nil {
 			return nil, &types.Error{
@@ -116,50 +120,102 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 			}
 		}
 
-		// check if transaction exists
-		isTransactionExist := false
-
-		for _, transactionBlocks := range transactions {
-			for _, transactionHash := range transactionBlocks {
-				if inputTransactionHash == transactionHash {
-					isTransactionExist = true
-				}
-			}
-		}
-
-		if isTransactionExist {
-			// TODO create transaction struct
-			return &types.BlockTransactionResponse{
-				Transaction: &types.Transaction{
-					TransactionIdentifier: &types.TransactionIdentifier{
-						Hash: "transaction 1",
-					},
-					Operations: []*types.Operation{
-						{
-							OperationIdentifier: &types.OperationIdentifier{
-								Index: 0,
-							},
-							Type:   "Reward",
-							Status: "Success",
-							Account: &types.AccountIdentifier{
-								Address: "account 2",
-							},
-							Amount: &types.Amount{
-								Value: "1000",
-								Currency: &types.Currency{
-									Symbol:   "ZIL",
-									Decimals: 12,
-								},
-							},
-						},
-					},
-				},
-			}, nil
-		} else {
+		if transactionDetails.Receipt.EpochNum != inputTxBlock {
 			return nil, config.TxhashInvalid
 		}
 
+		rosTransaction, err2 := createRosTransaction(transactionDetails)
+
+		if err2 != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err2.Error(),
+				Retriable: false,
+			}
+		}
+
+		rosBlockTransactionReponse := new(types.BlockTransactionResponse)
+		rosBlockTransactionReponse.Transaction = rosTransaction
+
+		return rosBlockTransactionReponse, nil
+
 	} else {
 		return nil, config.BlockHashInvalid
+	}
+}
+
+// convert zilliqa transaction object to rosetta transaction object
+// Transaction
+//    - TransactionIdentifier
+//    - Operation[]
+//        - OperationIdentifier
+//        - related_operations
+//        - type
+//        - status
+//        - AccountIdentifier
+//        - Amount
+//        - metadata
+func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
+	rosTransaction := new(types.Transaction)
+	rosTransactionIdentifier := &types.TransactionIdentifier{Hash: ctx.ID}
+	rosTransaction.TransactionIdentifier = rosTransactionIdentifier
+	rosOperations := make([]*types.Operation, 0)
+
+	idx := 0
+
+	// if transaction is payment
+	if ctx.Code == "" && ctx.Data == nil {
+		// sender operation
+		senderOperation := new(types.Operation)
+		senderOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx),
+		}
+		senderOperation.Type = config.OpTypeTransfer
+		senderOperation.Status = config.StatusSuccess.Status
+		senderOperation.Account = &types.AccountIdentifier{
+			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+		}
+		senderOperation.Amount = createRosAmount(ctx.Amount)
+
+		// recipient operation
+		recipientOperation := new(types.Operation)
+		recipientOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx + 1),
+		}
+		recipientOperation.RelatedOperations = []*types.OperationIdentifier{
+			{
+				Index: int64(idx),
+				// previous index = senderOperation
+			},
+		}
+		recipientOperation.Type = config.OpTypeTransfer
+		recipientOperation.Status = config.StatusSuccess.Status
+		recipientOperation.Account = &types.AccountIdentifier{
+			Address: ctx.ToAddr,
+		}
+		recipientOperation.Amount = createRosAmount(ctx.Amount)
+
+		rosOperations = append(rosOperations, senderOperation, recipientOperation)
+	}
+
+	// fmt.Println(ctx.Code)
+	// fmt.Println(ctx.Data)
+
+	// TODO
+	// add metadata for payment transaction
+	// if transaction is contract deployment
+	// if contract is contract call
+
+	rosTransaction.Operations = rosOperations
+	return rosTransaction, nil
+}
+
+func createRosAmount(amount string) *types.Amount {
+	return &types.Amount{
+		Value: amount,
+		Currency: &types.Currency{
+			Symbol:   "ZIL",
+			Decimals: 12,
+		},
 	}
 }
