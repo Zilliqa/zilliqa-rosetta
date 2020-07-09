@@ -345,6 +345,68 @@ Sample
 
 ### Block
 
+**/block**
+
+*Get a Block*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "mainnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "block_identifier": {
+    	"index": 660443,
+    	"hash": "1a0cbb9181bd2ed8fce59486a8779786393e73ddb61848a66fad290bf2025366"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "block": {
+        "block_identifier": {
+            "index": 660443,
+            "hash": "1a0cbb9181bd2ed8fce59486a8779786393e73ddb61848a66fad290bf2025366"
+        },
+        "parent_block_identifier": {
+            "index": 660442,
+            "hash": "e1ce89986962dc568745e0f536ecf213f9e85ac2afa2bb9737aaf4df2a510f72"
+        },
+        "timestamp": 1594275472610313,
+        "transactions": [
+            {
+                "transaction_identifier": {
+                    "hash": "abf7d4d915b4730a755dfa4a71cac9abc970525453c893065fbecafb2d932c11"
+                },
+                "operations": null
+            },
+            {
+                "transaction_identifier": {
+                    "hash": "979e24270c107d95b59dc9d3bb08bd8c174bce18336ed9da6221bf541b3bccd1"
+                },
+                "operations": null
+            },
+            {
+                "transaction_identifier": {
+                    "hash": "405a3d41da60fb7b34889f5901e5f8b2637b27b073d101a3170d4b335bf1f3e1"
+                },
+                "operations": null
+            }
+        ]
+    }
+}
+```
+
 **/block/transaction**
 
 *Get a Block Transaction - Payment Transaction*
@@ -388,28 +450,6 @@ Sample
                 "type": "transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "9e7542fe226de29721f62d3301e052cdcf4db190"
-                },
-                "amount": {
-                    "value": "500000000000000",
-                    "currency": {
-                        "symbol": "ZIL",
-                        "decimals": 12
-                    }
-                }
-            },
-            {
-                "operation_identifier": {
-                    "index": 1
-                },
-                "related_operations": [
-                    {
-                        "index": 0
-                    }
-                ],
-                "type": "transfer",
-                "status": "SUCCESS",
-                "account": {
                     "address": "af1fcb9b52e3cd61ad05fdf2e915c70c7ac22fbc"
                 },
                 "amount": {
@@ -418,6 +458,20 @@ Sample
                         "symbol": "ZIL",
                         "decimals": 12
                     }
+                },
+                "metadata": {
+                    "gasLimit": "1",
+                    "gasPrice": "1000000000",
+                    "nonce": "424",
+                    "receipt": {
+                        "success": true,
+                        "cumulative_gas": "1",
+                        "epoch_num": "1554594",
+                        "event_logs": null
+                    },
+                    "senderPubKey": "0x03A57C3AB9ACA0AA7B8CE496B2EB968450208B41DE25C1648AE30B4D3EA8D641E7",
+                    "signature": "0x8932698F58DDDD207251BA9E564D4E4524E674478B246C4CE4EB2A7B55C71271A99F2D5A02AEB65C9B210E4B0AF2999FFA63C64AE67047DAB168323B4ED90D47",
+                    "version": "21823489"
                 }
             }
         ]
