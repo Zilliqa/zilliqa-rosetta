@@ -20,7 +20,7 @@ package services
 import (
 	"context"
 	"fmt"
-	"time"
+	"strconv"
 
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
@@ -41,10 +41,10 @@ func NewBlockAPIService(config *config.Config) server.BlockAPIServicer {
 
 // implements /block endpoint
 func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest) (*types.BlockResponse, *types.Error) {
-
 	api := s.Config.NodeAPI(request.NetworkIdentifier.Network)
 	rpcClient := provider.NewProvider(api)
 	inputTxBlock := fmt.Sprintf("%d", *request.BlockIdentifier.Index)
+	inputTxBlockHash := *request.BlockIdentifier.Hash
 	txBlock, err := rpcClient.GetTxBlock(inputTxBlock)
 
 	if err != nil {
@@ -57,32 +57,57 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 
 	// check the hash matches
 	// assume input hash is without '0x'
-	if *request.BlockIdentifier.Hash == txBlock.Body.BlockHash {
-		// TODO
-		// transactions, err1 := rpcClient.GetTransactionsForTxBlock(inputTxBlock)
+	if inputTxBlockHash == txBlock.Body.BlockHash {
+		transactionsList, err1 := rpcClient.GetTransactionsForTxBlock(inputTxBlock)
 
-		// if err1 != nil {
-		// 	return nil, &types.Error{
-		// 		Code:      0,
-		// 		Message:   err1.Error(),
-		// 		Retriable: false,
-		// 	}
-		// }
+		if err1 != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err1.Error(),
+				Retriable: false,
+			}
+		}
 
-		return &types.BlockResponse{
-			Block: &types.Block{
-				BlockIdentifier: &types.BlockIdentifier{
-					Index: *request.BlockIdentifier.Index,
-					Hash:  fmt.Sprintf("block %d", *request.BlockIdentifier.Index),
-				},
-				ParentBlockIdentifier: &types.BlockIdentifier{
-					Index: *request.BlockIdentifier.Index,
-					Hash:  fmt.Sprintf("block %d", *request.BlockIdentifier.Index),
-				},
-				Timestamp:    time.Now().UnixNano() / 1000000,
-				Transactions: []*types.Transaction{},
-			},
-		}, nil
+		transactions := make([]*types.Transaction, 0)
+
+		// TODO fetch all the operations for each transaction?
+		for _, shards := range transactionsList {
+			for _, transactionHash := range shards {
+				transactionIdentifier := &types.TransactionIdentifier{
+					Hash: transactionHash,
+				}
+				currTransaction := &types.Transaction{
+					TransactionIdentifier: transactionIdentifier,
+				}
+				transactions = append(transactions, currTransaction)
+			}
+		}
+
+		blocknum, _ := strconv.ParseInt(txBlock.Header.BlockNum, 10, 64)
+		blockIdentifier := &types.BlockIdentifier{
+			Index: blocknum,
+			Hash:  txBlock.Body.BlockHash,
+		}
+
+		parentBlockIdentifier := new(types.BlockIdentifier)
+		if blocknum == 0 {
+			parentBlockIdentifier = blockIdentifier
+		} else {
+			parentBlockIdentifier.Index = (blocknum - 1)
+			parentBlockIdentifier.Hash = txBlock.Header.PrevBlockHash
+		}
+
+		timestamp, _ := strconv.ParseInt(txBlock.Header.Timestamp, 10, 64)
+
+		rosBlockResponse := new(types.BlockResponse)
+		rosBlockResponse.Block = &types.Block{
+			BlockIdentifier:       blockIdentifier,
+			ParentBlockIdentifier: parentBlockIdentifier,
+			Timestamp:             timestamp,
+			Transactions:          transactions,
+		}
+
+		return rosBlockResponse, nil
 	} else {
 		return nil, config.BlockHashInvalid
 	}
