@@ -23,9 +23,7 @@ import (
 	"time"
 
 	"github.com/Zilliqa/gozilliqa-sdk/core"
-	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
-	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -145,6 +143,7 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 }
 
 // convert zilliqa transaction object to rosetta transaction object
+// "Operations" contain all balance-changing information within a transaction
 // Transaction
 //    - TransactionIdentifier
 //    - Operation[]
@@ -163,48 +162,27 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 
 	idx := 0
 
-	// if transaction is payment
-	if ctx.Code == "" && ctx.Data == nil {
-		// sender operation
-		senderOperation := new(types.Operation)
-		senderOperation.OperationIdentifier = &types.OperationIdentifier{
-			Index: int64(idx),
-		}
-		senderOperation.Type = config.OpTypeTransfer
-		senderOperation.Status = config.StatusSuccess.Status
-		senderOperation.Account = &types.AccountIdentifier{
-			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
-		}
-		senderOperation.Amount = createRosAmount(ctx.Amount)
+	// TODO need to differentiate between different transactions?
+	// need to split from and to operations?
+	// if transaction is payment - code and data is empty
+	// if transaction is contract deployment - toaddr is 00...0
+	// if transaction is contract call - transitions is present under receipt
 
-		// recipient operation
-		recipientOperation := new(types.Operation)
-		recipientOperation.OperationIdentifier = &types.OperationIdentifier{
-			Index: int64(idx + 1),
-		}
-		recipientOperation.RelatedOperations = []*types.OperationIdentifier{
-			{
-				Index: int64(idx),
-				// previous index = senderOperation
-			},
-		}
-		recipientOperation.Type = config.OpTypeTransfer
-		recipientOperation.Status = config.StatusSuccess.Status
-		recipientOperation.Account = &types.AccountIdentifier{
-			Address: ctx.ToAddr,
-		}
-		recipientOperation.Amount = createRosAmount(ctx.Amount)
-
-		rosOperations = append(rosOperations, senderOperation, recipientOperation)
+	// recipient operation
+	recipientOperation := new(types.Operation)
+	recipientOperation.OperationIdentifier = &types.OperationIdentifier{
+		Index: int64(idx),
+	}
+	recipientOperation.Type = config.OpTypeTransfer
+	recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+	recipientOperation.Account = &types.AccountIdentifier{
+		Address: ctx.ToAddr,
 	}
 
-	// fmt.Println(ctx.Code)
-	// fmt.Println(ctx.Data)
+	recipientOperation.Amount = createRosAmount(ctx.Amount)
+	recipientOperation.Metadata = createMetadata(ctx)
 
-	// TODO
-	// add metadata for payment transaction
-	// if transaction is contract deployment
-	// if contract is contract call
+	rosOperations = append(rosOperations, recipientOperation)
 
 	rosTransaction.Operations = rosOperations
 	return rosTransaction, nil
@@ -218,4 +196,32 @@ func createRosAmount(amount string) *types.Amount {
 			Decimals: 12,
 		},
 	}
+}
+
+func createMetadata(ctx *core.Transaction) map[string]interface{} {
+	metadata := make(map[string]interface{})
+
+	if ctx.Code != "" {
+		metadata["code"] = ctx.Code
+	}
+
+	if ctx.Data != nil {
+		metadata["data"] = ctx.Data
+	}
+
+	metadata["gasLimit"] = ctx.GasLimit
+	metadata["gasPrice"] = ctx.GasPrice
+	metadata["nonce"] = ctx.Nonce
+	metadata["signature"] = ctx.Signature
+	metadata["receipt"] = ctx.Receipt
+	metadata["senderPubKey"] = ctx.SenderPubKey
+	metadata["version"] = ctx.Version
+	return metadata
+}
+
+func getTransactionStatus(status bool) string {
+	if status == true {
+		return config.StatusSuccess.Status
+	}
+	return config.StatusFailed.Status
 }
