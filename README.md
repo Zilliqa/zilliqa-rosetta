@@ -479,6 +479,94 @@ Sample
 }
 ```
 
+*Get a Block Transaction - Contract Call*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "block_identifier": {
+    	"index": 1558244,
+    	"hash": "4f00a6059b22ebd73e6a60d77fbc20f65bfa3be3f5ae57712422699e3bb031ac"
+    },
+    "transaction_identifier": {
+    	"hash": "ad8a8aa7c1aff0a59a3d56f9c9a72176c344e8a35bbd66e69b2bc7011b44e637"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction": {
+        "transaction_identifier": {
+            "hash": "ad8a8aa7c1aff0a59a3d56f9c9a72176c344e8a35bbd66e69b2bc7011b44e637"
+        },
+        "operations": [
+            {
+                "operation_identifier": {
+                    "index": 0
+                },
+                "type": "transfer",
+                "status": "SUCCESS",
+                "account": {
+                    "address": "c36087407e6474e038d7c316a620afe2a752ad0e"
+                },
+                "amount": {
+                    "value": "0",
+                    "currency": {
+                        "symbol": "ZIL",
+                        "decimals": 12
+                    }
+                },
+                "metadata": {
+                    "data": "{\"_tag\":\"SubmitHeaderBlock\",\"params\":[{\"vname\":\"new_hash\",\"type\":\"ByStr32\",\"value\":\"0x62c8b569f485f22878f8b31f6e159981be4ea78bdeb09062fbcdcbc4802deae2\"},{\"vname\":\"block\",\"type\":\"Uint64\",\"value\":\"178656\"}]}",
+                    "gasLimit": "40000",
+                    "gasPrice": "1000000000",
+                    "nonce": "352",
+                    "receipt": {
+                        "success": true,
+                        "cumulative_gas": "841",
+                        "epoch_num": "1558244",
+                        "event_logs": [
+                            {
+                                "_eventname": "SubmitHashSuccess",
+                                "address": "0xc36087407e6474e038d7c316a620afe2a752ad0e",
+                                "params": [
+                                    {
+                                        "type": "ByStr32",
+                                        "value": "0x62c8b569f485f22878f8b31f6e159981be4ea78bdeb09062fbcdcbc4802deae2",
+                                        "vname": "hash"
+                                    },
+                                    {
+                                        "type": "Int32",
+                                        "value": "2",
+                                        "vname": "code"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "senderPubKey": "0x025A5A6AFBB5797E44F29FEFA81B43EB3600C70F021B78ABCE7CF2D4D01D467AFF",
+                    "signature": "0xA9FA2B79A0927B544528693D51BB7FCAD1E283146310CE3B12167EAA982AF69EB879942A8310D66F4D5E46655C930DFB4664861435F7CCC2E3DACA653A3966FF",
+                    "version": "21823489"
+                }
+            }
+        ]
+    }
+}
+```
+
 ### Construction
 
 ### Mempool
