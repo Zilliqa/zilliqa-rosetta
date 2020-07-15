@@ -19,6 +19,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -268,6 +269,10 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// ----------------------------------------------------------------------
 		// contract call
 		// ----------------------------------------------------------------------
+
+		receipt, _ := json.Marshal(ctx.Receipt)
+		// test := interface{}(string(receipt)).(map[string]interface{})
+		fmt.Println(string(receipt))
 
 		// -----------------
 		// sender operation
