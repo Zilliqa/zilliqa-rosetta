@@ -19,7 +19,6 @@ package services
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strconv"
 
@@ -212,7 +211,7 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// deduct from sender account
 		// add negative sign
 		senderOperation.Amount = createRosAmount(ctx.Amount, true)
-		// senderOperation.Metadata = createMetadata(ctx)
+		senderOperation.Metadata = createMetadata(ctx)
 
 		// -------------------
 		// recipient operation
@@ -270,10 +269,6 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// contract call
 		// ----------------------------------------------------------------------
 
-		receipt, _ := json.Marshal(ctx.Receipt)
-		// test := interface{}(string(receipt)).(map[string]interface{})
-		fmt.Println(string(receipt))
-
 		// -----------------
 		// sender operation
 		// -----------------
@@ -289,9 +284,61 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// deduct from sender account
 		// add negative sign
 		senderOperation.Amount = createRosAmount(ctx.Amount, true)
-		senderOperation.Metadata = createMetadata(ctx)
+		senderOperation.Metadata = createMetadataContractCall(ctx)
 
 		rosOperations = append(rosOperations, senderOperation)
+		idx += 1
+
+		for _, transition := range ctx.Receipt.Transitions {
+			if transition.Msg.Tag == "AddFunds" || transition.Msg.Tag == "" {
+				// -----------------
+				// from operation
+				// -----------------
+				fromOperation := new(types.Operation)
+				fromOperation.OperationIdentifier = &types.OperationIdentifier{
+					Index: int64(idx),
+				}
+				fromOperation.RelatedOperations = []*types.OperationIdentifier{
+					{
+						Index: int64(idx - 1),
+					},
+				}
+				fromOperation.Type = config.OpTypeContractCallDeposit
+				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+				fromOperation.Account = &types.AccountIdentifier{
+					Address: transition.Addr,
+				}
+				fromOperation.Amount = createRosAmount(ctx.Amount, true)
+				fromOperation.Metadata = createMetadataContractCall(ctx)
+
+				rosOperations = append(rosOperations, fromOperation)
+				idx += 1
+
+				// -----------------
+				// to operation
+				// -----------------
+				toOperation := new(types.Operation)
+				toOperation.OperationIdentifier = &types.OperationIdentifier{
+					Index: int64(idx),
+				}
+				toOperation.RelatedOperations = []*types.OperationIdentifier{
+					{
+						Index: int64(idx - 1),
+					},
+				}
+				toOperation.Type = config.OpTypeContractCallDeposit
+				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+				toOperation.Account = &types.AccountIdentifier{
+					Address: transition.Msg.Recipient,
+				}
+				toOperation.Amount = createRosAmount(ctx.Amount, false)
+				toOperation.Metadata = createMetadataContractCall(ctx)
+
+				rosOperations = append(rosOperations, toOperation)
+				idx += 1
+			}
+		}
+
 		rosTransaction.Operations = rosOperations
 		return rosTransaction, nil
 
