@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/json"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/spf13/viper"
 )
@@ -165,6 +166,9 @@ var (
 )
 
 const OpTypeTransfer = "transfer"
+const OpTypeContractDeployment = "contract_deployment"
+const OpTypeContractCall = "contract_call"
+const OpTypeContractCallDeposit = "contract_call_deposit"
 
 type Rosetta struct {
 	Host string
@@ -237,8 +241,8 @@ func (config *Config) GetNetworkIdentifier() []*types.NetworkIdentifier {
 	var networks []*types.NetworkIdentifier
 	for _, nw := range nws {
 		n := &types.NetworkIdentifier{
-			Blockchain: "zilliqa",
-			Network:    nw.Type,
+			Blockchain:           "zilliqa",
+			Network:              nw.Type,
 			SubNetworkIdentifier: &types.SubNetworkIdentifier{Network: "empty"},
 		}
 

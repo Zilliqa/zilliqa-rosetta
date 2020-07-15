@@ -23,7 +23,9 @@ import (
 	"strconv"
 
 	"github.com/Zilliqa/gozilliqa-sdk/core"
+	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -187,33 +189,141 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 
 	idx := 0
 
-	// TODO need to differentiate between different transactions?
-	// need to split from and to operations?
-	// if transaction is payment - code and data is empty
-	// if transaction is contract deployment - toaddr is 00...0
 	// if transaction is contract call - transitions is present under receipt
 
-	// recipient operation
-	recipientOperation := new(types.Operation)
-	recipientOperation.OperationIdentifier = &types.OperationIdentifier{
-		Index: int64(idx),
+	// ----------------------------------------------------------------------
+	// payment
+	// ----------------------------------------------------------------------
+	if ctx.Code == "" && ctx.Data == nil {
+		// if transaction is payment - code and data is empty
+		// -----------------
+		// sender operation
+		// -----------------
+		senderOperation := new(types.Operation)
+		senderOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx),
+		}
+		senderOperation.Type = config.OpTypeTransfer
+		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		senderOperation.Account = &types.AccountIdentifier{
+			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+		}
+		// deduct from sender account
+		// add negative sign
+		senderOperation.Amount = createRosAmount(ctx.Amount, true)
+		// senderOperation.Metadata = createMetadata(ctx)
+
+		// -------------------
+		// recipient operation
+		// -------------------
+		recipientOperation := new(types.Operation)
+		recipientOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx + 1),
+		}
+		recipientOperation.RelatedOperations = []*types.OperationIdentifier{
+			{
+				Index: int64(idx),
+			},
+		}
+		recipientOperation.Type = config.OpTypeTransfer
+		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		recipientOperation.Account = &types.AccountIdentifier{
+			Address: ctx.ToAddr,
+		}
+
+		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
+		// recipientOperation.Metadata = createMetadata(ctx)
+
+		rosOperations = append(rosOperations, senderOperation, recipientOperation)
+		rosTransaction.Operations = rosOperations
+		return rosTransaction, nil
+
+	} else if ctx.ToAddr == "0000000000000000000000000000000000000000" {
+		// ----------------------------------------------------------------------
+		// contract deployment
+		// ----------------------------------------------------------------------
+
+		// -----------------
+		// sender operation
+		// -----------------
+		senderOperation := new(types.Operation)
+		senderOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx),
+		}
+		senderOperation.Type = config.OpTypeContractDeployment
+		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		senderOperation.Account = &types.AccountIdentifier{
+			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+		}
+		// deduct from sender account
+		// add negative sign
+		senderOperation.Amount = createRosAmount(ctx.Amount, true)
+		senderOperation.Metadata = createMetadata(ctx)
+
+		rosOperations = append(rosOperations, senderOperation)
+		rosTransaction.Operations = rosOperations
+		return rosTransaction, nil
+
+	} else if ctx.Data != nil {
+		// ----------------------------------------------------------------------
+		// contract call
+		// ----------------------------------------------------------------------
+
+		// -----------------
+		// sender operation
+		// -----------------
+		senderOperation := new(types.Operation)
+		senderOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx),
+		}
+		senderOperation.Type = config.OpTypeContractCall
+		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		senderOperation.Account = &types.AccountIdentifier{
+			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+		}
+		// deduct from sender account
+		// add negative sign
+		senderOperation.Amount = createRosAmount(ctx.Amount, true)
+		senderOperation.Metadata = createMetadata(ctx)
+
+		rosOperations = append(rosOperations, senderOperation)
+		rosTransaction.Operations = rosOperations
+		return rosTransaction, nil
+
+	} else {
+		// ----------------------------------------------------------------------
+		// generic case
+		// ----------------------------------------------------------------------
+		recipientOperation := new(types.Operation)
+		recipientOperation.OperationIdentifier = &types.OperationIdentifier{
+			Index: int64(idx + 1),
+		}
+		recipientOperation.RelatedOperations = []*types.OperationIdentifier{
+			{
+				Index: int64(idx),
+			},
+		}
+		recipientOperation.Type = config.OpTypeTransfer
+		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		recipientOperation.Account = &types.AccountIdentifier{
+			Address: ctx.ToAddr,
+		}
+
+		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
+		recipientOperation.Metadata = createMetadata(ctx)
+
+		rosOperations = append(rosOperations, recipientOperation)
+		rosTransaction.Operations = rosOperations
+		return rosTransaction, nil
 	}
-	recipientOperation.Type = config.OpTypeTransfer
-	recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
-	recipientOperation.Account = &types.AccountIdentifier{
-		Address: ctx.ToAddr,
-	}
-
-	recipientOperation.Amount = createRosAmount(ctx.Amount)
-	recipientOperation.Metadata = createMetadata(ctx)
-
-	rosOperations = append(rosOperations, recipientOperation)
-
-	rosTransaction.Operations = rosOperations
-	return rosTransaction, nil
 }
 
-func createRosAmount(amount string) *types.Amount {
+// create the amount identifier
+// if isNegative is true, indicates that the stated amount is deducted
+func createRosAmount(amount string, isNegative bool) *types.Amount {
+	if isNegative && amount != "0" {
+		amount = fmt.Sprintf("-%s", amount)
+	}
 	return &types.Amount{
 		Value: amount,
 		Currency: &types.Currency{
@@ -241,6 +351,17 @@ func createMetadata(ctx *core.Transaction) map[string]interface{} {
 	metadata["receipt"] = ctx.Receipt
 	metadata["senderPubKey"] = ctx.SenderPubKey
 	metadata["version"] = ctx.Version
+	return metadata
+}
+
+func createMetadataContractCall(ctx *core.Transaction) map[string]interface{} {
+	metadata := make(map[string]interface{})
+
+	if ctx.Data != nil {
+		metadata["data"] = ctx.Data
+	}
+
+	metadata["contractAddress"] = ctx.ToAddr
 	return metadata
 }
 
