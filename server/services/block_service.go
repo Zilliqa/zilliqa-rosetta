@@ -21,6 +21,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
@@ -211,7 +212,6 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// deduct from sender account
 		// add negative sign
 		senderOperation.Amount = createRosAmount(ctx.Amount, true)
-		senderOperation.Metadata = createMetadata(ctx)
 
 		// -------------------
 		// recipient operation
@@ -232,7 +232,7 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		}
 
 		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
-		// recipientOperation.Metadata = createMetadata(ctx)
+		recipientOperation.Metadata = createMetadata(ctx)
 
 		rosOperations = append(rosOperations, senderOperation, recipientOperation)
 		rosTransaction.Operations = rosOperations
@@ -269,24 +269,40 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		// contract call
 		// ----------------------------------------------------------------------
 
+		//  check if transition is a smart contract deposit , e.g. contains AddFunds
+		isSmartContractDeposit := false
+		for _, transition := range ctx.Receipt.Transitions {
+			if transition.Msg.Tag == "AddFunds" || transition.Msg.Tag == "" {
+				if transition.Msg.Amount != "0" {
+					isSmartContractDeposit = true
+					break
+				}
+			}
+		}
+
 		// -----------------
-		// sender operation
+		// initiator operation
 		// -----------------
-		senderOperation := new(types.Operation)
-		senderOperation.OperationIdentifier = &types.OperationIdentifier{
+		initiatorOperation := new(types.Operation)
+		initiatorOperation.OperationIdentifier = &types.OperationIdentifier{
 			Index: int64(idx),
 		}
-		senderOperation.Type = config.OpTypeContractCall
-		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
-		senderOperation.Account = &types.AccountIdentifier{
+		initiatorOperation.Type = config.OpTypeContractCall
+		initiatorOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		initiatorOperation.Account = &types.AccountIdentifier{
 			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
 		}
-		// deduct from sender account
-		// add negative sign
-		senderOperation.Amount = createRosAmount(ctx.Amount, true)
-		senderOperation.Metadata = createMetadataContractCall(ctx)
 
-		rosOperations = append(rosOperations, senderOperation)
+		// if it is not smart contract deposit, ie, no transition, means there is only one operation
+		// add metadata if only one and only operation
+		if isSmartContractDeposit {
+			initiatorOperation.Amount = createRosAmount("0", true)
+		} else {
+			initiatorOperation.Amount = createRosAmount(ctx.Amount, true)
+			initiatorOperation.Metadata = createMetadataContractCall(ctx)
+		}
+
+		rosOperations = append(rosOperations, initiatorOperation)
 		idx += 1
 
 		for _, transition := range ctx.Receipt.Transitions {
@@ -303,13 +319,13 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 						Index: int64(idx - 1),
 					},
 				}
-				fromOperation.Type = config.OpTypeContractCallDeposit
+				fromOperation.Type = config.OpTypeContractCallTransfer
 				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				fromOperation.Account = &types.AccountIdentifier{
-					Address: transition.Addr,
+					Address: removeHexPrefix(transition.Addr),
 				}
-				fromOperation.Amount = createRosAmount(ctx.Amount, true)
-				fromOperation.Metadata = createMetadataContractCall(ctx)
+				fromOperation.Amount = createRosAmount(transition.Msg.Amount, true)
+				// fromOperation.Metadata = createMetadataContractCall(ctx)
 
 				rosOperations = append(rosOperations, fromOperation)
 				idx += 1
@@ -326,12 +342,12 @@ func createRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 						Index: int64(idx - 1),
 					},
 				}
-				toOperation.Type = config.OpTypeContractCallDeposit
+				toOperation.Type = config.OpTypeContractCallTransfer
 				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				toOperation.Account = &types.AccountIdentifier{
-					Address: transition.Msg.Recipient,
+					Address: removeHexPrefix(transition.Msg.Recipient),
 				}
-				toOperation.Amount = createRosAmount(ctx.Amount, false)
+				toOperation.Amount = createRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
 
 				rosOperations = append(rosOperations, toOperation)
@@ -407,12 +423,7 @@ func createMetadata(ctx *core.Transaction) map[string]interface{} {
 }
 
 func createMetadataContractCall(ctx *core.Transaction) map[string]interface{} {
-	metadata := make(map[string]interface{})
-
-	if ctx.Data != nil {
-		metadata["data"] = ctx.Data
-	}
-
+	metadata := createMetadata(ctx)
 	metadata["contractAddress"] = ctx.ToAddr
 	return metadata
 }
@@ -422,4 +433,11 @@ func getTransactionStatus(status bool) string {
 		return config.StatusSuccess.Status
 	}
 	return config.StatusFailed.Status
+}
+
+func removeHexPrefix(address string) string {
+	if strings.HasPrefix(address, "0x") {
+		return strings.Split(address, "0x")[1]
+	}
+	return address
 }
