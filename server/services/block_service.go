@@ -61,7 +61,7 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 	// check the hash matches
 	// assume input hash is without '0x'
 	if inputTxBlockHash == txBlock.Body.BlockHash {
-		transactionsList, err1 := rpcClient.GetTransactionsForTxBlock(inputTxBlock)
+		transactionsList, err1 := rpcClient.GetTxnBodiesForTxBlock(inputTxBlock)
 
 		if err1 != nil {
 			return nil, &types.Error{
@@ -74,16 +74,9 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 		transactions := make([]*types.Transaction, 0)
 
 		// TODO fetch all the operations for each transaction?
-		for _, shards := range transactionsList {
-			for _, transactionHash := range shards {
-				transactionIdentifier := &types.TransactionIdentifier{
-					Hash: transactionHash,
-				}
-				currTransaction := &types.Transaction{
-					TransactionIdentifier: transactionIdentifier,
-				}
-				transactions = append(transactions, currTransaction)
-			}
+		for _, txnBody := range transactionsList {
+			currTransaction, _ := createRosTransaction(&txnBody)
+			transactions = append(transactions, currTransaction)
 		}
 
 		blocknum, _ := strconv.ParseInt(txBlock.Header.BlockNum, 10, 64)
