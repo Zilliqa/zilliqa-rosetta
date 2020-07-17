@@ -1,8 +1,8 @@
 package mempool
 
 import (
+	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
-	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/kataras/golog"
 	"time"
@@ -13,7 +13,7 @@ var log = golog.New()
 type PoolTransaction struct {
 	SendAddr string
 	Nonce    string
-	Txn      *transaction.Transaction
+	Txn      *core.Transaction
 }
 
 type MemPool struct {
