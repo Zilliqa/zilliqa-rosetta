@@ -23,5 +23,8 @@ func NewBlockchainRouter(
 	accountAPIService := services.NewAccountAPIService(cfg)
 	accountAPIController := server.NewAccountAPIController(accountAPIService, asserter)
 
-	return server.NewRouter(networkAPIController, accountAPIController)
+	memoryPoolAPIService := services.NewMemoryPoolAPIService(cfg)
+	memoryPoolController := server.NewMempoolAPIController(memoryPoolAPIService, asserter)
+
+	return server.NewRouter(networkAPIController, accountAPIController, memoryPoolController)
 }

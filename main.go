@@ -19,7 +19,6 @@ package main
 import (
 	"fmt"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
-	"github.com/Zilliqa/zilliqa-rosetta/mempool"
 	router2 "github.com/Zilliqa/zilliqa-rosetta/router"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
 	"github.com/kataras/golog"
@@ -61,7 +60,6 @@ func main() {
 
 	router := router2.NewBlockchainRouter(asserter, cfg)
 
-	_ = mempool.NewMemPools(10, 10, cfg)
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 
