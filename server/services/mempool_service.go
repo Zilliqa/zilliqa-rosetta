@@ -5,6 +5,7 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/Zilliqa/zilliqa-rosetta/mempool"
+	"github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"strings"
 )
@@ -71,7 +72,6 @@ func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.MempoolRe
 
 func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *types.MempoolTransactionRequest,
 ) (*types.MempoolTransactionResponse, *types.Error) {
-	// todo parse transaction
 	hash := req.TransactionIdentifier.Hash
 	pool := m.Pools.GetByType(req.NetworkIdentifier.Network)
 
@@ -79,9 +79,13 @@ func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *type
 		localTxn := pool.PendingPool[hash]
 		// haven't send it yet
 		if localTxn != nil {
-			rosettaTx := &types.Transaction{
-				TransactionIdentifier: &types.TransactionIdentifier{Hash: req.TransactionIdentifier.Hash},
-				Operations:            []*types.Operation{},
+			rosettaTx, err0 := util.CreateRosTransaction(localTxn.Txn)
+			if err0 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err0.Error(),
+					Retriable: false,
+				}
 			}
 			return &types.MempoolTransactionResponse{
 				Transaction: rosettaTx,
@@ -105,11 +109,25 @@ func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *type
 		return nil, config.TxNotExistInMem
 	}
 
-	rosettaTx := &types.Transaction{
-		TransactionIdentifier: &types.TransactionIdentifier{Hash: req.TransactionIdentifier.Hash},
-		Operations:            []*types.Operation{},
+	if pool != nil {
+		pendingTnx := pool.SentPool[hash].Txn
+		rosettaTx, err1 := util.CreateRosTransaction(pendingTnx)
+		if err1 != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err1.Error(),
+				Retriable: false,
+			}
+		}
+		return &types.MempoolTransactionResponse{
+			Transaction: rosettaTx,
+		}, nil
+	} else {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   "tx is penging, but cannot get its detail info",
+			Retriable: false,
+		}
 	}
-	return &types.MempoolTransactionResponse{
-		Transaction: rosettaTx,
-	}, nil
+
 }
