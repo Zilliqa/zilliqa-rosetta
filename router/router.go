@@ -30,5 +30,5 @@ func NewBlockchainRouter(
 	blockAPIService := services.NewBlockAPIService(cfg)
 	blockAPIController := server.NewBlockAPIController(blockAPIService, asserter)
 
-	return server.NewRouter(networkAPIController, accountAPIController, blockAPIController)
+	return server.NewRouter(networkAPIController, accountAPIController, blockAPIController,memoryPoolController)
 }
