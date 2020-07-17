@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
+	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -280,4 +281,21 @@ func removeHexPrefix(address string) string {
 		return strings.Split(address, "0x")[1]
 	}
 	return address
+}
+
+func ToCoreTransaction(txn *transaction.Transaction) *core.Transaction {
+	return &core.Transaction{
+		ID:           txn.ID,
+		Version:      txn.Version,
+		Nonce:        txn.Nonce,
+		Amount:       txn.Amount,
+		GasPrice:     txn.GasPrice,
+		GasLimit:     txn.GasLimit,
+		Signature:    txn.Signature,
+		SenderPubKey: txn.SenderPubKey,
+		ToAddr:       txn.ToAddr,
+		Code:         txn.Code,
+		Data:         txn.Data,
+		Priority:     txn.Priority,
+	}
 }

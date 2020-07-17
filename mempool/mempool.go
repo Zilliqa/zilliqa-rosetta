@@ -1,8 +1,8 @@
 package mempool
 
 import (
-	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/kataras/golog"
 	"time"
@@ -13,12 +13,12 @@ var log = golog.New()
 type PoolTransaction struct {
 	SendAddr string
 	Nonce    string
-	Txn      *core.Transaction
+	Txn      *transaction.Transaction
 }
 
 type MemPool struct {
 	FreshTime   int
-	PendingPool map[string]*PoolTransaction
+	// todo expire time
 	SentPool    map[string]*PoolTransaction
 	ConfirmPool map[string]*PoolTransaction
 	Network     config.Network
@@ -51,8 +51,8 @@ func NewMemPools(intNum int, fresh int, cfg *config.Config) MemPools {
 func NewMemPool(initNum int, fresh int, network config.Network) *MemPool {
 	c := provider.NewProvider(network.API)
 	return &MemPool{
-		PendingPool: make(map[string]*PoolTransaction, initNum),
 		SentPool:    make(map[string]*PoolTransaction, initNum),
+		ConfirmPool: make(map[string]*PoolTransaction, initNum),
 		FreshTime:   fresh,
 		Network:     network,
 		Client:      c,

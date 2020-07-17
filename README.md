@@ -1035,6 +1035,38 @@ Sample
 }
 ```
 
+**/construction/submit**
+
+*Submit a Signed Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed_transaction": "{\"version\":21823489,\"nonce\":30,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":10000000,\"pubKey\":\"026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"bf1a2a5d8b7eadaebba4a6ed7f5d01c5270b0a288ba8f12fc92fa92d3da9b65b03378cfcdd7c269847d2e3ea850ee16a2533b52bb055d8501578c8f683809e49\"}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction_identifier": {
+        "hash": "5d559dfbbfa98029b961d3f35422f8939095b17c9243fdbd6bf60aaadc41ebf4"
+    }
+}
+```
+
+
 ### Mempool
 
 **/mempool**
