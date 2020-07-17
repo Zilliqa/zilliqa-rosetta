@@ -10,7 +10,6 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strconv"
 	"strings"
 )
 
@@ -85,18 +84,7 @@ func (c *ConstructionAPIService) ConstructionHash(
 		}
 	}
 
-	txn := transaction.Transaction{
-		Version:         strconv.FormatInt(int64(transactionPayload.Version),10),
-		Nonce:           strconv.FormatInt(int64(transactionPayload.Nonce),10),
-		Amount:          transactionPayload.Amount,
-		GasPrice:        transactionPayload.GasPrice,
-		GasLimit:        transactionPayload.GasLimit,
-		Signature:       transactionPayload.Signature,
-		SenderPubKey:    transactionPayload.PubKey,
-		ToAddr:          transactionPayload.ToAddr,
-		Code:            transactionPayload.Code,
-		Data:            transactionPayload.Data,
-	}
+	txn := transaction.NewFromPayload(transactionPayload)
 
 	hash,err1 := txn.Hash()
 	if err1 != nil {
