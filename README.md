@@ -427,3 +427,35 @@ Sample
 }
 ```
 
+**/mempool/transaction**
+
+*Get a Mempool Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "mainnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "transaction_identifier": {
+        "hash": "2d326d17cde4a0a4de1b9d342066c9952d015929e49c8c3ace2bebeb2817e621"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "code": 511,
+    "message": "tx not exist in mem pool",
+    "retriable": false
+}
+```

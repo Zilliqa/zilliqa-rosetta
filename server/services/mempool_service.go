@@ -71,5 +71,45 @@ func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.MempoolRe
 
 func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *types.MempoolTransactionRequest,
 ) (*types.MempoolTransactionResponse, *types.Error) {
-	return nil, nil
+	// todo parse transaction
+	hash := req.TransactionIdentifier.Hash
+	pool := m.Pools.GetByType(req.NetworkIdentifier.Network)
+
+	if pool != nil {
+		localTxn := pool.PendingPool[hash]
+		// haven't send it yet
+		if localTxn != nil {
+			rosettaTx := &types.Transaction{
+				TransactionIdentifier: &types.TransactionIdentifier{Hash: req.TransactionIdentifier.Hash},
+				Operations:            []*types.Operation{},
+			}
+			return &types.MempoolTransactionResponse{
+				Transaction: rosettaTx,
+			}, nil
+		}
+	}
+
+	api := m.Config.NodeAPI(req.NetworkIdentifier.Network)
+	rpcClient := provider.NewProvider(api)
+
+	pendingResult, err := rpcClient.GetPendingTxn(hash)
+	if err != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: false,
+		}
+	}
+
+	if !strings.Contains(pendingResult.Info, "Pending") {
+		return nil, config.TxNotExistInMem
+	}
+
+	rosettaTx := &types.Transaction{
+		TransactionIdentifier: &types.TransactionIdentifier{Hash: req.TransactionIdentifier.Hash},
+		Operations:            []*types.Operation{},
+	}
+	return &types.MempoolTransactionResponse{
+		Transaction: rosettaTx,
+	}, nil
 }
