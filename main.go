@@ -51,14 +51,15 @@ func main() {
 
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
-	networkIdentifier :=  cfg.GetNetworkIdentifier()
+	networkIdentifier := cfg.GetNetworkIdentifier()
 	asserter, err := asserter.NewServer(networkIdentifier)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	router := router2.NewBlockchainRouter(asserter,cfg)
+	router := router2.NewBlockchainRouter(asserter, cfg)
+
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
 

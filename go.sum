@@ -22,8 +22,9 @@ github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398 h1:WDC6ySpJzbxG
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
 github.com/Zilliqa/gozilliqa-sdk v0.0.0-20200629033237-deee21288cb5 h1:OzCITCMxBnnaW0d8aswvFm1e0rWVD1cljeJepi9EU48=
 github.com/Zilliqa/gozilliqa-sdk v0.0.0-20200629033237-deee21288cb5/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
-github.com/Zilliqa/gozilliqa-sdk v1.2.0 h1:pxINq2woI80BQkMb8dnIVsHw0pk6AkEnZ7DNE94bDMo=
-github.com/Zilliqa/gozilliqa-sdk v1.2.0/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.1.0 h1:u4zzwuJaW7u3TOYInNQ7ywDPMWuYrejzmJf5vFTC5lc=
+github.com/Zilliqa/gozilliqa-sdk v1.1.0/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200713104641-2cc69c1f4fe7 h1:NZCi25XxGGxPw2zLxfL4aZKa7Ddrt53mJiALYqakxBA=
 github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584 h1:icJVsr6uwl1Td/NgpmTxF83tr8x+4Pqf6V5l1TnJLYg=
 github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
