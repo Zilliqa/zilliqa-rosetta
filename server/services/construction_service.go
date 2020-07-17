@@ -2,10 +2,15 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
+	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	"github.com/Zilliqa/gozilliqa-sdk/transaction"
+	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"strconv"
 	"strings"
 )
 
@@ -39,11 +44,6 @@ func (c *ConstructionAPIService) ConstructionDerive(
 
 	meta := req.Metadata
 	pubKey := req.PublicKey.Bytes
-	//fmt.Println(string(pubKey))
-	//publicKey := util.DecodeHex(string(pubKey))
-	//if publicKey == nil {
-	//	return nil, config.PublicHexError
-	//}
 
 	address := keytools.GetAddressFromPublic(pubKey)
 	bech32Addr, err := bech32.ToBech32Address(address)
@@ -75,7 +75,43 @@ func (c *ConstructionAPIService) ConstructionHash(
 	ctx context.Context,
 	req *types.ConstructionHashRequest,
 ) (*types.ConstructionHashResponse, *types.Error) {
-	return nil, nil
+	fmt.Println(req.SignedTransaction)
+	transactionPayload, err := provider.NewFromJson([]byte(req.SignedTransaction))
+	if err != nil {
+		return nil,&types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: false,
+		}
+	}
+
+	txn := transaction.Transaction{
+		Version:         strconv.FormatInt(int64(transactionPayload.Version),10),
+		Nonce:           strconv.FormatInt(int64(transactionPayload.Nonce),10),
+		Amount:          transactionPayload.Amount,
+		GasPrice:        transactionPayload.GasPrice,
+		GasLimit:        transactionPayload.GasLimit,
+		Signature:       transactionPayload.Signature,
+		SenderPubKey:    transactionPayload.PubKey,
+		ToAddr:          transactionPayload.ToAddr,
+		Code:            transactionPayload.Code,
+		Data:            transactionPayload.Data,
+	}
+
+	hash,err1 := txn.Hash()
+	if err1 != nil {
+		return nil,&types.Error{
+			Code:      0,
+			Message:   err1.Error(),
+			Retriable: false,
+		}
+	}
+
+	resp := &types.ConstructionHashResponse{}
+
+
+	resp.TransactionHash = util.EncodeHex(hash)
+	return resp, nil
 }
 
 func (c *ConstructionAPIService) ConstructionMetadata(

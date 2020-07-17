@@ -970,8 +970,6 @@ In the sample, the sequence of operations are as follows:
 
 **/construction/derive**
 
-### Mempool
-
 *Derive an Address from a PublicKey*
 
 Request:
@@ -1007,6 +1005,37 @@ Sample
     }
 }
 ```
+
+**/construction/hash**
+
+*Get the Hash of a Signed Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "mainnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed_transaction": "{\"version\":21823489,\"nonce\":166473,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":1000000,\"pubKey\":\"0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"0e28d454535a41b2bdc36ad3eade2238e27031bdca248e87417ace809e909c1dde72a3f8e910e82cc3be36dd2c02ed90547c8518f5e329fee1f71e957078b58e\"}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction_hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+}
+```
+
+### Mempool
 
 **/mempool**
 

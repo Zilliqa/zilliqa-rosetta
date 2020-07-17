@@ -40,8 +40,17 @@ github.com/Zilliqa/gozilliqa-sdk v0.0.0-20200629033237-deee21288cb5/go.mod h1:eS
 github.com/Zilliqa/gozilliqa-sdk v1.1.0 h1:u4zzwuJaW7u3TOYInNQ7ywDPMWuYrejzmJf5vFTC5lc=
 github.com/Zilliqa/gozilliqa-sdk v1.1.0/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
 github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200713104641-2cc69c1f4fe7 h1:NZCi25XxGGxPw2zLxfL4aZKa7Ddrt53mJiALYqakxBA=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200713104641-2cc69c1f4fe7/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
 github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584 h1:icJVsr6uwl1Td/NgpmTxF83tr8x+4Pqf6V5l1TnJLYg=
 github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717091218-ea7323644fd1 h1:rRqyhBNOc4G4huULSQDEAXp6a1HQjrUywhjFgIc79q4=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717091218-ea7323644fd1/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717094745-1560aeda8548 h1:naPqsYu66+94WMuFPCtGYZVFknoeiTcdG1a0MxsD8Rk=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717094745-1560aeda8548/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717120309-eb75996e81b7 h1:nfJJep0LQGlDbzNlJwC3j2iwSHHMuXLPwuv/ju8M2Sg=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717120309-eb75996e81b7/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717121646-28c777cfef39 h1:SwGVL5Ma4oTHaTDUb8w5yykdn1RCHqtjInkyfxm9SV0=
+github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717121646-28c777cfef39/go.mod h1:eSYp2T6f0apnuW8TzhV3f6Aff2SE8Dwio++U4ha4yEM=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
