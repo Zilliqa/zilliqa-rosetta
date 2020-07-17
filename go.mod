@@ -7,7 +7,7 @@ require (
 	github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398 // indirect
 	github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584
 	github.com/aymerick/raymond v2.0.2+incompatible // indirect
-	github.com/coinbase/rosetta-sdk-go v0.2.0
+	github.com/coinbase/rosetta-sdk-go v0.3.0
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/flosch/pongo2 v0.0.0-20200529170236-5abacdfa4915 // indirect

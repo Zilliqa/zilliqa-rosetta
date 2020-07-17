@@ -521,7 +521,7 @@ Sample
                                 "decimals": 12
                             }
                         },
-                        "metadata": {...}
+                        "metadata": {}
                     }
                 ]
             }
@@ -968,7 +968,45 @@ In the sample, the sequence of operations are as follows:
 
 ### Construction
 
+**/construction/derive**
+
 ### Mempool
+
+*Derive an Address from a PublicKey*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "mainnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "public_key": {
+        "hex_bytes": "026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc",
+        "curve_type": "secp256k1"
+    },
+    "metadata": {
+    	"type": "bech32"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "address": "zil1y9qmlzmdygfaf4eqfcka4wfx20wzghzl05xazc",
+    "metadata": {
+        "type": "bech32"
+    }
+}
+```
 
 **/mempool**
 

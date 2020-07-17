@@ -24,7 +24,7 @@ func NewMemoryPoolAPIService(config *config.Config) *MemoryPoolAPIService {
 	}
 }
 
-func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.MempoolRequest) (*types.MempoolResponse,
+func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.NetworkRequest) (*types.MempoolResponse,
 	*types.Error) {
 
 	api := m.Config.NodeAPI(req.NetworkIdentifier.Network)

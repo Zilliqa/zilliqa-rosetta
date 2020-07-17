@@ -52,7 +52,8 @@ func main() {
 	// The asserter automatically rejects incorrectly formatted
 	// requests.
 	networkIdentifier := cfg.GetNetworkIdentifier()
-	asserter, err := asserter.NewServer(networkIdentifier)
+	//todo
+	asserter, err := asserter.NewServer([]string{"transfer", "contract_deployment", "contract_call", "contract_call_transfer"}, true, networkIdentifier)
 
 	if err != nil {
 		log.Fatal(err)

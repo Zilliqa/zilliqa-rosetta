@@ -152,6 +152,16 @@ var (
 		Message:   "db store error",
 		Retriable: true,
 	}
+	PublicHexError = &types.Error{
+		Code:      514,
+		Message:   "public hex error",
+		Retriable: false,
+	}
+	InvalidAddressTypeError = &types.Error{
+		Code:      515,
+		Message:   "unsupported address format",
+		Retriable: false,
+	}
 )
 
 var (
