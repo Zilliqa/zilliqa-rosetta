@@ -3,7 +3,6 @@ module github.com/Zilliqa/zilliqa-rosetta
 go 1.14
 
 require (
-	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/Joker/jade v1.0.0 // indirect
 	github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398 // indirect
 	github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584

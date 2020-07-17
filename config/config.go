@@ -18,6 +18,7 @@ package config
 
 import (
 	"encoding/json"
+
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/spf13/viper"
 )
@@ -165,6 +166,9 @@ var (
 )
 
 const OpTypeTransfer = "transfer"
+const OpTypeContractDeployment = "contract_deployment"
+const OpTypeContractCall = "contract_call"
+const OpTypeContractCallTransfer = "contract_call_transfer"
 
 type Rosetta struct {
 	Host string
