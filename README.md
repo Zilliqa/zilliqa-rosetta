@@ -968,6 +968,49 @@ In the sample, the sequence of operations are as follows:
 
 ### Construction
 
+**/construction/metadata**
+
+*Create a Request to Fetch Metadata*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    }, 
+    "options": {
+        "method": "transfer"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "metadata": {
+        "amount": "Transaction amount to be sent to the recipent's address. This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
+        "code": "The smart contract source code. This is present only when deploying a new contract",
+        "data": "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract",
+        "gasLimit": "The amount of gas units that is needed to be process this transaction",
+        "gasPrice": "An amount that a sender is willing to pay per unit of gas for processing this transactionThis is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
+        "nonce": "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. 20 coins from A to B can be replayed by B over and over to continually drain A's balance",
+        "priority": "A flag for this transaction to be processed by the DS committee",
+        "pubKey": "Sender's public key of 33 bytes",
+        "signature": "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above",
+        "toAddr": "Recipient's account address. This is represented as a String",
+        "version": "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
+    }
+}
+```
+
 **/construction/derive**
 
 *Derive an Address from a PublicKey*

@@ -17,7 +17,7 @@ type PoolTransaction struct {
 }
 
 type MemPool struct {
-	FreshTime   int
+	FreshTime int
 	// todo expire time
 	SentPool    map[string]*PoolTransaction
 	ConfirmPool map[string]*PoolTransaction

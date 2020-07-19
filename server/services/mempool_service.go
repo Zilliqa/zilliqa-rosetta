@@ -47,7 +47,7 @@ func (m *MemoryPoolAPIService) AddTransaction(ctx context.Context, network *type
 		}
 	}
 	pl := txn.ToTransactionPayload()
-	payload,_ := json.Marshal(pl)
+	payload, _ := json.Marshal(pl)
 	fmt.Println(string(payload))
 	rsp, err1 := rpcClient.CreateTransaction(pl)
 	fmt.Println(rsp)

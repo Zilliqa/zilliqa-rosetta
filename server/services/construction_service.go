@@ -109,7 +109,30 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	ctx context.Context,
 	req *types.ConstructionMetadataRequest,
 ) (*types.ConstructionMetadataResponse, *types.Error) {
-	return nil, nil
+	resp := &types.ConstructionMetadataResponse{
+		Metadata: make(map[string]interface{}),
+	}
+
+	if req.Options[METHOD_TYPE] != "transfer" {
+		return nil, config.ParamsError
+	}
+
+	resp.Metadata["version"] = "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
+	resp.Metadata["nonce"] = "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. " +
+		"20 coins from A to B can be replayed by B over and over to continually drain A's balance"
+	resp.Metadata["toAddr"] = "Recipient's account address. This is represented as a String"
+	resp.Metadata["amount"] = "Transaction amount to be sent to the recipent's address. This is measured in the smallest" +
+		" price unit Qa (or 10^-12 Zil) in Zilliqa"
+	resp.Metadata["pubKey"] = "Sender's public key of 33 bytes"
+	resp.Metadata["gasPrice"] = "An amount that a sender is willing to pay per unit of gas for processing this transaction" +
+		"This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa"
+	resp.Metadata["gasLimit"] = "The amount of gas units that is needed to be process this transaction"
+	resp.Metadata["code"] = "The smart contract source code. This is present only when deploying a new contract"
+	resp.Metadata["data"] = "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract"
+	resp.Metadata["signature"] = "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above"
+	resp.Metadata["priority"] = "A flag for this transaction to be processed by the DS committee"
+
+	return resp, nil
 }
 
 func (c *ConstructionAPIService) ConstructionParse(
