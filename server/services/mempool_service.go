@@ -2,7 +2,13 @@ package services
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	"github.com/Zilliqa/gozilliqa-sdk/transaction"
+	util2 "github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/Zilliqa/zilliqa-rosetta/mempool"
 	"github.com/Zilliqa/zilliqa-rosetta/util"
@@ -21,6 +27,44 @@ func NewMemoryPoolAPIService(config *config.Config) *MemoryPoolAPIService {
 	return &MemoryPoolAPIService{
 		Config: config,
 		Pools:  pools,
+	}
+}
+
+func (m *MemoryPoolAPIService) AddTransaction(ctx context.Context, network *types.NetworkIdentifier, txn *transaction.Transaction) error {
+	api := m.Config.NodeAPI(network.Network)
+	rpcClient := provider.NewProvider(api)
+
+	t, _ := rpcClient.GetTransaction(txn.ID)
+	if t != nil && t.ID != "" {
+		return errors.New("transaction already sent and confirmed")
+	}
+
+	pool := m.Pools.GetByType(network.Network)
+	if pool != nil {
+		poolTxn := pool.SentPool[txn.ID]
+		if poolTxn != nil {
+			return errors.New("transaction already sent")
+		}
+	}
+	pl := txn.ToTransactionPayload()
+	payload, _ := json.Marshal(pl)
+	fmt.Println(string(payload))
+	rsp, err1 := rpcClient.CreateTransaction(pl)
+	fmt.Println(rsp)
+	if err1 == nil && rsp.Error == nil {
+		addr := keytools.GetAddressFromPublic(util2.DecodeHex(txn.SenderPubKey))
+		pool.SentPool[txn.ID] = &mempool.PoolTransaction{
+			SendAddr: addr,
+			Nonce:    txn.Nonce,
+			Txn:      txn,
+		}
+		return nil
+	} else {
+		if err1 != nil {
+			return err1
+		} else {
+			return errors.New(rsp.Error.Message)
+		}
 	}
 }
 
@@ -50,7 +94,7 @@ func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.NetworkRe
 
 	pool := m.Pools.GetByType(req.NetworkIdentifier.Network)
 	if pool != nil {
-		localPendingMap := pool.PendingPool
+		localPendingMap := pool.SentPool
 		for k, _ := range localPendingMap {
 			mergedPendings[k] = nil
 		}
@@ -76,10 +120,9 @@ func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *type
 	pool := m.Pools.GetByType(req.NetworkIdentifier.Network)
 
 	if pool != nil {
-		localTxn := pool.PendingPool[hash]
-		// haven't send it yet
+		localTxn := pool.SentPool[hash]
 		if localTxn != nil {
-			rosettaTx, err0 := util.CreateRosTransaction(localTxn.Txn)
+			rosettaTx, err0 := util.CreateRosTransaction(util.ToCoreTransaction(localTxn.Txn))
 			if err0 != nil {
 				return nil, &types.Error{
 					Code:      0,
@@ -93,41 +136,26 @@ func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *type
 		}
 	}
 
-	api := m.Config.NodeAPI(req.NetworkIdentifier.Network)
-	rpcClient := provider.NewProvider(api)
-
-	pendingResult, err := rpcClient.GetPendingTxn(hash)
-	if err != nil {
-		return nil, &types.Error{
-			Code:      0,
-			Message:   err.Error(),
-			Retriable: false,
-		}
+	return nil, &types.Error{
+		Code:      0,
+		Message:   "transaction not pending",
+		Retriable: false,
 	}
 
-	if !strings.Contains(pendingResult.Info, "Pending") {
-		return nil, config.TxNotExistInMem
-	}
-
-	if pool != nil {
-		pendingTnx := pool.SentPool[hash].Txn
-		rosettaTx, err1 := util.CreateRosTransaction(pendingTnx)
-		if err1 != nil {
-			return nil, &types.Error{
-				Code:      0,
-				Message:   err1.Error(),
-				Retriable: false,
-			}
-		}
-		return &types.MempoolTransactionResponse{
-			Transaction: rosettaTx,
-		}, nil
-	} else {
-		return nil, &types.Error{
-			Code:      0,
-			Message:   "tx is penging, but cannot get its detail info",
-			Retriable: false,
-		}
-	}
+	//api := m.Config.NodeAPI(req.NetworkIdentifier.Network)
+	//rpcClient := provider.NewProvider(api)
+	//
+	//pendingResult, err := rpcClient.GetPendingTxn(hash)
+	//if err != nil {
+	//	return nil, &types.Error{
+	//		Code:      0,
+	//		Message:   err.Error(),
+	//		Retriable: false,
+	//	}
+	//}
+	//
+	//if !strings.Contains(pendingResult.Info, "Pending") {
+	//	return nil, config.TxNotExistInMem
+	//}
 
 }

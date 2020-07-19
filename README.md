@@ -968,9 +968,50 @@ In the sample, the sequence of operations are as follows:
 
 ### Construction
 
-**/construction/derive**
+**/construction/metadata**
 
-### Mempool
+*Create a Request to Fetch Metadata*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    }, 
+    "options": {
+        "method": "transfer"
+    }
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "metadata": {
+        "amount": "Transaction amount to be sent to the recipent's address. This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
+        "code": "The smart contract source code. This is present only when deploying a new contract",
+        "data": "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract",
+        "gasLimit": "The amount of gas units that is needed to be process this transaction",
+        "gasPrice": "An amount that a sender is willing to pay per unit of gas for processing this transactionThis is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
+        "nonce": "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. 20 coins from A to B can be replayed by B over and over to continually drain A's balance",
+        "priority": "A flag for this transaction to be processed by the DS committee",
+        "pubKey": "Sender's public key of 33 bytes",
+        "signature": "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above",
+        "toAddr": "Recipient's account address. This is represented as a String",
+        "version": "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
+    }
+}
+```
+
+**/construction/derive**
 
 *Derive an Address from a PublicKey*
 
@@ -1007,6 +1048,69 @@ Sample
     }
 }
 ```
+
+**/construction/hash**
+
+*Get the Hash of a Signed Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "mainnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed_transaction": "{\"version\":21823489,\"nonce\":166473,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":1000000,\"pubKey\":\"0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"0e28d454535a41b2bdc36ad3eade2238e27031bdca248e87417ace809e909c1dde72a3f8e910e82cc3be36dd2c02ed90547c8518f5e329fee1f71e957078b58e\"}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction_hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+}
+```
+
+**/construction/submit**
+
+*Submit a Signed Transaction*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed_transaction": "{\"version\":21823489,\"nonce\":30,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":10000000,\"pubKey\":\"026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"bf1a2a5d8b7eadaebba4a6ed7f5d01c5270b0a288ba8f12fc92fa92d3da9b65b03378cfcdd7c269847d2e3ea850ee16a2533b52bb055d8501578c8f683809e49\"}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "transaction_identifier": {
+        "hash": "5d559dfbbfa98029b961d3f35422f8939095b17c9243fdbd6bf60aaadc41ebf4"
+    }
+}
+```
+
+
+### Mempool
 
 **/mempool**
 

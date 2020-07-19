@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/Joker/jade v1.0.0 // indirect
 	github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398 // indirect
-	github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200715093954-758ced3c5584
+	github.com/Zilliqa/gozilliqa-sdk v1.2.1-0.20200717133438-568e389c7843
 	github.com/aymerick/raymond v2.0.2+incompatible // indirect
 	github.com/coinbase/rosetta-sdk-go v0.3.0
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
