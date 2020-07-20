@@ -3,14 +3,16 @@ package services
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
-	"github.com/Zilliqa/gozilliqa-sdk/util"
+	goZilUtil "github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
+	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strings"
 )
 
 const (
@@ -101,7 +103,7 @@ func (c *ConstructionAPIService) ConstructionHash(
 
 	resp := &types.ConstructionHashResponse{}
 
-	resp.TransactionHash = util.EncodeHex(hash)
+	resp.TransactionHash = goZilUtil.EncodeHex(hash)
 	return resp, nil
 }
 
@@ -117,20 +119,20 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 		return nil, config.ParamsError
 	}
 
-	resp.Metadata["version"] = "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
-	resp.Metadata["nonce"] = "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. " +
+	resp.Metadata[rosettaUtil.VERSION] = "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
+	resp.Metadata[rosettaUtil.NONCE] = "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. " +
 		"20 coins from A to B can be replayed by B over and over to continually drain A's balance"
-	resp.Metadata["toAddr"] = "Recipient's account address. This is represented as a String"
-	resp.Metadata["amount"] = "Transaction amount to be sent to the recipent's address. This is measured in the smallest" +
+	resp.Metadata[rosettaUtil.TO_ADDR] = "Recipient's account address. This is represented as a String"
+	resp.Metadata[rosettaUtil.AMOUNT] = "Transaction amount to be sent to the recipent's address. This is measured in the smallest" +
 		" price unit Qa (or 10^-12 Zil) in Zilliqa"
-	resp.Metadata["pubKey"] = "Sender's public key of 33 bytes"
-	resp.Metadata["gasPrice"] = "An amount that a sender is willing to pay per unit of gas for processing this transaction" +
+	resp.Metadata[rosettaUtil.PUB_KEY] = "Sender's public key of 33 bytes"
+	resp.Metadata[rosettaUtil.GAS_PRICE] = "An amount that a sender is willing to pay per unit of gas for processing this transaction" +
 		"This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa"
-	resp.Metadata["gasLimit"] = "The amount of gas units that is needed to be process this transaction"
-	resp.Metadata["code"] = "The smart contract source code. This is present only when deploying a new contract"
-	resp.Metadata["data"] = "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract"
-	resp.Metadata["signature"] = "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above"
-	resp.Metadata["priority"] = "A flag for this transaction to be processed by the DS committee"
+	resp.Metadata[rosettaUtil.GAS_LIMIT] = "The amount of gas units that is needed to be process this transaction"
+	resp.Metadata[rosettaUtil.CODE] = "The smart contract source code. This is present only when deploying a new contract"
+	resp.Metadata[rosettaUtil.DATA] = "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract"
+	resp.Metadata[rosettaUtil.SIGNATURE] = "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above"
+	resp.Metadata[rosettaUtil.PRIORITY] = "A flag for this transaction to be processed by the DS committee"
 
 	return resp, nil
 }
@@ -149,11 +151,28 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	return nil, nil
 }
 
+// /construction/preprocess
+// create a request to fetch metadata
+// TODO - support contract deployment and contract call operations
+// support payment operation
 func (c *ConstructionAPIService) ConstructionPreprocess(
 	ctx context.Context,
 	req *types.ConstructionPreprocessRequest,
 ) (*types.ConstructionPreprocessResponse, *types.Error) {
-	return nil, nil
+	preProcessResp := &types.ConstructionPreprocessResponse{
+		Options: make(map[string]interface{}),
+	}
+	for _, operation := range req.Operations {
+		if operation.OperationIdentifier.Index == 0 {
+			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
+		}
+		if operation.OperationIdentifier.Index == 1 {
+			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
+			preProcessResp.Options[rosettaUtil.GAS_PRICE] = operation.Metadata[rosettaUtil.GAS_PRICE]
+			preProcessResp.Options[rosettaUtil.GAS_LIMIT] = operation.Metadata[rosettaUtil.GAS_LIMIT]
+		}
+	}
+	return preProcessResp, nil
 }
 
 func (c *ConstructionAPIService) ConstructionSubmit(
@@ -182,7 +201,7 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 		}
 	}
 
-	hexHash := util.EncodeHex(hash)
+	hexHash := goZilUtil.EncodeHex(hash)
 	txn.ID = hexHash
 
 	err2 := c.MemPoolService.AddTransaction(ctx, request.NetworkIdentifier, txn)

@@ -2,13 +2,29 @@ package util
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strings"
+)
+
+const (
+	// metadata
+	AMOUNT    = "amount"
+	CODE      = "code"
+	DATA      = "data"
+	GAS_LIMIT = "gasLimit"
+	GAS_PRICE = "gasPrice"
+	NONCE     = "nonce"
+	PRIORITY  = "priority"
+	PUB_KEY   = "pubKey"
+	SIGNATURE = "signature"
+	TO_ADDR   = "toAddr"
+	VERSION   = "version"
 )
 
 // convert zilliqa transaction object to rosetta transaction object
