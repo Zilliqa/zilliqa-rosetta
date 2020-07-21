@@ -170,7 +170,9 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 			preProcessResp.Options[rosettaUtil.GAS_PRICE] = operation.Metadata[rosettaUtil.GAS_PRICE]
 			preProcessResp.Options[rosettaUtil.GAS_LIMIT] = operation.Metadata[rosettaUtil.GAS_LIMIT]
+			preProcessResp.Options[rosettaUtil.TO_ADDR] = operation.Account.Address
 		}
+		preProcessResp.Options[rosettaUtil.PUB_KEY] = operation.Metadata[rosettaUtil.PUB_KEY]
 	}
 	return preProcessResp, nil
 }
