@@ -1078,6 +1078,87 @@ Sample
 }
 ```
 
+**/construction/preprocess**
+
+*Create a Request to Fetch Metadata*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+	"operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "f0b55a21ed19e6e442833afa9266c166ad639d53"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "208e1e2c4130e43f8f1329b96767492650597c92"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "senderPubKey": "0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6"
+            }
+        }
+    ],
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "options": {
+        "amount": "2000000000000",
+        "gasLimit": "1",
+        "gasPrice": "1000000000",
+        "pubKey": "0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6",
+        "toAddr": "208e1e2c4130e43f8f1329b96767492650597c92"
+    }
+}
+```
+
 **/construction/submit**
 
 *Submit a Signed Transaction*
