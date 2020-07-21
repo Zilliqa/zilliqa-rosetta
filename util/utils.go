@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Zilliqa/gozilliqa-sdk/core"
@@ -25,6 +26,9 @@ const (
 	SIGNATURE = "signature"
 	TO_ADDR   = "toAddr"
 	VERSION   = "version"
+
+	// others
+	EC_SCHNORR = "ec-schnorr"
 )
 
 // convert zilliqa transaction object to rosetta transaction object
@@ -314,4 +318,9 @@ func ToCoreTransaction(txn *transaction.Transaction) *core.Transaction {
 		Data:         txn.Data,
 		Priority:     txn.Priority,
 	}
+}
+
+func GetVersion(chainIdStr string) int {
+	chainID, _ := strconv.Atoi(chainIdStr)
+	return int(util.Pack(chainID, 1))
 }

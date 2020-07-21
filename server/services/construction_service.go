@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
@@ -144,11 +146,86 @@ func (c *ConstructionAPIService) ConstructionParse(
 	return nil, nil
 }
 
+// /construction/payloads
+// Generate an Unsigned Transaction and Signing Payloads
 func (c *ConstructionAPIService) ConstructionPayloads(
 	ctx context.Context,
 	req *types.ConstructionPayloadsRequest,
 ) (*types.ConstructionPayloadsResponse, *types.Error) {
-	return nil, nil
+
+	api := c.Config.NodeAPI(req.NetworkIdentifier.Network)
+	rpcClient := provider.NewProvider(api)
+
+	resp := new(types.ConstructionPayloadsResponse)
+	payloads := make([]*types.SigningPayload, 0)
+
+	// create the unsigned transaction json
+	var senderAddr string
+	transactionJson := make(map[string]interface{})
+
+	for _, operation := range req.Operations {
+		// sender
+		if operation.OperationIdentifier.Index == 0 {
+			senderAddr = operation.Account.Address
+			// get the nonce from sender
+			balAndNonce, err1 := rpcClient.GetBalance(senderAddr)
+			if err1 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err1.Error(),
+					Retriable: false,
+				}
+			}
+
+			// get the networkID (chainID) to compute the version
+			networkID, err2 := rpcClient.GetNetworkId()
+			if err2 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err2.Error(),
+					Retriable: false,
+				}
+			}
+
+			transactionJson[rosettaUtil.VERSION] = rosettaUtil.GetVersion(networkID)
+			transactionJson[rosettaUtil.NONCE] = balAndNonce.Nonce + 1
+		}
+
+		// recipient
+		if operation.OperationIdentifier.Index == 1 {
+			if operation.Metadata == nil {
+				return nil, config.ParamsError
+			}
+			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
+			transactionJson[rosettaUtil.TO_ADDR] = operation.Account.Address
+			transactionJson[rosettaUtil.PUB_KEY] = operation.Metadata[rosettaUtil.PUB_KEY]
+			transactionJson[rosettaUtil.GAS_PRICE], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_PRICE].(string), 10, 64)
+			transactionJson[rosettaUtil.GAS_LIMIT], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_LIMIT].(string), 10, 64)
+		}
+	}
+
+	transactionJson[rosettaUtil.CODE] = ""
+	transactionJson[rosettaUtil.DATA] = ""
+
+	unsignedTxnJson, err3 := json.Marshal(transactionJson)
+
+	if err3 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err3.Error(),
+			Retriable: false,
+		}
+	}
+
+	signingPayload := &types.SigningPayload{
+		Address:       senderAddr,
+		Bytes:         unsignedTxnJson, //byte array of transition
+		SignatureType: rosettaUtil.EC_SCHNORR,
+	}
+	payloads = append(payloads, signingPayload)
+	resp.UnsignedTransaction = string(unsignedTxnJson)
+	resp.Payloads = payloads
+	return resp, nil
 }
 
 // /construction/preprocess
@@ -167,6 +244,9 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 		}
 		if operation.OperationIdentifier.Index == 1 {
+			if operation.Metadata == nil {
+				return nil, config.ParamsError
+			}
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 			preProcessResp.Options[rosettaUtil.GAS_PRICE] = operation.Metadata[rosettaUtil.GAS_PRICE]
 			preProcessResp.Options[rosettaUtil.GAS_LIMIT] = operation.Metadata[rosettaUtil.GAS_LIMIT]
