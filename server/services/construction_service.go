@@ -41,7 +41,9 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	ctx context.Context,
 	req *types.ConstructionCombineRequest,
 ) (*types.ConstructionCombineResponse, *types.Error) {
-	return nil, nil
+	resp := new(types.ConstructionCombineResponse)
+	resp.SignedTransaction = "hello"
+	return resp, nil
 }
 
 func (c *ConstructionAPIService) ConstructionDerive(
@@ -220,7 +222,7 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	signingPayload := &types.SigningPayload{
 		Address:       senderAddr,
 		Bytes:         unsignedTxnJson, //byte array of transaction
-		SignatureType: rosettaUtil.EC_SCHNORR,
+		SignatureType: rosettaUtil.SIGNATURE_TYPE,
 	}
 	payloads = append(payloads, signingPayload)
 	resp.UnsignedTransaction = string(unsignedTxnJson)

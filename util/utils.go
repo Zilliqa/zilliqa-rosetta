@@ -28,7 +28,7 @@ const (
 	VERSION   = "version"
 
 	// others
-	EC_SCHNORR = "ec-schnorr"
+	SIGNATURE_TYPE = "secp256k1"
 )
 
 // convert zilliqa transaction object to rosetta transaction object
