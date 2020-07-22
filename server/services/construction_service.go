@@ -219,7 +219,7 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 
 	signingPayload := &types.SigningPayload{
 		Address:       senderAddr,
-		Bytes:         unsignedTxnJson, //byte array of transition
+		Bytes:         unsignedTxnJson, //byte array of transaction
 		SignatureType: rosettaUtil.EC_SCHNORR,
 	}
 	payloads = append(payloads, signingPayload)

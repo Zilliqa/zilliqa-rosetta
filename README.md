@@ -1078,6 +1078,88 @@ Sample
 }
 ```
 
+**/construction/payloads**
+
+*Generate an Unsigned Transaction and Signing Payloads*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+	"operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "f0b55a21ed19e6e442833afa9266c166ad639d53"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "208e1e2c4130e43f8f1329b96767492650597c92"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "pubKey": "0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6"
+            }
+        }
+    ],
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":142,\"pubKey\":\"0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6\",\"toAddr\":\"208e1e2c4130e43f8f1329b96767492650597c92\",\"version\":21823489}",
+    "payloads": [
+        {
+            "hex_bytes": "7b22616d6f756e74223a323030303030303030303030302c22636f6465223a22222c2264617461223a22222c226761734c696d6974223a312c226761735072696365223a313030303030303030302c226e6f6e6365223a3134322c227075624b6579223a223078303237353538454445374241314541374137363333463141434138393843453344453046373538394336423544384333304439314544453435374636453535324636222c22746f41646472223a2232303865316532633431333065343366386631333239623936373637343932363530353937633932222c2276657273696f6e223a32313832333438397d",
+            "address": "f0b55a21ed19e6e442833afa9266c166ad639d53",
+            "signature_type": "ec-schnorr"
+        }
+    ]
+}
+```
+
 **/construction/preprocess**
 
 *Create a Request to Fetch Metadata*
