@@ -98,7 +98,7 @@ ARG EXTRA_CMAKE_ARGS=
 RUN git clone ${REPO} ${SOURCE_DIR} \
     && git -C ${SOURCE_DIR} checkout ${COMMIT_OR_TAG}
 
-RUN pip3 install -r /zilliqa/dokcer/requirements3.txt
+RUN pip3 install -r /zilliqa/docker/requirements3.txt
 
 RUN cmake -H${SOURCE_DIR} -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} ${EXTRA_CMAKE_ARGS} \
