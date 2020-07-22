@@ -48,13 +48,6 @@ RUN make opamdep-ci \
 # ====================
 # Zilliqa Node
 # ====================
-ARG BASE=zilliqa/scilla:v0.7.1
-FROM ${BASE}
-
-COPY requirements2.txt ./
-COPY requirements2.preq.txt ./
-COPY requirements3.txt ./
-
 # Format guideline: one package per line and keep them alphabetically sorted
 RUN apt-get update \
     && apt-get install -y software-properties-common \
@@ -94,7 +87,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Manually input tag or commit, can be overwritten by docker build-args
-ARG COMMIT_OR_TAG=v6.3.0
+ARG COMMIT_OR_TAG=17d581f
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
 ARG BUILD_DIR=/build
@@ -105,9 +98,7 @@ ARG EXTRA_CMAKE_ARGS=
 RUN git clone ${REPO} ${SOURCE_DIR} \
     && git -C ${SOURCE_DIR} checkout ${COMMIT_OR_TAG}
 
-RUN pip install -r /zilliqa/docker/requirements2.preq.txt \
-    && pip install -r /zilliqa/docker/requirements2.txt \
-    && pip3 install -r /zilliqa/dokcer/requirements3.txt
+RUN pip3 install -r /zilliqa/dokcer/requirements3.txt
 
 RUN cmake -H${SOURCE_DIR} -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} ${EXTRA_CMAKE_ARGS} \
