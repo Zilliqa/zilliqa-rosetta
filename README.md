@@ -968,6 +968,78 @@ In the sample, the sequence of operations are as follows:
 
 ### Construction
 
+**/construction/combine**
+
+*Create Network Transaction from Signature*
+
+__Note__: Before calling `/combine`, please call `/payloads` to have the `unsigned_transaction`. Next, use [goZilliqa SDK](https://github.com/Zilliqa/gozilliqa-sdk) or other Zilliqa's SDKs to craft a transaction object and sign the transaction object; print out the __*signature*__ and __*transaction object*__ in __hexadecimals__. 
+
+Use them as request parameters as follows:
+
+```
+{
+    ...,
+    "unsigned_transaction": ... // from /payloads
+    "signatures": [
+        {
+            "signing_payload": {
+                "address": "string", // sender account address
+                "hex_bytes": "string",  // signed transaction object in hexadecimals representation obtained after signing with goZilliqa SDK or other Zilliqa SDK
+                "signature_type": "ecdsa"
+            },
+            "public_key": {
+                "hex_bytes": "string", // sender public key
+                "curve_type": "secp256k1"
+            },
+            "signature_type": "ecdsa",
+            "hex_bytes": "string" // signature of the signed transaction object 
+        }
+    ]
+}
+
+```
+
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
+    "signatures": [
+        {
+            "signing_payload": {
+                "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615",
+                "hex_bytes": "088180b40a10b8011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
+                "signature_type": "ecdsa"
+            },
+            "public_key": {
+                "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+                "curve_type": "secp256k1"
+            },
+            "signature_type": "ecdsa",
+            "hex_bytes": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca"
+        }
+    ]
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
+}
+```
+
 **/construction/metadata**
 
 *Create a Request to Fetch Metadata*
@@ -1078,9 +1150,268 @@ Sample
 }
 ```
 
+**/construction/parse**
+
+*Parse a Transaction*
+
+__Note__: Set the `signed` flag accordingly if the transaction is signed or unsigned.
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed": true,
+    "transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "SUCCESS",
+            "account": {
+                "address": "99f9d482abbdc5f05272a3c34a77e5933bb1c615"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "SUCCESS",
+            "account": {
+                "address": "4978075dd607933122f4355B220915EFa51E84c7"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "data": "",
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "nonce": "184",
+                "receipt": {
+                    "accept": false,
+                    "errors": null,
+                    "exceptions": null,
+                    "success": false,
+                    "cumulative_gas": "",
+                    "epoch_num": "",
+                    "event_logs": null,
+                    "transitions": null
+                },
+                "senderPubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+                "signature": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca",
+                "version": "21823489"
+            }
+        }
+    ],
+    "signers": [
+        "99f9d482abbdc5f05272a3c34a77e5933bb1c615"
+    ]
+}
+```
+
+**/construction/payloads**
+
+*Generate an Unsigned Transaction and Signing Payloads*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+	"operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "0x4978075dd607933122f4355B220915EFa51E84c7"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e"
+            }
+        }
+    ],
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
+    "payloads": [
+        {
+            "hex_bytes": "7b22616d6f756e74223a323030303030303030303030302c22636f6465223a22222c2264617461223a22222c226761734c696d6974223a312c226761735072696365223a313030303030303030302c226e6f6e6365223a3138342c227075624b6579223a22303265343465663263356332303331333836666161366361666466356636373331386363363631383731623031313261323734353865363566333761333536353565222c22746f41646472223a2234393738303735646436303739333331323266343335354232323039313545466135314538346337222c2276657273696f6e223a32313832333438397d",
+            "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615",
+            "signature_type": "ecdsa"
+        }
+    ]
+}
+```
+
+**/construction/preprocess**
+
+*Create a Request to Fetch Metadata*
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+	"operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "f0b55a21ed19e6e442833afa9266c166ad639d53"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "",
+            "account": {
+                "address": "208e1e2c4130e43f8f1329b96767492650597c92"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "senderPubKey": "0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6"
+            }
+        }
+    ],
+    "metadata": {}
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "options": {
+        "amount": "2000000000000",
+        "gasLimit": "1",
+        "gasPrice": "1000000000",
+        "pubKey": "027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6",
+        "toAddr": "208e1e2c4130e43f8f1329b96767492650597c92"
+    }
+}
+```
+
 **/construction/submit**
 
 *Submit a Signed Transaction*
+
+__Note__: Before calling `/submit`, please call `/combine` to obtain the `signed_transaction` required for the  request parameters.
 
 Request:
 

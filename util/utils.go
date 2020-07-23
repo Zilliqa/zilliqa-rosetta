@@ -2,13 +2,34 @@ package util
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strings"
+)
+
+const (
+	// metadata
+	AMOUNT    = "amount"
+	CODE      = "code"
+	DATA      = "data"
+	GAS_LIMIT = "gasLimit"
+	GAS_PRICE = "gasPrice"
+	NONCE     = "nonce"
+	PRIORITY  = "priority"
+	PUB_KEY   = "pubKey"
+	SIGNATURE = "signature"
+	TO_ADDR   = "toAddr"
+	VERSION   = "version"
+
+	// others
+	// set to ecdsa to bypass the signature type check for now
+	SIGNATURE_TYPE = "ecdsa"
 )
 
 // convert zilliqa transaction object to rosetta transaction object
@@ -36,7 +57,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 	// ----------------------------------------------------------------------
 	// payment
 	// ----------------------------------------------------------------------
-	if ctx.Code == "" && ctx.Data == nil {
+	if (ctx.Code == "" && ctx.Data == nil) || (ctx.Code == "" && ctx.Data == "") {
 		// if transaction is payment - code and data is empty
 		// -----------------
 		// sender operation
@@ -105,7 +126,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		rosTransaction.Operations = rosOperations
 		return rosTransaction, nil
 
-	} else if ctx.Data != nil {
+	} else if ctx.Data != nil || ctx.Data != "" {
 		// ----------------------------------------------------------------------
 		// contract call
 		// ----------------------------------------------------------------------
@@ -163,7 +184,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				fromOperation.Type = config.OpTypeContractCallTransfer
 				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				fromOperation.Account = &types.AccountIdentifier{
-					Address: removeHexPrefix(transition.Addr),
+					Address: RemoveHexPrefix(transition.Addr),
 				}
 				fromOperation.Amount = createRosAmount(transition.Msg.Amount, true)
 				// fromOperation.Metadata = createMetadataContractCall(ctx)
@@ -186,7 +207,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				toOperation.Type = config.OpTypeContractCallTransfer
 				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				toOperation.Account = &types.AccountIdentifier{
-					Address: removeHexPrefix(transition.Msg.Recipient),
+					Address: RemoveHexPrefix(transition.Msg.Recipient),
 				}
 				toOperation.Amount = createRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
@@ -276,7 +297,7 @@ func getTransactionStatus(status bool) string {
 	return config.StatusFailed.Status
 }
 
-func removeHexPrefix(address string) string {
+func RemoveHexPrefix(address string) string {
 	if strings.HasPrefix(address, "0x") {
 		return strings.Split(address, "0x")[1]
 	}
@@ -298,4 +319,9 @@ func ToCoreTransaction(txn *transaction.Transaction) *core.Transaction {
 		Data:         txn.Data,
 		Priority:     txn.Priority,
 	}
+}
+
+func GetVersion(chainIdStr string) int {
+	chainID, _ := strconv.Atoi(chainIdStr)
+	return int(util.Pack(chainID, 1))
 }

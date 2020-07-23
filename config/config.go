@@ -162,6 +162,11 @@ var (
 		Message:   "unsupported address format",
 		Retriable: false,
 	}
+	SignatureInvalidError = &types.Error{
+		Code:      516,
+		Message:   "signature provided in transaction is invalid",
+		Retriable: false,
+	}
 )
 
 var (
