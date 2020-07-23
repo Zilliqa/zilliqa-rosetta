@@ -57,7 +57,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 	// ----------------------------------------------------------------------
 	// payment
 	// ----------------------------------------------------------------------
-	if ctx.Code == "" && ctx.Data == nil {
+	if (ctx.Code == "" && ctx.Data == nil) || (ctx.Code == "" && ctx.Data == "") {
 		// if transaction is payment - code and data is empty
 		// -----------------
 		// sender operation
@@ -126,7 +126,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		rosTransaction.Operations = rosOperations
 		return rosTransaction, nil
 
-	} else if ctx.Data != nil {
+	} else if ctx.Data != nil || ctx.Data != "" {
 		// ----------------------------------------------------------------------
 		// contract call
 		// ----------------------------------------------------------------------

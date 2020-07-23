@@ -213,11 +213,74 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	return resp, nil
 }
 
+// /construction/parse
+// Parse is called on both unsigned and signed transactions to understand the intent of the formulated transaction.
+// This is run as a sanity check before signing (after `/construction/payloads`) and before broadcast (after `/construction/combine`).
 func (c *ConstructionAPIService) ConstructionParse(
 	ctx context.Context,
 	req *types.ConstructionParseRequest,
 ) (*types.ConstructionParseResponse, *types.Error) {
-	return nil, nil
+
+	// convert transaction to Zilliqa Transaction object
+	var txnJson map[string]interface{}
+	err := json.Unmarshal([]byte(req.Transaction), &txnJson)
+	if err != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: false,
+		}
+	}
+
+	zilliqaTransaction := &transaction.Transaction{
+		Version:      fmt.Sprintf("%.0f", txnJson["version"]),
+		Nonce:        fmt.Sprintf("%.0f", txnJson["nonce"]),
+		Amount:       fmt.Sprintf("%.0f", txnJson["amount"]),
+		GasPrice:     fmt.Sprintf("%.0f", txnJson["gasPrice"]),
+		GasLimit:     fmt.Sprintf("%.0f", txnJson["gasLimit"]),
+		ToAddr:       rosettaUtil.RemoveHexPrefix(txnJson["toAddr"].(string)),
+		SenderPubKey: txnJson["pubKey"].(string),
+		Code:         txnJson["code"].(string),
+		Data:         txnJson["data"].(string),
+	}
+
+	if req.Signed {
+		if txnJson["signature"] == nil || txnJson["signature"] == "" {
+			return nil, config.SignatureInvalidError
+		}
+		zilliqaTransaction.Signature = txnJson["signature"].(string)
+	}
+
+	// convert to rosetta transaction object
+	rosTransaction, err2 := rosettaUtil.CreateRosTransaction(rosettaUtil.ToCoreTransaction(zilliqaTransaction))
+	if err2 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err2.Error(),
+			Retriable: false,
+		}
+	}
+
+	resp := &types.ConstructionParseResponse{
+		Signers:    make([]string, 0),
+		Operations: []*types.Operation{},
+		Metadata:   make(map[string]interface{}),
+	}
+
+	// set all the operation status to success
+	for _, operations := range rosTransaction.Operations {
+		operations.Status = config.StatusSuccess.Status
+	}
+
+	resp.Operations = rosTransaction.Operations
+
+	if req.Signed {
+		// txnJson is a signed transaction
+		// assume sender is signer
+		resp.Signers = append(resp.Signers, keytools.GetAddressFromPublic(util.DecodeHex(zilliqaTransaction.SenderPubKey)))
+	}
+
+	return resp, nil
 }
 
 // /construction/payloads
