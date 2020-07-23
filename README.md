@@ -976,6 +976,29 @@ __Note__: Before calling `/combine`, please call `/payloads` to have the `unsign
 
 Use them as request parameters as follows:
 
+```
+{
+    ...,
+    "unsigned_transaction": ... // from /payloads
+    "signatures": [
+        {
+            "signing_payload": {
+                "address": "string", // sender account address
+                "hex_bytes": "string",  // signed transaction object in hexadecimals representation obtained after signing with goZilliqa SDK or other Zilliqa SDK
+                "signature_type": "ecdsa"
+            },
+            "public_key": {
+                "hex_bytes": "string", // sender public key
+                "curve_type": "secp256k1"
+            },
+            "signature_type": "ecdsa",
+            "hex_bytes": "string" // signature of the signed transaction object 
+        }
+    ]
+}
+
+```
+
 
 Request:
 
@@ -988,20 +1011,20 @@ Request:
             "network": "empty"
         }
     },
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}", // from /payloads
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
     "signatures": [
         {
             "signing_payload": {
-                "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615", // sender account address
-                "hex_bytes": "088180b40a10b8011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801", // signed transaction object output in hex, from goZilliqa SDK, etc
+                "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615",
+                "hex_bytes": "088180b40a10b8011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
                 "signature_type": "ecdsa"
             },
             "public_key": {
-                "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e", // sender public key
+                "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
                 "curve_type": "secp256k1"
             },
             "signature_type": "ecdsa",
-            "hex_bytes": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca" // signature of the signed transaction output from goZilliqa SDK, etc
+            "hex_bytes": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca"
         }
     ]
 }
@@ -1124,6 +1147,100 @@ Sample
 ```json
 {
     "transaction_hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+}
+```
+
+**/construction/parse**
+
+*Parse a Transaction*
+
+__Note__: Set the `signed` flag accordingly if the transaction is signed or unsigned.
+
+Request:
+
+```json
+{
+    "network_identifier": {
+        "blockchain": "zilliqa",
+        "network": "testnet",
+        "sub_network_identifier": {
+            "network": "empty"
+        }
+    },
+    "signed": true,
+    "transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
+}
+```
+
+Response:
+
+Sample
+
+```json
+{
+    "operations": [
+        {
+            "operation_identifier": {
+                "index": 0
+            },
+            "type": "transfer",
+            "status": "SUCCESS",
+            "account": {
+                "address": "99f9d482abbdc5f05272a3c34a77e5933bb1c615"
+            },
+            "amount": {
+                "value": "-2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            }
+        },
+        {
+            "operation_identifier": {
+                "index": 1
+            },
+            "related_operations": [
+                {
+                    "index": 0
+                }
+            ],
+            "type": "transfer",
+            "status": "SUCCESS",
+            "account": {
+                "address": "4978075dd607933122f4355B220915EFa51E84c7"
+            },
+            "amount": {
+                "value": "2000000000000",
+                "currency": {
+                    "symbol": "ZIL",
+                    "decimals": 12
+                }
+            },
+            "metadata": {
+                "data": "",
+                "gasLimit": "1",
+                "gasPrice": "1000000000",
+                "nonce": "184",
+                "receipt": {
+                    "accept": false,
+                    "errors": null,
+                    "exceptions": null,
+                    "success": false,
+                    "cumulative_gas": "",
+                    "epoch_num": "",
+                    "event_logs": null,
+                    "transitions": null
+                },
+                "senderPubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+                "signature": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca",
+                "version": "21823489"
+            }
+        }
+    ],
+    "signers": [
+        "99f9d482abbdc5f05272a3c34a77e5933bb1c615"
+    ]
 }
 ```
 
