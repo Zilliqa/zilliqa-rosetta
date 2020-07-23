@@ -10,7 +10,9 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
+	schnorr "github.com/Zilliqa/gozilliqa-sdk/schnorr"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
+	"github.com/Zilliqa/gozilliqa-sdk/util"
 	goZilUtil "github.com/Zilliqa/gozilliqa-sdk/util"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
@@ -37,12 +39,83 @@ func NewConstructionAPIService(config *config.Config, memPoolService *MemoryPool
 	}
 }
 
+// /construction/combine
+// Create Network Transaction from Signatures
+// sign the transaction using goZil or other out-of-band methods
+// pass the result of the signature, and signed transaction in bytes as request for /combine
 func (c *ConstructionAPIService) ConstructionCombine(
 	ctx context.Context,
 	req *types.ConstructionCombineRequest,
 ) (*types.ConstructionCombineResponse, *types.Error) {
+
+	// extract request params
+	txnSig := util.EncodeHex(req.Signatures[0].Bytes)
+	pubKey := req.Signatures[0].PublicKey.Bytes
+	signedPayload := req.Signatures[0].SigningPayload.Bytes // not used for verification
+
+	r := goZilUtil.DecodeHex(txnSig[0:64])
+	s := goZilUtil.DecodeHex(txnSig[64:128])
+
+	// convert unsigned transaction to Zilliqa Transaction object
+	var unsignedTxnJson map[string]interface{}
+	err := json.Unmarshal([]byte(req.UnsignedTransaction), &unsignedTxnJson)
+	if err != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: false,
+		}
+	}
+
+	zilliqaTransaction := &transaction.Transaction{
+		Version:      fmt.Sprintf("%.0f", unsignedTxnJson["version"]),
+		Nonce:        fmt.Sprintf("%.0f", unsignedTxnJson["nonce"]),
+		Amount:       fmt.Sprintf("%.0f", unsignedTxnJson["amount"]),
+		GasPrice:     fmt.Sprintf("%.0f", unsignedTxnJson["gasPrice"]),
+		GasLimit:     fmt.Sprintf("%.0f", unsignedTxnJson["gasLimit"]),
+		ToAddr:       rosettaUtil.RemoveHexPrefix(unsignedTxnJson["toAddr"].(string)),
+		SenderPubKey: unsignedTxnJson["pubKey"].(string),
+		Code:         unsignedTxnJson["code"].(string),
+		Data:         unsignedTxnJson["data"].(string),
+		Signature:    txnSig, // signature from request param
+	}
+
+	zilliqaTransactionBytes, err2 := zilliqaTransaction.Bytes()
+	if err2 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err2.Error(),
+			Retriable: false,
+		}
+	}
+
+	// not using signed payload from request directly
+	// verify unsigned transaction + signature is indeed legit
+	// also helps to verify integrity of unsigned transaction
+	signatureVerification := schnorr.Verify(pubKey, zilliqaTransactionBytes, r, s)
+
+	if signatureVerification == false {
+		return nil, config.SignatureInvalidError
+	}
+
+	// add signature to unsigned transaction json
+	unsignedTxnJson["signature"] = txnSig
+	signedTxnJson, err3 := json.Marshal(unsignedTxnJson)
+	if err3 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err3.Error(),
+			Retriable: false,
+		}
+	}
+
 	resp := new(types.ConstructionCombineResponse)
-	resp.SignedTransaction = "hello"
+	resp.SignedTransaction = string(signedTxnJson)
+
+	fmt.Printf("txn signature: %v\n", txnSig)
+	fmt.Printf("signed payload from request: %v\n", signedPayload)
+	fmt.Printf("unsigned transaction with signature: %v\n", zilliqaTransactionBytes)
+	fmt.Printf("schnorr verify result: %v\n", signatureVerification)
 	return resp, nil
 }
 
@@ -84,7 +157,6 @@ func (c *ConstructionAPIService) ConstructionHash(
 	ctx context.Context,
 	req *types.ConstructionHashRequest,
 ) (*types.ConstructionHashResponse, *types.Error) {
-	fmt.Println(req.SignedTransaction)
 	transactionPayload, err := provider.NewFromJson([]byte(req.SignedTransaction))
 	if err != nil {
 		return nil, &types.Error{
@@ -199,8 +271,8 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 				return nil, config.ParamsError
 			}
 			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
-			transactionJson[rosettaUtil.TO_ADDR] = operation.Account.Address
-			transactionJson[rosettaUtil.PUB_KEY] = operation.Metadata[rosettaUtil.PUB_KEY]
+			transactionJson[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
+			transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata[rosettaUtil.PUB_KEY].(string))
 			transactionJson[rosettaUtil.GAS_PRICE], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_PRICE].(string), 10, 64)
 			transactionJson[rosettaUtil.GAS_LIMIT], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_LIMIT].(string), 10, 64)
 		}

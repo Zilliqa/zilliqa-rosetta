@@ -28,7 +28,8 @@ const (
 	VERSION   = "version"
 
 	// others
-	SIGNATURE_TYPE = "secp256k1"
+	// set to ecdsa to bypass the signature type check for now
+	SIGNATURE_TYPE = "ecdsa"
 )
 
 // convert zilliqa transaction object to rosetta transaction object
@@ -183,7 +184,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				fromOperation.Type = config.OpTypeContractCallTransfer
 				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				fromOperation.Account = &types.AccountIdentifier{
-					Address: removeHexPrefix(transition.Addr),
+					Address: RemoveHexPrefix(transition.Addr),
 				}
 				fromOperation.Amount = createRosAmount(transition.Msg.Amount, true)
 				// fromOperation.Metadata = createMetadataContractCall(ctx)
@@ -206,7 +207,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				toOperation.Type = config.OpTypeContractCallTransfer
 				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				toOperation.Account = &types.AccountIdentifier{
-					Address: removeHexPrefix(transition.Msg.Recipient),
+					Address: RemoveHexPrefix(transition.Msg.Recipient),
 				}
 				toOperation.Amount = createRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
@@ -296,7 +297,7 @@ func getTransactionStatus(status bool) string {
 	return config.StatusFailed.Status
 }
 
-func removeHexPrefix(address string) string {
+func RemoveHexPrefix(address string) string {
 	if strings.HasPrefix(address, "0x") {
 		return strings.Split(address, "0x")[1]
 	}
