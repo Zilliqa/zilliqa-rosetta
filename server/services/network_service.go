@@ -19,9 +19,10 @@ package services
 
 import (
 	"context"
+	"strconv"
+
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
-	"strconv"
 
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
@@ -141,7 +142,7 @@ func (s *NetworkAPIService) NetworkOptions(
 		config.StatusFailed,
 	}
 
-	operationTypes := []string{config.OpTypeTransfer}
+	operationTypes := []string{config.OpTypeTransfer, config.OpTypeContractDeployment, config.OpTypeContractCall, config.OpTypeContractCallTransfer}
 
 	errors := []*types.Error{
 		config.NetworkIdentifierError,
