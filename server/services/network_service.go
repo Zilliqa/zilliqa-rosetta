@@ -109,7 +109,7 @@ func (s *NetworkAPIService) NetworkStatus(
 	// todo peer info
 	return &types.NetworkStatusResponse{
 		CurrentBlockIdentifier: blockIden,
-		CurrentBlockTimestamp:  timestamp,
+		CurrentBlockTimestamp:  timestamp / 1000,
 		GenesisBlockIdentifier: genesisIden,
 	}, nil
 }
