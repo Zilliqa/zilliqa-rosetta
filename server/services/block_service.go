@@ -20,59 +20,73 @@ package services
 import (
 	"context"
 	"fmt"
+	"strconv"
+
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strconv"
 )
 
+// BlockAPIService implements the server.BlockAPIService interface.
 type BlockAPIService struct {
 	Config *config.Config
 }
 
+// NewBlockAPIService creates a new instance of a BlockAPIService.
 func NewBlockAPIService(config *config.Config) server.BlockAPIServicer {
 	return &BlockAPIService{
 		Config: config,
 	}
 }
 
-// implements /block endpoint
+// Block implements /block endpoint
+// When fetching data by BlockIdentifier, it may be possible to only specify the index or hash.
+// If neither property is specified, it is assumed that the client is making a request at the current block.
 func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest) (*types.BlockResponse, *types.Error) {
 	api := s.Config.NodeAPI(request.NetworkIdentifier.Network)
 	rpcClient := provider.NewProvider(api)
-	inputTxBlock := fmt.Sprintf("%d", *request.BlockIdentifier.Index)
-	inputTxBlockHash := *request.BlockIdentifier.Hash
-	txBlock, err := rpcClient.GetTxBlock(inputTxBlock)
 
-	if err != nil {
-		return nil, &types.Error{
-			Code:      0,
-			Message:   err.Error(),
-			Retriable: true,
-		}
+	if request.BlockIdentifier.Index == nil && request.BlockIdentifier.Hash == nil {
+		return nil, config.BlockIdentifierNil
 	}
 
-	// check the hash matches
-	// assume input hash is without '0x'
-	if inputTxBlockHash == txBlock.Body.BlockHash {
-		transactionsList, err1 := rpcClient.GetTxnBodiesForTxBlock(inputTxBlock)
+	if request.BlockIdentifier.Index != nil && *request.BlockIdentifier.Index < 0 {
+		return nil, config.BlockNumberInvalid
+	}
 
-		if err1 != nil {
+	if request.BlockIdentifier.Index != nil {
+		inputTxBlock := fmt.Sprintf("%d", *request.BlockIdentifier.Index)
+		txBlock, err := rpcClient.GetTxBlock(inputTxBlock)
+
+		if err != nil {
 			return nil, &types.Error{
 				Code:      0,
-				Message:   err1.Error(),
-				Retriable: false,
+				Message:   err.Error(),
+				Retriable: true,
 			}
 		}
 
 		transactions := make([]*types.Transaction, 0)
 
-		// TODO fetch all the operations for each transaction?
-		for _, txnBody := range transactionsList {
-			currTransaction, _ := util.CreateRosTransaction(&txnBody)
-			transactions = append(transactions, currTransaction)
+		// block may have no transaction
+		if txBlock.Header.NumTxns > 0 {
+			transactionsList, err1 := rpcClient.GetTxnBodiesForTxBlock(inputTxBlock)
+
+			if err1 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err1.Error(),
+					Retriable: false,
+				}
+			}
+
+			// TODO fetch all the operations for each transaction?
+			for _, txnBody := range transactionsList {
+				currTransaction, _ := util.CreateRosTransaction(&txnBody)
+				transactions = append(transactions, currTransaction)
+			}
 		}
 
 		blocknum, _ := strconv.ParseInt(txBlock.Header.BlockNum, 10, 64)
@@ -95,17 +109,19 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 		rosBlockResponse.Block = &types.Block{
 			BlockIdentifier:       blockIdentifier,
 			ParentBlockIdentifier: parentBlockIdentifier,
-			Timestamp:             timestamp,
+			Timestamp:             timestamp / 1e3,
 			Transactions:          transactions,
 		}
 
 		return rosBlockResponse, nil
-	} else {
-		return nil, config.BlockHashInvalid
 	}
+
+	// TODO the hash
+
+	return nil, config.BlockNumberInvalid
 }
 
-// implements /block/transaction endpoint
+// BlockTransaction implements /block/transaction endpoint
 func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.BlockTransactionRequest) (*types.BlockTransactionResponse, *types.Error) {
 
 	api := s.Config.NodeAPI(request.NetworkIdentifier.Network)
@@ -154,7 +170,6 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 
 		return rosBlockTransactionReponse, nil
 
-	} else {
-		return nil, config.BlockHashInvalid
 	}
+	return nil, config.BlockHashInvalid
 }
