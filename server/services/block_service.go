@@ -68,6 +68,11 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 			}
 		}
 
+		// verify the hash if present in the request
+		if request.BlockIdentifier.Hash != nil && *request.BlockIdentifier.Hash != txBlock.Body.BlockHash {
+			return nil, config.BlockHashInvalid
+		}
+
 		transactions := make([]*types.Transaction, 0)
 
 		// block may have no transaction
@@ -115,8 +120,6 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 
 		return rosBlockResponse, nil
 	}
-
-	// TODO the hash
 
 	return nil, config.BlockNumberInvalid
 }
