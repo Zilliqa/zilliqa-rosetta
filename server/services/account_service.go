@@ -3,12 +3,15 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/gozilliqa-sdk/validator"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strings"
 )
 
 type AccountAPIService struct {
@@ -82,8 +85,47 @@ func (s *AccountAPIService) AccountBalance(
 		}
 	}
 
+	// zilliqa has no historical lookup
+	// return the request block / latest block as the block identifier
+	blockIdentifier := new(types.BlockIdentifier)
+
+	if request.BlockIdentifier != nil && request.BlockIdentifier.Index != nil {
+		blockIdentifier.Index = *request.BlockIdentifier.Index
+
+		if request.BlockIdentifier.Hash != nil {
+			blockIdentifier.Hash = *request.BlockIdentifier.Hash
+		} else {
+			txBlock, err2 := rpcClient.GetTxBlock(fmt.Sprintf("%d", blockIdentifier.Index))
+			if err2 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err2.Error(),
+					Retriable: false,
+				}
+			}
+			blockIdentifier.Hash = txBlock.Body.BlockHash
+		}
+	} else {
+		latestTxBlock, err3 := rpcClient.GetLatestTxBlock()
+
+		if err3 != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err3.Error(),
+				Retriable: false,
+			}
+		}
+
+		blocknum, _ := strconv.ParseInt(latestTxBlock.Header.BlockNum, 10, 64)
+		blockIdentifier.Index = blocknum
+		blockIdentifier.Hash = latestTxBlock.Body.BlockHash
+	}
+
+	metadata := make(map[string]interface{})
+	metadata["nonce"] = balAndNonce.Nonce
+
 	return &types.AccountBalanceResponse{
-		BlockIdentifier: &types.BlockIdentifier{},
+		BlockIdentifier: blockIdentifier,
 		Balances: []*types.Amount{
 			&types.Amount{
 				Value: balAndNonce.Balance,
@@ -95,6 +137,6 @@ func (s *AccountAPIService) AccountBalance(
 				Metadata: map[string]interface{}{},
 			},
 		},
-		Metadata: nil,
+		Metadata: metadata,
 	}, nil
 }
