@@ -1,0 +1,12 @@
+[
+    {
+      "account_identifier": {
+        "address":"12b94775c510e189a632344ce6a5a563aa195714"
+      },
+      "currency": {
+        "symbol": "ZIL",
+        "decimals": 12
+      }
+    }
+]
+  
