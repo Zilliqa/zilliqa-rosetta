@@ -1553,3 +1553,31 @@ Sample
     "retriable": false
 }
 ```
+
+## How to test
+Install rosetta-cli@0.3.1 from https://github.com/coinbase/rosetta-cli/releases/tag/v0.3.1.
+```
+1. Extract the downloaded folder
+2. cd into the folder
+3. make deps
+4. make lint
+5. make release
+```
+The above should install `rosetta-cli` under your `$GOPATH/bin`.
+
+To begin testing:
+1. cd into zilliqa-rosetta folder
+2. `go run main.go`
+3. Open another terminal and run one of the following depending on the network:
+
+**Zilliqa Mainnet**
+```
+rosetta-cli check --lookup-balance-by-block=false --log-blocks --log-transactions --log-balance-changes
+```
+
+**Zilliqa Testnet**
+```
+rosetta-cli check --lookup-balance-by-block=false --exempt-accounts ~/projects/zilliqa-rosetta/exempt-accounts.json --log-blocks --log-transactions --log-balance-changes
+```
+
+The above command executes the `check` function on `rosetta-cli` to crawl from block 0 to the latest block. If you are testing on **testnet**, the command takes in a `exempt-accounts.json` parameter that specifies some addresses to be skipped during the check. These addresses on the testnet have balances which are created by network configurations means and will cause the `rosetta-cli` to flag negative balances errors as it cannot find a matching deposit from any previous blocks.
