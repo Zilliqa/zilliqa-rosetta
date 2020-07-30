@@ -101,9 +101,23 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 		}
 
 		parentBlockIdentifier := new(types.BlockIdentifier)
+
 		if blocknum == 0 {
 			parentBlockIdentifier = blockIdentifier
+		} else if blocknum == 1 {
+			// link block 1 parent to genesis block
+			genesisBlock, err2 := rpcClient.GetTxBlock("0")
+			if err2 != nil {
+				return nil, &types.Error{
+					Code:      0,
+					Message:   err2.Error(),
+					Retriable: false,
+				}
+			}
+			parentBlockIdentifier.Index = (blocknum - 1)
+			parentBlockIdentifier.Hash = genesisBlock.Body.BlockHash
 		} else {
+			// other blocks except 0, 1
 			parentBlockIdentifier.Index = (blocknum - 1)
 			parentBlockIdentifier.Hash = txBlock.Header.PrevBlockHash
 		}
