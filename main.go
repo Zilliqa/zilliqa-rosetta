@@ -18,12 +18,14 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	router2 "github.com/Zilliqa/zilliqa-rosetta/router"
 	"github.com/coinbase/rosetta-sdk-go/asserter"
+	"github.com/coinbase/rosetta-sdk-go/server"
 	"github.com/kataras/golog"
 	"github.com/spf13/viper"
-	"net/http"
 )
 
 var log *golog.Logger
@@ -60,8 +62,8 @@ func main() {
 	}
 
 	router := router2.NewBlockchainRouter(asserter, cfg)
-
+	loggedRouter := server.LoggerMiddleware(router)
 	log.Printf("Listening on port %d\n", cfg.Rosetta.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), router))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", cfg.Rosetta.Port), loggedRouter))
 
 }
