@@ -19,7 +19,7 @@ The default configuration file is config.local.yaml
 rosetta:
  host: "0.0.0.0"
  port: 8080
- version: "1.3.1"
+ version: "1.4.1"
  middleware_version: "0.0.1"
 
 networks:
@@ -75,25 +75,11 @@ Sample
     "network_identifiers": [
         {
             "blockchain": "zilliqa",
-            "network": "testnet",
-            "sub_network_identifier": {
-                "network": "",
-                "metadata": {
-                    "api": "https://dev-api.zilliqa.com",
-                    "chainId": 333
-                }
-            }
+            "network": "mainnet"
         },
         {
             "blockchain": "zilliqa",
-            "network": "mainnet",
-            "sub_network_identifier": {
-                "network": "",
-                "metadata": {
-                    "api": "https://api.zilliqa.com",
-                    "chainId": 1
-                }
-            }
+            "network": "testnet"
         }
     ]
 }
@@ -109,10 +95,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "metadata": {}
 }
@@ -125,7 +108,7 @@ Sample
 ```json
 {
     "version": {
-        "rosetta_version": "1.3.1",
+        "rosetta_version": "1.4.1",
         "node_version": "v6.3.0-alpha.0"
     },
     "allow": {
@@ -263,10 +246,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "metadata": {}
 }
@@ -303,10 +283,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "account_identifier": {
         "address": "2141bf8b6d2213d4d7204e2ddab92653dc245c5f",
@@ -355,10 +332,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "block_identifier": {
     	"index": 672276,
@@ -540,10 +514,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "block_identifier": {
     	"index": 1582509,
@@ -637,10 +608,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "block_identifier": {
     	"index": 670379,
@@ -723,10 +691,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "block_identifier": {
     	"index": 1558244,
@@ -817,10 +782,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "block_identifier": {
     	"index": 1406004,
@@ -1006,10 +968,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
     "signatures": [
@@ -1050,10 +1009,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     }, 
     "options": {
         "method": "transfer"
@@ -1093,10 +1049,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "public_key": {
         "hex_bytes": "026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc",
@@ -1131,10 +1084,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "signed_transaction": "{\"version\":21823489,\"nonce\":166473,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":1000000,\"pubKey\":\"0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"0e28d454535a41b2bdc36ad3eade2238e27031bdca248e87417ace809e909c1dde72a3f8e910e82cc3be36dd2c02ed90547c8518f5e329fee1f71e957078b58e\"}"
 }
@@ -1146,7 +1096,9 @@ Sample
 
 ```json
 {
-    "transaction_hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+    "transaction_identifier": {
+        "hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+    }
 }
 ```
 
@@ -1162,10 +1114,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "signed": true,
     "transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
@@ -1254,10 +1203,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
 	"operations": [
         {
@@ -1336,10 +1282,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
 	"operations": [
         {
@@ -1419,10 +1362,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "testnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "testnet"
     },
     "signed_transaction": "{\"version\":21823489,\"nonce\":30,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":10000000,\"pubKey\":\"026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"bf1a2a5d8b7eadaebba4a6ed7f5d01c5270b0a288ba8f12fc92fa92d3da9b65b03378cfcdd7c269847d2e3ea850ee16a2533b52bb055d8501578c8f683809e49\"}"
 }
@@ -1453,10 +1393,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "metadata": {}
 }
@@ -1531,10 +1468,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet",
-        "sub_network_identifier": {
-            "network": "empty"
-        }
+        "network": "mainnet"
     },
     "transaction_identifier": {
         "hash": "2d326d17cde4a0a4de1b9d342066c9952d015929e49c8c3ace2bebeb2817e621"
@@ -1555,7 +1489,7 @@ Sample
 ```
 
 ## How to test
-Install rosetta-cli@0.3.1 from https://github.com/coinbase/rosetta-cli/releases/tag/v0.3.1.
+Install rosetta-cli@0.4.0 from https://github.com/coinbase/rosetta-cli/releases/tag/v0.4.0.
 ```
 1. Extract the downloaded folder
 2. cd into the folder
@@ -1572,12 +1506,12 @@ To begin testing:
 
 **Zilliqa Mainnet**
 ```
-rosetta-cli check --lookup-balance-by-block=false --log-blocks --log-transactions --log-balance-changes
+TBD
 ```
 
 **Zilliqa Testnet**
 ```
-rosetta-cli check --lookup-balance-by-block=false --exempt-accounts ~/projects/zilliqa-rosetta/exempt-accounts.json --log-blocks --log-transactions --log-balance-changes
+TBD
 ```
 
 The above command executes the `check` function on `rosetta-cli` to crawl from block 0 to the latest block. If you are testing on **testnet**, the command takes in a `exempt-accounts.json` parameter that specifies some addresses to be skipped during the check. These addresses on the testnet have balances which are created by network configurations means and will cause the `rosetta-cli` to flag negative balances errors as it cannot find a matching deposit from any previous blocks.
