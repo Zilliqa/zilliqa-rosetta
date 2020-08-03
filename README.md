@@ -1507,14 +1507,20 @@ To begin testing:
 2. `go run main.go`
 3. Open another terminal and run one of the following depending on the network:
 
+### Testing Data API
+
 **Zilliqa Mainnet**
 ```
-TBD
+rosetta-cli check:data --configuration-file config/mainnet_config.json
 ```
 
 **Zilliqa Testnet**
 ```
-TBD
+rosetta-cli check:data --configuration-file config/testnet_config.json
 ```
 
-The above command executes the `check` function on `rosetta-cli` to crawl from block 0 to the latest block. If you are testing on **testnet**, the command takes in a `exempt-accounts.json` parameter that specifies some addresses to be skipped during the check. These addresses on the testnet have balances which are created by network configurations means and will cause the `rosetta-cli` to flag negative balances errors as it cannot find a matching deposit from any previous blocks.
+Note: The `mainnet_config.json` specifically **disables** historical balance lookup and balance tracking options. This is due to the fact that historical balance lookup is not supported on Zilliqa blockchain. In addition, the blockchain rewards miners directly, which results in a single outflow transaction without prior inflow transactions. This will result in `negative balances` errors being raised incorrectly. Hence, both the historical balance lookup and balance tracking options are disabled.
+
+### Testing Construction API
+
+*WIP*

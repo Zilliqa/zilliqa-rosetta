@@ -1,7 +1,7 @@
 {
  "network": {
   "blockchain": "zilliqa",
-  "network": "mainnet"
+  "network": "testnet"
  },
  "online_url": "http://localhost:8080",
  "data_directory": "",
