@@ -39,7 +39,7 @@ func NewConstructionAPIService(config *config.Config, memPoolService *MemoryPool
 	}
 }
 
-// /construction/combine
+// ConstructionCombine /construction/combine
 // Create Network Transaction from Signatures
 // sign the transaction using goZil or other out-of-band methods
 // pass the result of the signature, and signed transaction in bytes as request for /combine
@@ -119,6 +119,7 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	return resp, nil
 }
 
+// ConstructionDerive /construction/derive
 func (c *ConstructionAPIService) ConstructionDerive(
 	ctx context.Context,
 	req *types.ConstructionDeriveRequest,
@@ -153,10 +154,11 @@ func (c *ConstructionAPIService) ConstructionDerive(
 	return resp, nil
 }
 
+// ConstructionHash /construction/hash
 func (c *ConstructionAPIService) ConstructionHash(
 	ctx context.Context,
 	req *types.ConstructionHashRequest,
-) (*types.ConstructionHashResponse, *types.Error) {
+) (*types.TransactionIdentifierResponse, *types.Error) {
 	transactionPayload, err := provider.NewFromJson([]byte(req.SignedTransaction))
 	if err != nil {
 		return nil, &types.Error{
@@ -177,12 +179,17 @@ func (c *ConstructionAPIService) ConstructionHash(
 		}
 	}
 
-	resp := &types.ConstructionHashResponse{}
+	transactionHash := goZilUtil.EncodeHex(hash)
 
-	resp.TransactionHash = goZilUtil.EncodeHex(hash)
+	resp := &types.TransactionIdentifierResponse{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: transactionHash,
+		},
+	}
 	return resp, nil
 }
 
+// ConstructionMetadata /construction/metadata
 func (c *ConstructionAPIService) ConstructionMetadata(
 	ctx context.Context,
 	req *types.ConstructionMetadataRequest,
@@ -213,7 +220,7 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	return resp, nil
 }
 
-// /construction/parse
+// ConstructionParse /construction/parse
 // Parse is called on both unsigned and signed transactions to understand the intent of the formulated transaction.
 // This is run as a sanity check before signing (after `/construction/payloads`) and before broadcast (after `/construction/combine`).
 func (c *ConstructionAPIService) ConstructionParse(
@@ -283,7 +290,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 	return resp, nil
 }
 
-// /construction/payloads
+// ConstructionPayloads /construction/payloads
 // Generate an Unsigned Transaction and Signing Payloads
 func (c *ConstructionAPIService) ConstructionPayloads(
 	ctx context.Context,
@@ -365,7 +372,7 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	return resp, nil
 }
 
-// /construction/preprocess
+// ConstructionPreprocess /construction/preprocess
 // create a request to fetch metadata
 // TODO - support contract deployment and contract call operations
 // support payment operation
@@ -394,10 +401,11 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 	return preProcessResp, nil
 }
 
+// ConstructionSubmit /construction/submit
 func (c *ConstructionAPIService) ConstructionSubmit(
 	ctx context.Context,
 	request *types.ConstructionSubmitRequest,
-) (*types.ConstructionSubmitResponse, *types.Error) {
+) (*types.TransactionIdentifierResponse, *types.Error) {
 	txStr := request.SignedTransaction
 	if len(txStr) == 0 {
 		return nil, config.SignedTxInvalid
@@ -432,9 +440,10 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 		}
 	}
 
-	return &types.ConstructionSubmitResponse{
-		TransactionIdentifier: &types.TransactionIdentifier{Hash: hexHash},
-		Metadata:              nil,
-	}, nil
-
+	resp := &types.TransactionIdentifierResponse{
+		TransactionIdentifier: &types.TransactionIdentifier{
+			Hash: hexHash,
+		},
+	}
+	return resp, nil
 }
