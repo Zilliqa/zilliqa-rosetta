@@ -306,17 +306,20 @@ Sample
 {
     "block_identifier": {
         "index": 0,
-        "hash": ""
+        "hash": "1947718b431d25dd65c226f79f3e0a9cc96a948899dab3422993def1494a9c95"
     },
     "balances": [
         {
-            "value": "979976864000000000",
+            "value": "529909051575",
             "currency": {
                 "symbol": "ZIL",
                 "decimals": 12
             }
         }
-    ]
+    ],
+    "metadata": {
+        "nonce": 48
+    }
 }
 ```
 
