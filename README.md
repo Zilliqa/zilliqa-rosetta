@@ -123,7 +123,10 @@ Sample
             }
         ],
         "operation_types": [
-            "transfer"
+            "transfer",
+            "contract_deployment",
+            "contract_call",
+            "contract_call_transfer"
         ],
         "errors": [
             {
@@ -230,8 +233,39 @@ Sample
                 "code": 510,
                 "message": "query balance failed",
                 "retriable": true
+            },
+            {
+                "code": 511,
+                "message": "tx not exist in mem pool",
+                "retriable": false
+            },
+            {
+                "code": 512,
+                "message": "historical compute balance height less than req height",
+                "retriable": false
+            },
+            {
+                "code": 513,
+                "message": "db store error",
+                "retriable": true
+            },
+            {
+                "code": 514,
+                "message": "public hex error",
+                "retriable": false
+            },
+            {
+                "code": 515,
+                "message": "unsupported address format",
+                "retriable": false
+            },
+            {
+                "code": 516,
+                "message": "signature provided in transaction is invalid",
+                "retriable": false
             }
-        ]
+        ],
+        "historical_balance_lookup": false
     }
 }
 ```
