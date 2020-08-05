@@ -396,7 +396,9 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 			preProcessResp.Options[rosettaUtil.GAS_LIMIT] = operation.Metadata[rosettaUtil.GAS_LIMIT]
 			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 		}
-		preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata[rosettaUtil.PUB_KEY].(string))
+		if operation.Metadata != nil {
+			preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
+		}
 	}
 	return preProcessResp, nil
 }
