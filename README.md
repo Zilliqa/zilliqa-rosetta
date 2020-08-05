@@ -293,10 +293,10 @@ Sample
 ```json
 {
     "current_block_identifier": {
-        "index": 1521313,
-        "hash": "0d0a72c50fcfb98962d3a9ac44c3d9eea96e2a808399f3909380890d41b51893"
+        "index": 1668170,
+        "hash": "cfe255a521942588708213129f6cce4522820fb0aaaf1bb3934f2908ca94b738"
     },
-    "current_block_timestamp": 1593478612587324,
+    "current_block_timestamp": 1596617124206,
     "genesis_block_identifier": {
         "index": 0,
         "hash": "1947718b431d25dd65c226f79f3e0a9cc96a948899dab3422993def1494a9c95"
