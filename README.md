@@ -1007,12 +1007,12 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
     "signatures": [
         {
             "signing_payload": {
                 "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615",
-                "hex_bytes": "088180b40a10b8011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
+                "hex_bytes": "088180b40a10b9011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
                 "signature_type": "ecdsa"
             },
             "public_key": {
@@ -1020,7 +1020,7 @@ Request:
                 "curve_type": "secp256k1"
             },
             "signature_type": "ecdsa",
-            "hex_bytes": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca"
+            "hex_bytes": "519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108"
         }
     ]
 }
@@ -1032,7 +1032,7 @@ Sample
 
 ```json
 {
-    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
 }
 ```
 
@@ -1122,9 +1122,9 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet"
+        "network": "testnet"
     },
-    "signed_transaction": "{\"version\":21823489,\"nonce\":166473,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":1000000,\"pubKey\":\"0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"0e28d454535a41b2bdc36ad3eade2238e27031bdca248e87417ace809e909c1dde72a3f8e910e82cc3be36dd2c02ed90547c8518f5e329fee1f71e957078b58e\"}"
+	"signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
 }
 ```
 
@@ -1135,7 +1135,7 @@ Sample
 ```json
 {
     "transaction_identifier": {
-        "hash": "044f4ac093fbd399f5829c1ecaec76e8fc6cf38367dddf8ee02eede891959d6e"
+        "hash": "af6e2a81812f7834312e8e2358b51f2f9d7ca696c4d315258102ed868389a7c1"
     }
 }
 ```
@@ -1155,7 +1155,7 @@ Request:
         "network": "testnet"
     },
     "signed": true,
-    "transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
+    "transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
 }
 ```
 
@@ -1208,7 +1208,7 @@ Sample
                 "data": "",
                 "gasLimit": "1",
                 "gasPrice": "1000000000",
-                "nonce": "184",
+                "nonce": "185",
                 "receipt": {
                     "accept": false,
                     "errors": null,
@@ -1220,7 +1220,7 @@ Sample
                     "transitions": null
                 },
                 "senderPubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
-                "signature": "af2bb8c883d633a978cfa9b1263de0ad6e55d0f82f75317542db695c62aa50e857e05316b1f0162f4be0acc37b0dc14f2d7f2c1f0b207683be3b2bebdd89deca",
+                "signature": "519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108",
                 "version": "21823489"
             }
         }
@@ -1405,7 +1405,7 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "signed_transaction": "{\"version\":21823489,\"nonce\":30,\"toAddr\":\"4BAF5faDA8e5Db92C3d3242618c5B47133AE003C\",\"amount\":10000000,\"pubKey\":\"026c7f3b8ac6f615c00c34186cbe4253a2c5acdc524b1cfae544c629d8e3564cfc\",\"gasPrice\":1000000000,\"gasLimit\":1,\"code\":\"\",\"data\":\"\",\"signature\":\"bf1a2a5d8b7eadaebba4a6ed7f5d01c5270b0a288ba8f12fc92fa92d3da9b65b03378cfcdd7c269847d2e3ea850ee16a2533b52bb055d8501578c8f683809e49\"}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"519b2c3fe75b115a1efed4cd5f835fe7c92b60d46eb385d2de8a87ae3dfef01ef26685409d1e1935496488e58d3174f21747f3c0b270ef723a2113d7fdbdf108\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}"
 }
 ```
 
@@ -1416,7 +1416,7 @@ Sample
 ```json
 {
     "transaction_identifier": {
-        "hash": "5d559dfbbfa98029b961d3f35422f8939095b17c9243fdbd6bf60aaadc41ebf4"
+        "hash": "af6e2a81812f7834312e8e2358b51f2f9d7ca696c4d315258102ed868389a7c1"
     }
 }
 ```
@@ -1434,7 +1434,7 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet"
+        "network": "testnet"
     },
     "metadata": {}
 }
@@ -1448,52 +1448,7 @@ Sample
 {
     "transaction_identifiers": [
         {
-            "hash": "5a8af8bd09e6b40ddcb5a0244257590724797fd19925236e0ab29baf525ea1f8"
-        },
-        {
-            "hash": "a6713dd0bc10cea7071cd9ac2f547b067d38df2a53060fbf146a2de4d23fbc76"
-        },
-        {
-            "hash": "37efa722fa36f82b9c1fc8ea7eee44b90e2909d950cbf829905eb05a5238a6bf"
-        },
-        {
-            "hash": "54705f8e2c9319010acec738dd810894e0e1e6e97b23455731aeb87038451303"
-        },
-        {
-            "hash": "e560516d65bf7c54a6fb7e723ca47f70832975d900e1f9b33de2446d9380898f"
-        },
-        {
-            "hash": "69b4d4da4cefc56be22cc3b48dad63aff3e03f6b2dbcbd63db13ad98ef7ffc2c"
-        },
-        {
-            "hash": "5c0d222a54f2bc3e23f0c1e27827f32408132c1ad7d4a7d8cfaba3d2c0414753"
-        },
-        {
-            "hash": "a89c7a0f5ff5b8e176086e5e5475464945b6f5016c93c1662a44f765401c7e13"
-        },
-        {
-            "hash": "a3977b1871125d285b5bbed1fc2d100e6752a1b800120d1b0b0f4d360547e575"
-        },
-        {
-            "hash": "c6b8bf3ef36e5796c0c72cf20c3de0a85f69a3de300da05afb9a42a38cd5042b"
-        },
-        {
-            "hash": "14cff40c72c329fdee306e297b8a5844a81e9283e64d1dfc80d37e3064b278a9"
-        },
-        {
-            "hash": "74fc61c4e4ed3eed64592aac55356afc3c1aad1ebba2fd4709662c43d3223b32"
-        },
-        {
-            "hash": "0c172d26a2e091f2e3d8a5aca9b513ec4424ab4907a2bfbdb87ab399f7b96c51"
-        },
-        {
-            "hash": "4e4e3c70b192cc3b55e386410140040473550a0ed435f12a9d27c07d1381663a"
-        },
-        {
-            "hash": "4861a490361fc1e71942b70986309174dbd28b5de3e8aeba586ac51ee0caa8cf"
-        },
-        {
-            "hash": "6a38457c0b9202f892a9ef7f9f361ee73d2282ff0d8cf48d85cfe97a605e5799"
+            "hash": "af6e2a81812f7834312e8e2358b51f2f9d7ca696c4d315258102ed868389a7c1"
         }
     ]
 }
@@ -1509,10 +1464,10 @@ Request:
 {
     "network_identifier": {
         "blockchain": "zilliqa",
-        "network": "mainnet"
+        "network": "testnet"
     },
     "transaction_identifier": {
-        "hash": "2d326d17cde4a0a4de1b9d342066c9952d015929e49c8c3ace2bebeb2817e621"
+        "hash": "af6e2a81812f7834312e8e2358b51f2f9d7ca696c4d315258102ed868389a7c1"
     }
 }
 ```
@@ -1523,8 +1478,8 @@ Sample
 
 ```json
 {
-    "code": 511,
-    "message": "tx not exist in mem pool",
+    "code": 0,
+    "message": "transaction not pending",
     "retriable": false
 }
 ```
