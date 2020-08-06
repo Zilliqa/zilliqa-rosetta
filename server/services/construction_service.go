@@ -190,6 +190,8 @@ func (c *ConstructionAPIService) ConstructionHash(
 }
 
 // ConstructionMetadata /construction/metadata
+// options structure is from /preprocess
+// fetch online metadata
 func (c *ConstructionAPIService) ConstructionMetadata(
 	ctx context.Context,
 	req *types.ConstructionMetadataRequest,
@@ -198,24 +200,59 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 		Metadata: make(map[string]interface{}),
 	}
 
-	if req.Options[METHOD_TYPE] != "transfer" {
+	if req.Options[rosettaUtil.AMOUNT] == nil {
 		return nil, config.ParamsError
 	}
 
-	resp.Metadata[rosettaUtil.VERSION] = "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
-	resp.Metadata[rosettaUtil.NONCE] = "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. " +
-		"20 coins from A to B can be replayed by B over and over to continually drain A's balance"
-	resp.Metadata[rosettaUtil.TO_ADDR] = "Recipient's account address. This is represented as a String"
-	resp.Metadata[rosettaUtil.AMOUNT] = "Transaction amount to be sent to the recipent's address. This is measured in the smallest" +
-		" price unit Qa (or 10^-12 Zil) in Zilliqa"
-	resp.Metadata[rosettaUtil.PUB_KEY] = "Sender's public key of 33 bytes"
-	resp.Metadata[rosettaUtil.GAS_PRICE] = "An amount that a sender is willing to pay per unit of gas for processing this transaction" +
-		"This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa"
-	resp.Metadata[rosettaUtil.GAS_LIMIT] = "The amount of gas units that is needed to be process this transaction"
-	resp.Metadata[rosettaUtil.CODE] = "The smart contract source code. This is present only when deploying a new contract"
-	resp.Metadata[rosettaUtil.DATA] = "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract"
-	resp.Metadata[rosettaUtil.SIGNATURE] = "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above"
-	resp.Metadata[rosettaUtil.PRIORITY] = "A flag for this transaction to be processed by the DS committee"
+	if req.Options[rosettaUtil.GAS_LIMIT] == nil {
+		return nil, config.ParamsError
+	}
+
+	if req.Options[rosettaUtil.GAS_PRICE] == nil {
+		return nil, config.ParamsError
+	}
+
+	if req.Options[rosettaUtil.PUB_KEY] == nil {
+		return nil, config.ParamsError
+	}
+
+	if req.Options[rosettaUtil.TO_ADDR] == nil {
+		return nil, config.ParamsError
+	}
+
+	api := c.Config.NodeAPI(req.NetworkIdentifier.Network)
+	rpcClient := provider.NewProvider(api)
+
+	// get the nonce from sender
+	senderPubKey := req.Options[rosettaUtil.PUB_KEY].(string)
+	senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(senderPubKey))
+
+	balAndNonce, err1 := rpcClient.GetBalance(senderAddr)
+	if err1 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err1.Error(),
+			Retriable: false,
+		}
+	}
+
+	// get the networkID (chainID) to compute the version
+	networkID, err2 := rpcClient.GetNetworkId()
+	if err2 != nil {
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err2.Error(),
+			Retriable: false,
+		}
+	}
+
+	resp.Metadata[rosettaUtil.VERSION] = rosettaUtil.GetVersion(networkID)
+	resp.Metadata[rosettaUtil.NONCE] = balAndNonce.Nonce + 1
+	resp.Metadata[rosettaUtil.AMOUNT] = req.Options[rosettaUtil.AMOUNT]
+	resp.Metadata[rosettaUtil.GAS_LIMIT] = req.Options[rosettaUtil.GAS_LIMIT]
+	resp.Metadata[rosettaUtil.GAS_PRICE] = req.Options[rosettaUtil.GAS_PRICE]
+	resp.Metadata[rosettaUtil.PUB_KEY] = senderPubKey
+	resp.Metadata[rosettaUtil.TO_ADDR] = req.Options[rosettaUtil.TO_ADDR]
 
 	return resp, nil
 }
@@ -297,9 +334,6 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	req *types.ConstructionPayloadsRequest,
 ) (*types.ConstructionPayloadsResponse, *types.Error) {
 
-	api := c.Config.NodeAPI(req.NetworkIdentifier.Network)
-	rpcClient := provider.NewProvider(api)
-
 	resp := new(types.ConstructionPayloadsResponse)
 	payloads := make([]*types.SigningPayload, 0)
 
@@ -311,28 +345,6 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 		// sender
 		if operation.OperationIdentifier.Index == 0 {
 			senderAddr = operation.Account.Address
-			// get the nonce from sender
-			balAndNonce, err1 := rpcClient.GetBalance(senderAddr)
-			if err1 != nil {
-				return nil, &types.Error{
-					Code:      0,
-					Message:   err1.Error(),
-					Retriable: false,
-				}
-			}
-
-			// get the networkID (chainID) to compute the version
-			networkID, err2 := rpcClient.GetNetworkId()
-			if err2 != nil {
-				return nil, &types.Error{
-					Code:      0,
-					Message:   err2.Error(),
-					Retriable: false,
-				}
-			}
-
-			transactionJson[rosettaUtil.VERSION] = rosettaUtil.GetVersion(networkID)
-			transactionJson[rosettaUtil.NONCE] = balAndNonce.Nonce + 1
 		}
 
 		// recipient
@@ -340,6 +352,8 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 			if operation.Metadata == nil {
 				return nil, config.ParamsError
 			}
+			transactionJson[rosettaUtil.VERSION] = operation.Metadata[rosettaUtil.VERSION]
+			transactionJson[rosettaUtil.NONCE] = operation.Metadata[rosettaUtil.NONCE]
 			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
 			transactionJson[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata[rosettaUtil.PUB_KEY].(string))
@@ -392,14 +406,14 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 				return nil, config.ParamsError
 			}
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
-			preProcessResp.Options[rosettaUtil.GAS_PRICE] = operation.Metadata[rosettaUtil.GAS_PRICE]
-			preProcessResp.Options[rosettaUtil.GAS_LIMIT] = operation.Metadata[rosettaUtil.GAS_LIMIT]
 			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 		}
 		if operation.Metadata != nil {
 			preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
 		}
 	}
+	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE_VALUE
+	preProcessResp.Options[rosettaUtil.GAS_LIMIT] = rosettaUtil.GAS_LIMIT_VALUE
 	return preProcessResp, nil
 }
 

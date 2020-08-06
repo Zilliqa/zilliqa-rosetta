@@ -1042,6 +1042,7 @@ Sample
 
 Request:
 
+`options` is from `/construction/preprocess`
 ```json
 {
     "network_identifier": {
@@ -1049,7 +1050,11 @@ Request:
         "network": "testnet"
     }, 
     "options": {
-        "method": "transfer"
+        "amount": "2000000000000",
+        "gasLimit": "1",
+        "gasPrice": "1000000000",
+        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "toAddr": "4978075dd607933122f4355B220915EFa51E84c7"
     }
 }
 ```
@@ -1061,17 +1066,13 @@ Sample
 ```json
 {
     "metadata": {
-        "amount": "Transaction amount to be sent to the recipent's address. This is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
-        "code": "The smart contract source code. This is present only when deploying a new contract",
-        "data": "String-ified JSON object specifying the transition parameters to be passed to a specified smart contract",
-        "gasLimit": "The amount of gas units that is needed to be process this transaction",
-        "gasPrice": "An amount that a sender is willing to pay per unit of gas for processing this transactionThis is measured in the smallest price unit Qa (or 10^-12 Zil) in Zilliqa",
-        "nonce": "A transaction counter in each account. This prevents replay attacks where a transaction sending eg. 20 coins from A to B can be replayed by B over and over to continually drain A's balance",
-        "priority": "A flag for this transaction to be processed by the DS committee",
-        "pubKey": "Sender's public key of 33 bytes",
-        "signature": "An EC-Schnorr signature of 64 bytes of the entire Transaction object as stipulated above",
-        "toAddr": "Recipient's account address. This is represented as a String",
-        "version": "The decimal conversion of the bitwise concatenation of CHAIN_ID and MSG_VERSION parameters"
+        "amount": "2000000000000",
+        "gasLimit": "1",
+        "gasPrice": "1000000000",
+        "nonce": 185,
+        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "toAddr": "4978075dd607933122f4355B220915EFa51E84c7",
+        "version": 21823489
     }
 }
 ```
@@ -1236,6 +1237,7 @@ Sample
 
 Request:
 
+`metadata` for `operation_identifier 1` is from `/construction/metadata`
 ```json
 {
     "network_identifier": {
@@ -1282,9 +1284,13 @@ Request:
                 }
             },
             "metadata": {
+                "amount": "2000000000000",
                 "gasLimit": "1",
                 "gasPrice": "1000000000",
-                "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e"
+                "nonce": 185,
+                "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+                "toAddr": "4978075dd607933122f4355B220915EFa51E84c7",
+                "version": 21823489
             }
         }
     ],
@@ -1298,10 +1304,10 @@ Sample
 
 ```json
 {
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":184,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":185,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"4978075dd607933122f4355B220915EFa51E84c7\",\"version\":21823489}",
     "payloads": [
         {
-            "hex_bytes": "7b22616d6f756e74223a323030303030303030303030302c22636f6465223a22222c2264617461223a22222c226761734c696d6974223a312c226761735072696365223a313030303030303030302c226e6f6e6365223a3138342c227075624b6579223a22303265343465663263356332303331333836666161366361666466356636373331386363363631383731623031313261323734353865363566333761333536353565222c22746f41646472223a2234393738303735646436303739333331323266343335354232323039313545466135314538346337222c2276657273696f6e223a32313832333438397d",
+            "hex_bytes": "7b22616d6f756e74223a323030303030303030303030302c22636f6465223a22222c2264617461223a22222c226761734c696d6974223a312c226761735072696365223a313030303030303030302c226e6f6e6365223a3138352c227075624b6579223a22303265343465663263356332303331333836666161366361666466356636373331386363363631383731623031313261323734353865363566333761333536353565222c22746f41646472223a2234393738303735646436303739333331323266343335354232323039313545466135314538346337222c2276657273696f6e223a32313832333438397d",
             "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615",
             "signature_type": "ecdsa"
         }
@@ -1329,7 +1335,7 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "f0b55a21ed19e6e442833afa9266c166ad639d53"
+                "address": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
             },
             "amount": {
                 "value": "-2000000000000",
@@ -1351,7 +1357,7 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "208e1e2c4130e43f8f1329b96767492650597c92"
+                "address": "4978075dd607933122f4355B220915EFa51E84c7"
             },
             "amount": {
                 "value": "2000000000000",
@@ -1361,9 +1367,7 @@ Request:
                 }
             },
             "metadata": {
-                "gasLimit": "1",
-                "gasPrice": "1000000000",
-                "senderPubKey": "0x027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6"
+                "senderPubKey": "0x02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e"
             }
         }
     ],
@@ -1381,8 +1385,8 @@ Sample
         "amount": "2000000000000",
         "gasLimit": "1",
         "gasPrice": "1000000000",
-        "pubKey": "027558EDE7BA1EA7A7633F1ACA898CE3DE0F7589C6B5D8C30D91EDE457F6E552F6",
-        "toAddr": "208e1e2c4130e43f8f1329b96767492650597c92"
+        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "toAddr": "4978075dd607933122f4355B220915EFa51E84c7"
     }
 }
 ```
