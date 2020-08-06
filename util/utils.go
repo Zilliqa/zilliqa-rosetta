@@ -27,6 +27,9 @@ const (
 	TO_ADDR   = "toAddr"
 	VERSION   = "version"
 
+	GAS_LIMIT_VALUE = "1"
+	GAS_PRICE_VALUE = "1000000000"
+
 	// others
 	// set to ecdsa to bypass the signature type check for now
 	SIGNATURE_TYPE = "ecdsa"
