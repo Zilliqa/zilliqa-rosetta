@@ -973,6 +973,8 @@ In the sample, the sequence of operations are as follows:
 
 __Note__: Before calling `/combine`, please call `/payloads` to have the `unsigned_transaction`. Next, use [goZilliqa SDK](https://github.com/Zilliqa/gozilliqa-sdk) or other Zilliqa's SDKs to craft a transaction object and sign the transaction object; print out the __*signature*__ and __*transaction object*__ in __hexadecimals__. 
 
+Refer to the `signRosettaTransaction.js` in the `examples` folder to craft and sign a transaction object.
+
 Use them as request parameters as follows:
 
 ```
