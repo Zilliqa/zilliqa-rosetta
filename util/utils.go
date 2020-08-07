@@ -5,10 +5,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
+	"github.com/Zilliqa/gozilliqa-sdk/validator"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -35,7 +37,7 @@ const (
 	SIGNATURE_TYPE = "ecdsa"
 )
 
-// convert zilliqa transaction object to rosetta transaction object
+// CreateRosTransaction convert zilliqa transaction object to rosetta transaction object
 // "Operations" contain all balance-changing information within a transaction
 // Transaction
 //    - TransactionIdentifier
@@ -47,7 +49,7 @@ const (
 //        - AccountIdentifier
 //        - Amount
 //        - metadata
-func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
+func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Error) {
 	rosTransaction := new(types.Transaction)
 	rosTransactionIdentifier := &types.TransactionIdentifier{Hash: ctx.ID}
 	rosTransaction.TransactionIdentifier = rosTransactionIdentifier
@@ -69,10 +71,21 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		senderOperation.OperationIdentifier = &types.OperationIdentifier{
 			Index: int64(idx),
 		}
+		senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
+		senderBech32Addr, err := bech32.ToBech32Address(senderAddr)
+
+		if err != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err.Error(),
+				Retriable: false,
+			}
+		}
+
 		senderOperation.Type = config.OpTypeTransfer
 		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Account = &types.AccountIdentifier{
-			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+			Address: senderBech32Addr,
 		}
 		// deduct from sender account
 		// add negative sign
@@ -90,10 +103,21 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				Index: int64(idx),
 			},
 		}
+
+		recipientBech32Addr, err := bech32.ToBech32Address(ctx.ToAddr)
+
+		if err != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err.Error(),
+				Retriable: false,
+			}
+		}
+
 		recipientOperation.Type = config.OpTypeTransfer
 		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Account = &types.AccountIdentifier{
-			Address: ctx.ToAddr,
+			Address: recipientBech32Addr,
 		}
 
 		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
@@ -115,10 +139,21 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		senderOperation.OperationIdentifier = &types.OperationIdentifier{
 			Index: int64(idx),
 		}
+		senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
+		senderBech32Addr, err := bech32.ToBech32Address(senderAddr)
+
+		if err != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err.Error(),
+				Retriable: false,
+			}
+		}
+
 		senderOperation.Type = config.OpTypeContractDeployment
 		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Account = &types.AccountIdentifier{
-			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+			Address: senderBech32Addr,
 		}
 		// deduct from sender account
 		// add negative sign
@@ -152,10 +187,22 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 		initiatorOperation.OperationIdentifier = &types.OperationIdentifier{
 			Index: int64(idx),
 		}
+
+		initiatorAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
+		initiatorBech32Addr, err := bech32.ToBech32Address(initiatorAddr)
+
+		if err != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err.Error(),
+				Retriable: false,
+			}
+		}
+
 		initiatorOperation.Type = config.OpTypeContractCall
 		initiatorOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 		initiatorOperation.Account = &types.AccountIdentifier{
-			Address: keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey)),
+			Address: initiatorBech32Addr,
 		}
 
 		// if it is not smart contract deposit, ie, no transition, means there is only one operation
@@ -184,10 +231,21 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 						Index: int64(idx - 1),
 					},
 				}
+
+				fromBech32Addr, err := bech32.ToBech32Address(transition.Addr)
+
+				if err != nil {
+					return nil, &types.Error{
+						Code:      0,
+						Message:   err.Error(),
+						Retriable: false,
+					}
+				}
+
 				fromOperation.Type = config.OpTypeContractCallTransfer
 				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				fromOperation.Account = &types.AccountIdentifier{
-					Address: RemoveHexPrefix(transition.Addr),
+					Address: fromBech32Addr,
 				}
 				fromOperation.Amount = createRosAmount(transition.Msg.Amount, true)
 				// fromOperation.Metadata = createMetadataContractCall(ctx)
@@ -207,10 +265,20 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 						Index: int64(idx - 1),
 					},
 				}
+				toBech32Addr, err := bech32.ToBech32Address(transition.Msg.Recipient)
+
+				if err != nil {
+					return nil, &types.Error{
+						Code:      0,
+						Message:   err.Error(),
+						Retriable: false,
+					}
+				}
+
 				toOperation.Type = config.OpTypeContractCallTransfer
 				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 				toOperation.Account = &types.AccountIdentifier{
-					Address: RemoveHexPrefix(transition.Msg.Recipient),
+					Address: toBech32Addr,
 				}
 				toOperation.Amount = createRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
@@ -236,10 +304,21 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, error) {
 				Index: int64(idx),
 			},
 		}
+
+		recipientBech32Addr, err := bech32.ToBech32Address(ctx.ToAddr)
+
+		if err != nil {
+			return nil, &types.Error{
+				Code:      0,
+				Message:   err.Error(),
+				Retriable: false,
+			}
+		}
+
 		recipientOperation.Type = config.OpTypeTransfer
 		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Account = &types.AccountIdentifier{
-			Address: ctx.ToAddr,
+			Address: recipientBech32Addr,
 		}
 
 		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
@@ -327,4 +406,15 @@ func ToCoreTransaction(txn *transaction.Transaction) *core.Transaction {
 func GetVersion(chainIdStr string) int {
 	chainID, _ := strconv.Atoi(chainIdStr)
 	return int(util.Pack(chainID, 1))
+}
+
+func ToChecksumAddr(addr string) string {
+	if validator.IsBech32(addr) {
+		checksum, err := bech32.FromBech32Addr(addr)
+		if err != nil {
+			return RemoveHexPrefix(addr)
+		}
+		return checksum
+	}
+	return RemoveHexPrefix(addr)
 }

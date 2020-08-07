@@ -213,11 +213,7 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 		rosTransaction, err2 := util.CreateRosTransaction(transactionDetails)
 
 		if err2 != nil {
-			return nil, &types.Error{
-				Code:      0,
-				Message:   err2.Error(),
-				Retriable: false,
-			}
+			return nil, err2
 		}
 
 		rosBlockTransactionReponse := new(types.BlockTransactionResponse)

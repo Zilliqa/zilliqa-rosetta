@@ -73,7 +73,7 @@ func (c *ConstructionAPIService) ConstructionCombine(
 		Amount:       fmt.Sprintf("%.0f", unsignedTxnJson["amount"]),
 		GasPrice:     fmt.Sprintf("%.0f", unsignedTxnJson["gasPrice"]),
 		GasLimit:     fmt.Sprintf("%.0f", unsignedTxnJson["gasLimit"]),
-		ToAddr:       rosettaUtil.RemoveHexPrefix(unsignedTxnJson["toAddr"].(string)),
+		ToAddr:       rosettaUtil.ToChecksumAddr(unsignedTxnJson["toAddr"].(string)),
 		SenderPubKey: unsignedTxnJson["pubKey"].(string),
 		Code:         unsignedTxnJson["code"].(string),
 		Data:         unsignedTxnJson["data"].(string),
@@ -169,6 +169,11 @@ func (c *ConstructionAPIService) ConstructionHash(
 	}
 
 	txn := transaction.NewFromPayload(transactionPayload)
+
+	// txn.ToAddr should be in zil format
+	// remove uneeded 0x prefix
+	// convert to checksum format
+	txn.ToAddr = rosettaUtil.ToChecksumAddr(rosettaUtil.RemoveHexPrefix(txn.ToAddr))
 
 	hash, err1 := txn.Hash()
 	if err1 != nil {
@@ -282,7 +287,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 		Amount:       fmt.Sprintf("%.0f", txnJson["amount"]),
 		GasPrice:     fmt.Sprintf("%.0f", txnJson["gasPrice"]),
 		GasLimit:     fmt.Sprintf("%.0f", txnJson["gasLimit"]),
-		ToAddr:       rosettaUtil.RemoveHexPrefix(txnJson["toAddr"].(string)),
+		ToAddr:       rosettaUtil.ToChecksumAddr(txnJson["toAddr"].(string)),
 		SenderPubKey: txnJson["pubKey"].(string),
 		Code:         txnJson["code"].(string),
 		Data:         txnJson["data"].(string),
@@ -298,11 +303,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 	// convert to rosetta transaction object
 	rosTransaction, err2 := rosettaUtil.CreateRosTransaction(rosettaUtil.ToCoreTransaction(zilliqaTransaction))
 	if err2 != nil {
-		return nil, &types.Error{
-			Code:      0,
-			Message:   err2.Error(),
-			Retriable: false,
-		}
+		return nil, err2
 	}
 
 	resp := &types.ConstructionParseResponse{
@@ -321,7 +322,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 	if req.Signed {
 		// txnJson is a signed transaction
 		// assume sender is signer
-		resp.Signers = append(resp.Signers, keytools.GetAddressFromPublic(util.DecodeHex(zilliqaTransaction.SenderPubKey)))
+		resp.Signers = append(resp.Signers, resp.Operations[0].Account.Address)
 	}
 
 	return resp, nil
@@ -435,6 +436,12 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 		}
 	}
 	txn := transaction.NewFromPayload(pl)
+
+	// txn.ToAddr should be in zil format
+	// remove uneeded 0x prefix
+	// convert to checksum format
+	txn.ToAddr = rosettaUtil.ToChecksumAddr(rosettaUtil.RemoveHexPrefix(txn.ToAddr))
+
 	hash, err1 := txn.Hash()
 	if err1 != nil {
 		return nil, &types.Error{
