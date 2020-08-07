@@ -890,8 +890,8 @@ __Note__: The operation type is `contract_call`, follow by `contract_call_transf
 
 
 In the sample, the sequence of operations are as follows:
-- Initiator `d707d8a6f049eb7d3e1e768d22578a71b3f39553` -> Contract `8d1109594e019d9c4defe9b6a855f92691a9e4fa` (invokes a contract call to add funds)
-- Contract `8d1109594e019d9c4defe9b6a855f92691a9e4fa` -> Recipient `54f57a2017f85c7f2162f833480283f040a80647` (amount is deducted from contract balance and trasnferred to recipient)
+- Initiator `zil16ura3fhsf84h60s7w6xjy4u2wxel892n7sq5dp` -> Contract `zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h` (invokes a contract call to add funds)
+- Contract `zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h` (`8d1109594e019d9c4defe9b6a855f92691a9e4fa`) -> Recipient `zil12n6h5gqhlpw87gtzlqe5sq5r7pq2spj8x2g8pe` (amount is deducted from contract balance and trasnferred to recipient)
 
 ```json
 {
