@@ -14,7 +14,7 @@ async function sign() {
             amount: new BN(units.toQa('2', units.Units.Zil)),
             gasLimit: Long.fromNumber(1), // normal (non-contract) transactions cost 1 gas
             gasPrice: new BN(units.toQa(1000, units.Units.Li)), // the minimum gas price is 1,000 li
-            toAddr: "0x4978075dd607933122f4355B220915EFa51E84c7", // toAddr is self-explanatory
+            toAddr: "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0", // toAddr is self-explanatory
             pubKey: "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e", // this determines which account is used to send the tx
         });
         
