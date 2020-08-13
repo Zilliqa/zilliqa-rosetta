@@ -1,0 +1,87 @@
+#!/bin/bash
+
+prog=$(basename $0)
+mykeyfile=mykey.txt
+myaddrfile=myaddr.txt
+cmd_log=last.log
+
+
+# ========================================
+# RUN FUNCTION START
+# ========================================
+function run() {
+
+name="zilliqa"
+ip="$IP_ADDRESS"
+port="33133"
+multiplier_sync="Y"
+extseedprivk=""
+zilliqa_path="/zilliqa"
+storage_path="`dirname \"$0\"`"
+storage_path="`( cd \"$MY_PATH\" && pwd )`"
+base_path="$storage_path"
+testnet_name='mainnet-fullerton'
+exclusion_txbodies_mb="false"
+bucket_name='c5b68604-8540-4887-ad29-2ab9e680f997'
+isSeed="true"
+
+if [ -z "$zilliqa_path" -o ! -x $zilliqa_path/build/bin/zilliqa ]
+then
+    echo "Cannot find zilliqa binary on the path you specified"
+    exit 1
+fi
+
+echo "$ip"
+if [ "$isSeed" = "true" ]
+then
+	echo -n "Use IP whitelisting registration approach (default: $multiplier_sync): " && read sync_read && [ -n "$sync_read" ] && multiplier_sync=$sync_read
+
+    if [ "$multiplier_sync" = "N" ] || [ "$multiplier_sync" = "n" ]
+    then
+        echo -n "Enter the private key (32-byte hex string) to be used by this node and whitelisted by upper seeds: " && read extseedprivk_read && [ -n "$extseedprivk_read" ] && extseedprivk=$extseedprivk_read
+    fi
+fi
+
+if [ ! -s $mykeyfile ]
+then
+    echo "Cannot find $mykeyfile, generating new keypair for you..."
+    ${zilliqa_path}/build/bin/genkeypair > $mykeyfile
+fi
+
+prikey=$(cat $mykeyfile | awk '{ print $2 }')
+pubkey=$(cat $mykeyfile | awk '{ print $1 }')
+
+$zilliqa_path/build/bin/getaddr --pubk $pubkey > $myaddrfile
+
+cmd="cp ${zilliqa_path}/scripts/download_incr_DB.py ${base_path}/download_incr_DB.py; sed -i \"/TESTNET_NAME=/c\TESTNET_NAME= '${testnet_name}'\" ${base_path}/download_incr_DB.py; sed -i \"/BUCKET_NAME=/c\BUCKET_NAME= '${bucket_name}'\" ${base_path}/download_incr_DB.py; o1=\$(grep -oPm1 '(?<=<NUM_FINAL_BLOCK_PER_POW>)[^<]+' ${base_path}/constants.xml); [ ! -z \$o1 ] && sed -i \"/NUM_FINAL_BLOCK_PER_POW=/c\NUM_FINAL_BLOCK_PER_POW= \$o1\" ${base_path}/download_incr_DB.py; o1=\$(grep -oPm1 '(?<=<INCRDB_DSNUMS_WITH_STATEDELTAS>)[^<]+' ${base_path}/constants.xml); [ ! -z \$o1 ] && sed -i \"/NUM_DSBLOCK=/c\NUM_DSBLOCK= \$o1\" ${base_path}/download_incr_DB.py"
+eval ${cmd}
+
+if [ ! -z "$storage_path" ]; then
+ # patch constant for STORAGE_PATH
+ tag="STORAGE_PATH"
+ tag_value=$(grep "<$tag>.*<.$tag>" constants.xml | sed -e "s/^.*<$tag/<$tag/" | cut -f2 -d">"| cut -f1 -d"<")
+ # Replacing element value with new storage path
+ sed -i -e "s|<$tag>$tag_value</$tag>|<$tag>$storage_path</$tag>|g" constants.xml
+fi
+
+cmd="zilliqa --privk $prikey --pubk $pubkey --address $ip --port $port --synctype 6 --recovery"
+
+if [ "$multiplier_sync" = "N" ] || [ "$multiplier_sync" = "n" ]
+then
+    cmd="$cmd --l2lsyncmode --extseedprivk $extseedprivk"
+fi
+
+$zilliqa_path/build/bin/$cmd > $cmd_log 2>&1 &
+
+echo
+echo "Use 'cat $cmd_log' to see the command output"
+echo "Use 'tail -f zilliqa-00001-log.txt' to see the runtime log"
+}
+
+
+
+
+# ========================================
+# SCRIPT START
+# ========================================
+run

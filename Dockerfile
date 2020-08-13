@@ -109,6 +109,14 @@ ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib
 
 
 # ====================
+# Rosetta Deployment
+# ====================
+#WORKDIR /rosetta
+COPY --from=rosetta-build-stage /app/main /rosetta/main
+COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
+EXPOSE 8080
+
+# ====================
 # Seed node setup
 # ====================
 EXPOSE 4201
@@ -116,17 +124,6 @@ EXPOSE 4301
 EXPOSE 4501
 EXPOSE 33133
 
-WORKDIR /zilliqa/seed_setup
-RUN curl -O https://mainnet-join.zilliqa.com/seed-configuration.tar.gz
-RUN tar -zxvf seed-configuration.tar.gz
-
-
-
-# ====================
-# Rosetta Deployment
-# ====================
-#WORKDIR /rosetta
-COPY --from=rosetta-build-stage /app/main /rosetta/main
-COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
-EXPOSE 8080
+WORKDIR /zilliqa
+COPY --from=rosetta-build-stage /app/rosetta_seed_launch.sh /zilliqa/rosetta_seed_launch.sh
 ENTRYPOINT ["/bin/bash"]
