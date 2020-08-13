@@ -125,5 +125,5 @@ EXPOSE 4501
 EXPOSE 33133
 
 WORKDIR /zilliqa
-COPY --from=rosetta-build-stage /app/seed_scripts/rosetta_seed_launch.sh /zilliqa/seed_scripts/rosetta_seed_launch.sh
+COPY --from=rosetta-build-stage /app/seed_scripts/rosetta_seed_launch.sh /zilliqa/rosetta_seed_launch.sh
 ENTRYPOINT ["/bin/bash"]
