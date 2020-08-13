@@ -90,7 +90,7 @@ RUN apt-get update \
 ARG COMMIT_OR_TAG=17d581f
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
-ARG BUILD_DIR=/build
+ARG BUILD_DIR=/zilliqa/build
 ARG INSTALL_DIR=/usr/local
 ARG BUILD_TYPE=RelWithDebInfo
 ARG EXTRA_CMAKE_ARGS=
@@ -103,18 +103,29 @@ RUN pip3 install -r /zilliqa/docker/requirements3.txt
 RUN cmake -H${SOURCE_DIR} -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} ${EXTRA_CMAKE_ARGS} \
     && cmake --build ${BUILD_DIR} -- -j$(nproc) \
-    && cmake --build ${BUILD_DIR} --target install \
-    && rm -rf ${BUILD_DIR}
+    && cmake --build ${BUILD_DIR} --target install
 
 ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib
 
+
+# ====================
+# Seed node setup
+# ====================
+EXPOSE 4201
+EXPOSE 4301
+EXPOSE 4501
+EXPOSE 33133
+
+WORKDIR /zilliqa/seed_setup
+RUN curl -O https://mainnet-join.zilliqa.com/seed-configuration.tar.gz
+RUN tar -zxvf seed-configuration.tar.gz
 
 
 
 # ====================
 # Rosetta Deployment
 # ====================
-WORKDIR /rosetta
+#WORKDIR /rosetta
 COPY --from=rosetta-build-stage /app/main /rosetta/main
 COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
