@@ -11,18 +11,22 @@ cmd_log=last.log
 # ========================================
 function run() {
 
-name="zilliqa"
+# Abstracted variables
 ip="$IP_ADDRESS"
-port="33133"
-multiplier_sync="N"
+multiplier_sync="$MULTIPLIER_SYNC"
 extseedprivk="$SEED_PRIVATE_KEY"
+testnet_name="$TESTNET_NAME"
+bucket_name="$BUCKET_NAME"
+
+
+
+name="zilliqa"
+port="33133"
 zilliqa_path="/zilliqa"
 storage_path="`dirname \"$0\"`"
 storage_path="`( cd \"$MY_PATH\" && pwd )`"
 base_path="$storage_path"
-testnet_name='mainnet-fullerton'
 exclusion_txbodies_mb="false"
-bucket_name='c5b68604-8540-4887-ad29-2ab9e680f997'
 isSeed="true"
 
 if [ -z "$zilliqa_path" -o ! -x $zilliqa_path/build/bin/zilliqa ]
