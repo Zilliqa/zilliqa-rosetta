@@ -15,7 +15,7 @@ name="zilliqa"
 ip="$IP_ADDRESS"
 port="33133"
 multiplier_sync="Y"
-extseedprivk=""
+extseedprivk="$SEED_PRIVATE_KEY"
 zilliqa_path="/zilliqa"
 storage_path="`dirname \"$0\"`"
 storage_path="`( cd \"$MY_PATH\" && pwd )`"
@@ -32,20 +32,11 @@ then
 fi
 
 echo "$ip"
-if [ "$isSeed" = "true" ]
-then
-	echo -n "Use IP whitelisting registration approach (default: $multiplier_sync): " && read sync_read && [ -n "$sync_read" ] && multiplier_sync=$sync_read
-
-    if [ "$multiplier_sync" = "N" ] || [ "$multiplier_sync" = "n" ]
-    then
-        echo -n "Enter the private key (32-byte hex string) to be used by this node and whitelisted by upper seeds: " && read extseedprivk_read && [ -n "$extseedprivk_read" ] && extseedprivk=$extseedprivk_read
-    fi
-fi
 
 if [ ! -s $mykeyfile ]
 then
-    echo "Cannot find $mykeyfile, generating new keypair for you..."
-    ${zilliqa_path}/build/bin/genkeypair > $mykeyfile
+    echo "Cannot find $mykeyfile, please mount the key pair file."
+    exit 1
 fi
 
 prikey=$(cat $mykeyfile | awk '{ print $2 }')
