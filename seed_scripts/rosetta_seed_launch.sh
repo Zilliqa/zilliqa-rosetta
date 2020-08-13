@@ -14,7 +14,7 @@ function run() {
 name="zilliqa"
 ip="$IP_ADDRESS"
 port="33133"
-multiplier_sync="Y"
+multiplier_sync="N"
 extseedprivk="$SEED_PRIVATE_KEY"
 zilliqa_path="/zilliqa"
 storage_path="`dirname \"$0\"`"
