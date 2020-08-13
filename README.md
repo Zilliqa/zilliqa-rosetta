@@ -1,13 +1,39 @@
 # zilliqa-rosetta
 Zilliqa node which follows Rosetta Blockchain Standard
 
-## Build docker image
+`
 
+## Docker Administration
+### Docker build variables
+|Variable|Description|
+|---|---|
+|SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
+|COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+
+### Building the docker image
 ```shell script
 sh ./build_docker.sh
 ```
 
-## Running docker image
+
+### Docker run environment variables
+|Variable|Description|
+|---|---|
+|IP_ADDRESS|The seed node's host public ip address|
+|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
+|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|TESTNET_NAME|The name of the testnet|
+|BUCKET_NAME|The bucket to use for persistence|
+
+### Seed node preparation
+You need to generate 2 sets of keys:
+* seed node keypair
+* whitelisting keypair (if key based whitelisting is selected)
+
+### Seed node launch
+```shell script
+docker run -it --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env MULTIPLIER="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
+```
 
 ## How to use
 
@@ -1523,4 +1549,4 @@ Note: The `mainnet_config.json` specifically **disables** historical balance loo
 
 ### Testing Construction API
 
-*WIP*
+*WIP*:
