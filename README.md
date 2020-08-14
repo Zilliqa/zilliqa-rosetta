@@ -15,12 +15,16 @@ Zilliqa node which follows Rosetta Blockchain Standard
 sh ./build_docker.sh
 ```
 
+### Building the docker image with a specific scilla and zilliqa tag
+```shell script
+docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+```
 
 ### Docker run environment variables
 |Variable|Description|
 |---|---|
 |IP_ADDRESS|The seed node's host public ip address|
-|SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz</br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
+|SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
 |SEED_PRIVATE_KEY|The private key used for key based whitelisting|
 |TESTNET_NAME|The name of the testnet|
