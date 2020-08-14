@@ -82,3 +82,6 @@ echo "Use 'tail -f zilliqa-00001-log.txt' to see the runtime log"
 # SCRIPT START
 # ========================================
 run
+
+touch /zilliqa/zilliqa-00001-log.txt
+tail -f /zilliqa/zilliqa-00001-log.txt
