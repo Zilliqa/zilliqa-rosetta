@@ -28,7 +28,7 @@ base_path="$storage_path"
 exclusion_txbodies_mb="false"
 isSeed="true"
 
-curl -O $ curl "seed_configuration_url"
+curl -O "$seed_configuration_url"
 tar -zxvf seed-configuration.tar.gz
 
 if [ -z "$zilliqa_path" -o ! -x $zilliqa_path/build/bin/zilliqa ]
