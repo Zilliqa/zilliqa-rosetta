@@ -37,7 +37,7 @@ You need to generate 2 sets of keys:
 
 ### Seed node launch
 ```shell script
-docker run -it --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
+docker run -d --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
 ```
 
 ## How to use
