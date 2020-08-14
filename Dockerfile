@@ -87,7 +87,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Manually input tag or commit, can be overwritten by docker build-args
-ARG COMMIT_OR_TAG=17d581f
+ARG COMMIT_OR_TAG=v6.3.0-alpha.3
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
 ARG BUILD_DIR=/zilliqa/build
