@@ -17,8 +17,7 @@ multiplier_sync="$MULTIPLIER_SYNC"
 extseedprivk="$SEED_PRIVATE_KEY"
 testnet_name="$TESTNET_NAME"
 bucket_name="$BUCKET_NAME"
-
-
+seed_configuration_url="$SEED_CONFIGURATION_URL"
 
 name="zilliqa"
 port="33133"
@@ -28,6 +27,9 @@ storage_path="`( cd \"$MY_PATH\" && pwd )`"
 base_path="$storage_path"
 exclusion_txbodies_mb="false"
 isSeed="true"
+
+curl -O $ curl "seed_configuration_url"
+tar -zxvf seed-configuration.tar.gz
 
 if [ -z "$zilliqa_path" -o ! -x $zilliqa_path/build/bin/zilliqa ]
 then
