@@ -29,12 +29,14 @@ const (
 	TO_ADDR   = "toAddr"
 	VERSION   = "version"
 
+	SENDER_ADDR = "senderAddr"
+
 	GAS_LIMIT_VALUE = "1"
 	GAS_PRICE_VALUE = "1000000000"
 
 	// others
 	// set to ecdsa to bypass the signature type check for now
-	SIGNATURE_TYPE = "ecdsa"
+	SIGNATURE_TYPE = "schnorr_1"
 )
 
 // CreateRosTransaction convert zilliqa transaction object to rosetta transaction object
@@ -89,7 +91,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		}
 		// deduct from sender account
 		// add negative sign
-		senderOperation.Amount = createRosAmount(ctx.Amount, true)
+		senderOperation.Amount = CreateRosAmount(ctx.Amount, true)
 
 		// -------------------
 		// recipient operation
@@ -120,7 +122,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			Address: recipientBech32Addr,
 		}
 
-		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
+		recipientOperation.Amount = CreateRosAmount(ctx.Amount, false)
 		recipientOperation.Metadata = createMetadata(ctx)
 
 		rosOperations = append(rosOperations, senderOperation, recipientOperation)
@@ -157,7 +159,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		}
 		// deduct from sender account
 		// add negative sign
-		senderOperation.Amount = createRosAmount(ctx.Amount, true)
+		senderOperation.Amount = CreateRosAmount(ctx.Amount, true)
 		senderOperation.Metadata = createMetadata(ctx)
 
 		rosOperations = append(rosOperations, senderOperation)
@@ -208,9 +210,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		// if it is not smart contract deposit, ie, no transition, means there is only one operation
 		// add metadata if only one and only operation
 		if isSmartContractDeposit {
-			initiatorOperation.Amount = createRosAmount("0", true)
+			initiatorOperation.Amount = CreateRosAmount("0", true)
 		} else {
-			initiatorOperation.Amount = createRosAmount(ctx.Amount, true)
+			initiatorOperation.Amount = CreateRosAmount(ctx.Amount, true)
 			initiatorOperation.Metadata = createMetadataContractCall(ctx)
 		}
 
@@ -247,7 +249,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 				fromOperation.Account = &types.AccountIdentifier{
 					Address: fromBech32Addr,
 				}
-				fromOperation.Amount = createRosAmount(transition.Msg.Amount, true)
+				fromOperation.Amount = CreateRosAmount(transition.Msg.Amount, true)
 				// fromOperation.Metadata = createMetadataContractCall(ctx)
 
 				rosOperations = append(rosOperations, fromOperation)
@@ -280,7 +282,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 				toOperation.Account = &types.AccountIdentifier{
 					Address: toBech32Addr,
 				}
-				toOperation.Amount = createRosAmount(transition.Msg.Amount, false)
+				toOperation.Amount = CreateRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
 
 				rosOperations = append(rosOperations, toOperation)
@@ -321,7 +323,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			Address: recipientBech32Addr,
 		}
 
-		recipientOperation.Amount = createRosAmount(ctx.Amount, false)
+		recipientOperation.Amount = CreateRosAmount(ctx.Amount, false)
 		recipientOperation.Metadata = createMetadata(ctx)
 
 		rosOperations = append(rosOperations, recipientOperation)
@@ -332,7 +334,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 
 // create the amount identifier
 // if isNegative is true, indicates that the stated amount is deducted
-func createRosAmount(amount string, isNegative bool) *types.Amount {
+func CreateRosAmount(amount string, isNegative bool) *types.Amount {
 	if isNegative && amount != "0" {
 		amount = fmt.Sprintf("-%s", amount)
 	}

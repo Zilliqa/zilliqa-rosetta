@@ -53,6 +53,10 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	pubKey := req.Signatures[0].PublicKey.Bytes
 	signedPayload := req.Signatures[0].SigningPayload.Bytes // not used for verification
 
+	fmt.Printf("txn signature: %v\n", txnSig)
+	fmt.Printf("pubKey: %v\n", pubKey)
+	fmt.Printf("signedPayload: %v\n", signedPayload)
+
 	r := goZilUtil.DecodeHex(txnSig[0:64])
 	s := goZilUtil.DecodeHex(txnSig[64:128])
 
@@ -217,9 +221,9 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 		return nil, config.ParamsError
 	}
 
-	if req.Options[rosettaUtil.PUB_KEY] == nil {
-		return nil, config.ParamsError
-	}
+	// if req.Options[rosettaUtil.PUB_KEY] == nil {
+	// 	return nil, config.ParamsError
+	// }
 
 	if req.Options[rosettaUtil.TO_ADDR] == nil {
 		return nil, config.ParamsError
@@ -229,10 +233,9 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	rpcClient := provider.NewProvider(api)
 
 	// get the nonce from sender
-	senderPubKey := req.Options[rosettaUtil.PUB_KEY].(string)
-	senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(senderPubKey))
-
-	balAndNonce, err1 := rpcClient.GetBalance(senderAddr)
+	fmt.Printf("getting nonce from address: %v\n", req.Options[rosettaUtil.SENDER_ADDR])
+	senderBech32Addr := req.Options[rosettaUtil.SENDER_ADDR].(string)
+	balAndNonce, err1 := rpcClient.GetBalance(rosettaUtil.ToChecksumAddr(senderBech32Addr))
 	if err1 != nil {
 		return nil, &types.Error{
 			Code:      0,
@@ -256,7 +259,8 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	resp.Metadata[rosettaUtil.AMOUNT] = req.Options[rosettaUtil.AMOUNT]
 	resp.Metadata[rosettaUtil.GAS_LIMIT] = req.Options[rosettaUtil.GAS_LIMIT]
 	resp.Metadata[rosettaUtil.GAS_PRICE] = req.Options[rosettaUtil.GAS_PRICE]
-	resp.Metadata[rosettaUtil.PUB_KEY] = senderPubKey
+	// resp.Metadata[rosettaUtil.PUB_KEY] = senderPubKey
+	resp.Metadata[rosettaUtil.SENDER_ADDR] = senderBech32Addr
 	resp.Metadata[rosettaUtil.TO_ADDR] = req.Options[rosettaUtil.TO_ADDR]
 
 	return resp, nil
@@ -281,43 +285,83 @@ func (c *ConstructionAPIService) ConstructionParse(
 		}
 	}
 
-	zilliqaTransaction := &transaction.Transaction{
-		Version:      fmt.Sprintf("%.0f", txnJson["version"]),
-		Nonce:        fmt.Sprintf("%.0f", txnJson["nonce"]),
-		Amount:       fmt.Sprintf("%.0f", txnJson["amount"]),
-		GasPrice:     fmt.Sprintf("%.0f", txnJson["gasPrice"]),
-		GasLimit:     fmt.Sprintf("%.0f", txnJson["gasLimit"]),
-		ToAddr:       rosettaUtil.ToChecksumAddr(txnJson["toAddr"].(string)),
-		SenderPubKey: txnJson["pubKey"].(string),
-		Code:         txnJson["code"].(string),
-		Data:         txnJson["data"].(string),
+	rosOperations := make([]*types.Operation, 0)
+
+	// zilliqaTransaction := &transaction.Transaction{
+	// 	Version:      fmt.Sprintf("%.0f", txnJson["version"]),
+	// 	Nonce:        fmt.Sprintf("%.0f", txnJson["nonce"]),
+	// 	Amount:       fmt.Sprintf("%.0f", txnJson["amount"]),
+	// 	GasPrice:     fmt.Sprintf("%.0f", txnJson["gasPrice"]),
+	// 	GasLimit:     fmt.Sprintf("%.0f", txnJson["gasLimit"]),
+	// 	ToAddr:       rosettaUtil.ToChecksumAddr(txnJson["toAddr"].(string)),
+	// 	SenderPubKey: txnJson["pubKey"].(string),
+	// 	Code:         txnJson["code"].(string),
+	// 	Data:         txnJson["data"].(string),
+	// }
+
+	senderBech32Addr := txnJson["senderAddr"].(string)
+	recipientBech32Addr := txnJson["toAddr"].(string)
+	amount := fmt.Sprintf("%.0f", txnJson["amount"])
+
+	// sender operation
+	idx := 0
+	senderOperation := new(types.Operation)
+	senderOperation.OperationIdentifier = &types.OperationIdentifier{
+		Index: int64(idx),
 	}
+	senderOperation.Type = config.OpTypeTransfer
+	senderOperation.Status = ""
+	senderOperation.Account = &types.AccountIdentifier{
+		Address: senderBech32Addr,
+	}
+	senderOperation.Amount = rosettaUtil.CreateRosAmount(amount, true)
+
+	// recipient operation
+	recipientOperation := new(types.Operation)
+	recipientOperation.OperationIdentifier = &types.OperationIdentifier{
+		Index: int64(idx + 1),
+	}
+	recipientOperation.RelatedOperations = []*types.OperationIdentifier{
+		{
+			Index: int64(idx),
+		},
+	}
+
+	recipientOperation.Type = config.OpTypeTransfer
+	recipientOperation.Status = ""
+	recipientOperation.Account = &types.AccountIdentifier{
+		Address: recipientBech32Addr,
+	}
+
+	recipientOperation.Amount = rosettaUtil.CreateRosAmount(amount, false)
+
+	rosOperations = append(rosOperations, senderOperation, recipientOperation)
 
 	if req.Signed {
 		if txnJson["signature"] == nil || txnJson["signature"] == "" {
 			return nil, config.SignatureInvalidError
 		}
-		zilliqaTransaction.Signature = txnJson["signature"].(string)
+		// zilliqaTransaction.Signature = txnJson["signature"].(string)
 	}
 
 	// convert to rosetta transaction object
-	rosTransaction, err2 := rosettaUtil.CreateRosTransaction(rosettaUtil.ToCoreTransaction(zilliqaTransaction))
-	if err2 != nil {
-		return nil, err2
-	}
+	// rosTransaction, err2 := rosettaUtil.CreateRosTransaction(rosettaUtil.ToCoreTransaction(zilliqaTransaction))
+	// if err2 != nil {
+	// 	return nil, err2
+	// }
 
 	resp := &types.ConstructionParseResponse{
 		Signers:    make([]string, 0),
-		Operations: []*types.Operation{},
+		Operations: rosOperations,
 		Metadata:   make(map[string]interface{}),
 	}
 
 	// set all the operation status to success
-	for _, operations := range rosTransaction.Operations {
-		operations.Status = config.StatusSuccess.Status
-	}
+	// for _, operations := range rosTransaction.Operations {
+	// 	operations.Status = config.StatusSuccess.Status
+	// }
 
-	resp.Operations = rosTransaction.Operations
+	// resp.Operations = rosTransaction.Operations
 
 	if req.Signed {
 		// txnJson is a signed transaction
@@ -339,30 +383,30 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	payloads := make([]*types.SigningPayload, 0)
 
 	// create the unsigned transaction json
-	var senderAddr string
 	transactionJson := make(map[string]interface{})
 
 	for _, operation := range req.Operations {
 		// sender
 		if operation.OperationIdentifier.Index == 0 {
-			senderAddr = operation.Account.Address
+			// senderAddr = operation.Account.Address
+			transactionJson[rosettaUtil.SENDER_ADDR] = operation.Account.Address
 		}
 
 		// recipient
 		if operation.OperationIdentifier.Index == 1 {
-			if operation.Metadata == nil {
-				return nil, config.ParamsError
-			}
-			transactionJson[rosettaUtil.VERSION] = operation.Metadata[rosettaUtil.VERSION]
-			transactionJson[rosettaUtil.NONCE] = operation.Metadata[rosettaUtil.NONCE]
+			// if operation.Metadata == nil {
+			// 	return nil, config.ParamsError
+			// }
 			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
 			transactionJson[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
-			transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata[rosettaUtil.PUB_KEY].(string))
-			transactionJson[rosettaUtil.GAS_PRICE], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_PRICE].(string), 10, 64)
-			transactionJson[rosettaUtil.GAS_LIMIT], _ = strconv.ParseInt(operation.Metadata[rosettaUtil.GAS_LIMIT].(string), 10, 64)
+			// transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata[rosettaUtil.PUB_KEY].(string))
 		}
 	}
 
+	transactionJson[rosettaUtil.VERSION] = req.Metadata[rosettaUtil.VERSION]
+	transactionJson[rosettaUtil.NONCE] = req.Metadata[rosettaUtil.NONCE]
+	transactionJson[rosettaUtil.GAS_PRICE], _ = strconv.ParseInt(req.Metadata[rosettaUtil.GAS_PRICE].(string), 10, 64)
+	transactionJson[rosettaUtil.GAS_LIMIT], _ = strconv.ParseInt(req.Metadata[rosettaUtil.GAS_LIMIT].(string), 10, 64)
 	transactionJson[rosettaUtil.CODE] = ""
 	transactionJson[rosettaUtil.DATA] = ""
 
@@ -377,13 +421,14 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	}
 
 	signingPayload := &types.SigningPayload{
-		Address:       senderAddr,
+		Address:       transactionJson[rosettaUtil.SENDER_ADDR].(string),
 		Bytes:         unsignedTxnJson, //byte array of transaction
 		SignatureType: rosettaUtil.SIGNATURE_TYPE,
 	}
 	payloads = append(payloads, signingPayload)
 	resp.UnsignedTransaction = string(unsignedTxnJson)
 	resp.Payloads = payloads
+	fmt.Printf("/payloads - unsigned transaction: %v\n", string(unsignedTxnJson))
 	return resp, nil
 }
 
@@ -400,18 +445,19 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 	}
 	for _, operation := range req.Operations {
 		if operation.OperationIdentifier.Index == 0 {
+			preProcessResp.Options[rosettaUtil.SENDER_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 		}
 		if operation.OperationIdentifier.Index == 1 {
-			if operation.Metadata == nil {
-				return nil, config.ParamsError
-			}
+			// if operation.Metadata == nil {
+			// 	return nil, config.ParamsError
+			// }
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 		}
-		if operation.Metadata != nil {
-			preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
-		}
+		// if operation.Metadata != nil {
+		// 	preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
+		// }
 	}
 	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE_VALUE
 	preProcessResp.Options[rosettaUtil.GAS_LIMIT] = rosettaUtil.GAS_LIMIT_VALUE
