@@ -10,7 +10,6 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
-	schnorr "github.com/Zilliqa/gozilliqa-sdk/schnorr"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	goZilUtil "github.com/Zilliqa/gozilliqa-sdk/util"
@@ -57,8 +56,10 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	fmt.Printf("pubKey: %v\n", pubKey)
 	fmt.Printf("signedPayload: %v\n", signedPayload)
 
-	r := goZilUtil.DecodeHex(txnSig[0:64])
-	s := goZilUtil.DecodeHex(txnSig[64:128])
+	encodedPubKey := goZilUtil.EncodeHex(pubKey)
+	fmt.Printf("public key is: %v\n", encodedPubKey)
+	// r := goZilUtil.DecodeHex(txnSig[0:64])
+	// s := goZilUtil.DecodeHex(txnSig[64:128])
 
 	// convert unsigned transaction to Zilliqa Transaction object
 	var unsignedTxnJson map[string]interface{}
@@ -77,8 +78,8 @@ func (c *ConstructionAPIService) ConstructionCombine(
 		Amount:       fmt.Sprintf("%.0f", unsignedTxnJson["amount"]),
 		GasPrice:     fmt.Sprintf("%.0f", unsignedTxnJson["gasPrice"]),
 		GasLimit:     fmt.Sprintf("%.0f", unsignedTxnJson["gasLimit"]),
-		ToAddr:       rosettaUtil.ToChecksumAddr(unsignedTxnJson["toAddr"].(string)),
-		SenderPubKey: unsignedTxnJson["pubKey"].(string),
+		ToAddr:       unsignedTxnJson["toAddr"].(string),
+		SenderPubKey: encodedPubKey,
 		Code:         unsignedTxnJson["code"].(string),
 		Data:         unsignedTxnJson["data"].(string),
 		Signature:    txnSig, // signature from request param
@@ -96,15 +97,17 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	// not using signed payload from request directly
 	// verify unsigned transaction + signature is indeed legit
 	// also helps to verify integrity of unsigned transaction
-	signatureVerification := schnorr.Verify(pubKey, zilliqaTransactionBytes, r, s)
+	// signatureVerification := schnorr.Verify(pubKey, zilliqaTransactionBytes, r, s)
 
-	if signatureVerification == false {
-		return nil, config.SignatureInvalidError
-	}
+	// if signatureVerification == false {
+	// 	return nil, config.SignatureInvalidError
+	// }
 
-	// add signature to unsigned transaction json
-	unsignedTxnJson["signature"] = txnSig
-	signedTxnJson, err3 := json.Marshal(unsignedTxnJson)
+	signedTxnJson := unsignedTxnJson
+	signedTxnJson["signature"] = txnSig
+	signedTxnJson["pubKey"] = encodedPubKey
+
+	signedTxnBytes, err3 := json.Marshal(signedTxnJson)
 	if err3 != nil {
 		return nil, &types.Error{
 			Code:      0,
@@ -114,12 +117,13 @@ func (c *ConstructionAPIService) ConstructionCombine(
 	}
 
 	resp := new(types.ConstructionCombineResponse)
-	resp.SignedTransaction = string(signedTxnJson)
+	resp.SignedTransaction = string(signedTxnBytes)
 
 	fmt.Printf("txn signature: %v\n", txnSig)
+	fmt.Printf("signed txn json: %v\n\n", signedTxnJson)
 	fmt.Printf("signed payload from request: %v\n", signedPayload)
 	fmt.Printf("unsigned transaction with signature: %v\n", zilliqaTransactionBytes)
-	fmt.Printf("schnorr verify result: %v\n", signatureVerification)
+	// fmt.Printf("schnorr verify result: %v\n", signatureVerification)
 	return resp, nil
 }
 
@@ -163,7 +167,9 @@ func (c *ConstructionAPIService) ConstructionHash(
 	ctx context.Context,
 	req *types.ConstructionHashRequest,
 ) (*types.TransactionIdentifierResponse, *types.Error) {
+	fmt.Printf("signed txn: %v\n", req.SignedTransaction)
 	transactionPayload, err := provider.NewFromJson([]byte(req.SignedTransaction))
+	fmt.Printf("transaction payload: %v\n", transactionPayload)
 	if err != nil {
 		return nil, &types.Error{
 			Code:      0,
@@ -174,10 +180,15 @@ func (c *ConstructionAPIService) ConstructionHash(
 
 	txn := transaction.NewFromPayload(transactionPayload)
 
+	fmt.Printf("/hash - txn :%v\n\n", txn)
+
 	// txn.ToAddr should be in zil format
+	// NewFromPayload will add uneeded 0x prefix
 	// remove uneeded 0x prefix
 	// convert to checksum format
 	txn.ToAddr = rosettaUtil.ToChecksumAddr(rosettaUtil.RemoveHexPrefix(txn.ToAddr))
+
+	fmt.Printf("/hash - txn to address :%v\n\n", txn.ToAddr)
 
 	hash, err1 := txn.Hash()
 	if err1 != nil {
@@ -428,7 +439,7 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 	payloads = append(payloads, signingPayload)
 	resp.UnsignedTransaction = string(unsignedTxnJson)
 	resp.Payloads = payloads
-	fmt.Printf("/payloads - unsigned transaction: %v\n", string(unsignedTxnJson))
+	fmt.Printf("/payloads - unsigned transaction: %v\n\n", string(unsignedTxnJson))
 	return resp, nil
 }
 
@@ -469,12 +480,14 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 	ctx context.Context,
 	request *types.ConstructionSubmitRequest,
 ) (*types.TransactionIdentifierResponse, *types.Error) {
+	fmt.Printf("/submit - signed txn: %v\n\n", request.SignedTransaction)
 	txStr := request.SignedTransaction
 	if len(txStr) == 0 {
 		return nil, config.SignedTxInvalid
 	}
 	pl, err := provider.NewFromJson([]byte(txStr))
 	if err != nil {
+		fmt.Println("error trying to new from json")
 		return nil, &types.Error{
 			Code:      0,
 			Message:   err.Error(),
@@ -483,13 +496,19 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 	}
 	txn := transaction.NewFromPayload(pl)
 
+	fmt.Printf("/submit - txn: %v\n\n", txn)
+
 	// txn.ToAddr should be in zil format
+	// New.FromPayload adds uneeded '0x' prefix
 	// remove uneeded 0x prefix
 	// convert to checksum format
 	txn.ToAddr = rosettaUtil.ToChecksumAddr(rosettaUtil.RemoveHexPrefix(txn.ToAddr))
 
+	fmt.Printf("/submit - txn: %v\n\n", txn.ToAddr)
+
 	hash, err1 := txn.Hash()
 	if err1 != nil {
+		fmt.Println("error trying to convert to hash")
 		return nil, &types.Error{
 			Code:      0,
 			Message:   err1.Error(),
@@ -502,6 +521,7 @@ func (c *ConstructionAPIService) ConstructionSubmit(
 
 	err2 := c.MemPoolService.AddTransaction(ctx, request.NetworkIdentifier, txn)
 	if err2 != nil {
+		fmt.Println("error trying to add transaction")
 		return nil, &types.Error{
 			Code:      0,
 			Message:   err2.Error(),
