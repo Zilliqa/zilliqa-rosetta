@@ -84,8 +84,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		status := getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Type = config.OpTypeTransfer
-		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		senderOperation.Status = &status
 		senderOperation.Account = &types.AccountIdentifier{
 			Address: senderBech32Addr,
 		}
@@ -116,8 +117,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		recipientStatus := getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Type = config.OpTypeTransfer
-		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		recipientOperation.Status = &recipientStatus
 		recipientOperation.Account = &types.AccountIdentifier{
 			Address: recipientBech32Addr,
 		}
@@ -152,8 +154,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		status := getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Type = config.OpTypeContractDeployment
-		senderOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		senderOperation.Status = &status
 		senderOperation.Account = &types.AccountIdentifier{
 			Address: senderBech32Addr,
 		}
@@ -201,8 +204,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		status := getTransactionStatus(ctx.Receipt.Success)
 		initiatorOperation.Type = config.OpTypeContractCall
-		initiatorOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		initiatorOperation.Status = &status
 		initiatorOperation.Account = &types.AccountIdentifier{
 			Address: initiatorBech32Addr,
 		}
@@ -244,8 +248,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 					}
 				}
 
+				status := getTransactionStatus(ctx.Receipt.Success)
 				fromOperation.Type = config.OpTypeContractCallTransfer
-				fromOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+				fromOperation.Status = &status
 				fromOperation.Account = &types.AccountIdentifier{
 					Address: fromBech32Addr,
 				}
@@ -277,8 +282,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 					}
 				}
 
+				toStatus := getTransactionStatus(ctx.Receipt.Success)
 				toOperation.Type = config.OpTypeContractCallTransfer
-				toOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+				toOperation.Status = &toStatus
 				toOperation.Account = &types.AccountIdentifier{
 					Address: toBech32Addr,
 				}
@@ -317,8 +323,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		receipientStatus := getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Type = config.OpTypeTransfer
-		recipientOperation.Status = getTransactionStatus(ctx.Receipt.Success)
+		recipientOperation.Status = &receipientStatus
 		recipientOperation.Account = &types.AccountIdentifier{
 			Address: recipientBech32Addr,
 		}
