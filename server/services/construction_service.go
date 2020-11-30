@@ -341,7 +341,6 @@ func (c *ConstructionAPIService) ConstructionParse(
 	}
 
 	recipientOperation.Type = config.OpTypeTransfer
-	// todo check
 	recipientOperation.Status = new(string)
 	recipientOperation.Account = &types.AccountIdentifier{
 		Address: recipientBech32Addr,

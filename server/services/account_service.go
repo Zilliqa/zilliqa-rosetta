@@ -24,9 +24,10 @@ func NewAccountAPIService(config *config.Config) *AccountAPIService {
 	}
 }
 
-// todo impl it
+// Get an array of all unspent coins for an AccountIdentifier and the BlockIdentifier at which the lookup was performed.
+// If your implementation does not support coins (i.e. it is for an account-based blockchain), you do not need to implement this endpoint.
 func (s *AccountAPIService) AccountCoins(context.Context, *types.AccountCoinsRequest) (*types.AccountCoinsResponse, *types.Error) {
-	return nil, nil
+	return nil, config.InvalidOperation
 }
 
 func (s *AccountAPIService) IsValidAddress(addr string) (string, error) {
@@ -44,7 +45,6 @@ func (s *AccountAPIService) IsValidAddress(addr string) (string, error) {
 			return "", err
 		}
 		return checksum, nil
-
 	}
 
 	return "", errors.New("invalid address")
