@@ -272,7 +272,7 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	resp.Metadata[rosettaUtil.AMOUNT] = req.Options[rosettaUtil.AMOUNT]
 	resp.Metadata[rosettaUtil.GAS_LIMIT] = req.Options[rosettaUtil.GAS_LIMIT]
 	resp.Metadata[rosettaUtil.GAS_PRICE] = req.Options[rosettaUtil.GAS_PRICE]
-	// resp.Metadata[rosettaUtil.PUB_KEY] = senderPubKey
+	resp.Metadata[rosettaUtil.PUB_KEY] = req.Options[rosettaUtil.PUB_KEY]
 	resp.Metadata[rosettaUtil.SENDER_ADDR] = senderBech32Addr
 	resp.Metadata[rosettaUtil.TO_ADDR] = req.Options[rosettaUtil.TO_ADDR]
 
