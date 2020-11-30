@@ -146,14 +146,16 @@ func (c *ConstructionAPIService) ConstructionDerive(
 		}
 	}
 
-	resp := new(types.ConstructionDeriveResponse)
+	resp := &types.ConstructionDeriveResponse{
+		AccountIdentifier: &types.AccountIdentifier{},
+	}
 
 	if meta == nil {
-		resp.Address = bech32Addr
+		resp.AccountIdentifier.Address = bech32Addr
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_HEX) {
-		resp.Address = address
+		resp.AccountIdentifier.Address = address
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_BECH32) {
-		resp.Address = bech32Addr
+		resp.AccountIdentifier.Address = bech32Addr
 	} else {
 		return nil, config.InvalidAddressTypeError
 	}
@@ -321,7 +323,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 		Index: int64(idx),
 	}
 	senderOperation.Type = config.OpTypeTransfer
-	senderOperation.Status = ""
+	senderOperation.Status = new(string)
 	senderOperation.Account = &types.AccountIdentifier{
 		Address: senderBech32Addr,
 	}
@@ -339,7 +341,8 @@ func (c *ConstructionAPIService) ConstructionParse(
 	}
 
 	recipientOperation.Type = config.OpTypeTransfer
-	recipientOperation.Status = ""
+	// todo check
+	recipientOperation.Status = new(string)
 	recipientOperation.Account = &types.AccountIdentifier{
 		Address: recipientBech32Addr,
 	}
@@ -362,9 +365,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 	// }
 
 	resp := &types.ConstructionParseResponse{
-		Signers:    make([]string, 0),
-		Operations: rosOperations,
-		Metadata:   make(map[string]interface{}),
+		AccountIdentifierSigners: make([]*types.AccountIdentifier, 0),
+		Operations:               rosOperations,
+		Metadata:                 make(map[string]interface{}),
 	}
 
 	// set all the operation status to success
@@ -377,7 +380,10 @@ func (c *ConstructionAPIService) ConstructionParse(
 	if req.Signed {
 		// txnJson is a signed transaction
 		// assume sender is signer
-		resp.Signers = append(resp.Signers, resp.Operations[0].Account.Address)
+		ai := &types.AccountIdentifier{
+			Address: resp.Operations[0].Account.Address,
+		}
+		resp.AccountIdentifierSigners = append(resp.AccountIdentifierSigners, ai)
 	}
 
 	return resp, nil
@@ -431,10 +437,13 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 		}
 	}
 
+	ai := &types.AccountIdentifier{
+		Address: transactionJson[rosettaUtil.SENDER_ADDR].(string),
+	}
 	signingPayload := &types.SigningPayload{
-		Address:       transactionJson[rosettaUtil.SENDER_ADDR].(string),
-		Bytes:         unsignedTxnJson, //byte array of transaction
-		SignatureType: rosettaUtil.SIGNATURE_TYPE,
+		AccountIdentifier: ai,
+		Bytes:             unsignedTxnJson, //byte array of transaction
+		SignatureType:     rosettaUtil.SIGNATURE_TYPE,
 	}
 	payloads = append(payloads, signingPayload)
 	resp.UnsignedTransaction = string(unsignedTxnJson)

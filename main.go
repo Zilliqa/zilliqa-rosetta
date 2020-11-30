@@ -55,7 +55,7 @@ func main() {
 	// requests.
 	networkIdentifier := cfg.GetNetworkIdentifier()
 	//todo
-	asserter, err := asserter.NewServer([]string{"transfer", "contract_deployment", "contract_call", "contract_call_transfer"}, true, networkIdentifier)
+	asserter, err := asserter.NewServer([]string{"transfer", "contract_deployment", "contract_call", "contract_call_transfer"}, true, networkIdentifier, []string{}, false)
 
 	if err != nil {
 		log.Fatal(err)

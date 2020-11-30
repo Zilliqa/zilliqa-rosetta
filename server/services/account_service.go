@@ -24,6 +24,11 @@ func NewAccountAPIService(config *config.Config) *AccountAPIService {
 	}
 }
 
+// todo impl it
+func (s *AccountAPIService) AccountCoins(context.Context, *types.AccountCoinsRequest) (*types.AccountCoinsResponse, *types.Error) {
+	return nil, nil
+}
+
 func (s *AccountAPIService) IsValidAddress(addr string) (string, error) {
 	if validator.IsAddress(addr) {
 		if strings.HasPrefix(addr, "0x") {
