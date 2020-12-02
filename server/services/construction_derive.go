@@ -47,6 +47,7 @@ func (c *ConstructionAPIService) ConstructionDerive(
 
 	meta = make(map[string]interface{}, 1)
 	meta[util.PUB_KEY] = hex.EncodeToString(pubKey)
+	//resp.AccountIdentifier.Metadata = meta
 	resp.Metadata = meta
 	return resp, nil
 }

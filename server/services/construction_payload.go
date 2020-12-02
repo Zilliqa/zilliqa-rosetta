@@ -38,13 +38,13 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 			// }
 			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
 			transactionJson[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
-			transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(req.Metadata[rosettaUtil.PUB_KEY].(string))
 			tx.Amount = operation.Amount.Value
 			tx.ToAddr = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			tx.SenderPubKey = rosettaUtil.RemoveHexPrefix(req.Metadata[rosettaUtil.PUB_KEY].(string))
 		}
 	}
 
+	transactionJson[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(req.Metadata[rosettaUtil.PUB_KEY].(string))
 	transactionJson[rosettaUtil.VERSION] = req.Metadata[rosettaUtil.VERSION]
 	transactionJson[rosettaUtil.NONCE] = req.Metadata[rosettaUtil.NONCE]
 	transactionJson[rosettaUtil.GAS_PRICE], _ = strconv.ParseInt(req.Metadata[rosettaUtil.GAS_PRICE].(string), 10, 64)

@@ -75,8 +75,11 @@ func (c *ConstructionAPIService) ConstructionParse(
 
 	recipientOperation.Type = config.OpTypeTransfer
 	recipientOperation.Status = new(string)
+	//meta = make(map[string]interface{},1)
+
 	recipientOperation.Account = &types.AccountIdentifier{
 		Address: recipientBech32Addr,
+		//Metadata: meta,
 	}
 
 	recipientOperation.Amount = rosettaUtil.CreateRosAmount(amount, false)

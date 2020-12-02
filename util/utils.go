@@ -2,9 +2,6 @@ package util
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
-
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
@@ -13,6 +10,8 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/validator"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -75,6 +74,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		}
 		senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
 		senderBech32Addr, err := bech32.ToBech32Address(senderAddr)
+		checksum,_ := bech32.FromBech32Addr(senderBech32Addr)
 
 		if err != nil {
 			return nil, &types.Error{
@@ -87,8 +87,11 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		status := getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Type = config.OpTypeTransfer
 		senderOperation.Status = &status
+		meta := make(map[string]interface{},1)
+		meta[PUB_KEY] = RemoveHexPrefix(strings.ToLower(ctx.SenderPubKey))
 		senderOperation.Account = &types.AccountIdentifier{
-			Address: senderBech32Addr,
+			Address: checksum,
+			Metadata: meta,
 		}
 		// deduct from sender account
 		// add negative sign
@@ -117,11 +120,14 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
+		recipientChecksum,_ := bech32.FromBech32Addr(recipientBech32Addr)
+
+
 		recipientStatus := getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Type = config.OpTypeTransfer
 		recipientOperation.Status = &recipientStatus
 		recipientOperation.Account = &types.AccountIdentifier{
-			Address: recipientBech32Addr,
+			Address: recipientChecksum,
 		}
 
 		recipientOperation.Amount = CreateRosAmount(ctx.Amount, false)
