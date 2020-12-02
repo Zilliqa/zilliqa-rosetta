@@ -2,9 +2,11 @@ package services
 
 import (
 	"context"
+	"encoding/hex"
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
+	"github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"strings"
 )
@@ -20,6 +22,7 @@ func (c *ConstructionAPIService) ConstructionDerive(
 
 	address := keytools.GetAddressFromPublic(pubKey)
 	bech32Addr, err := bech32.ToBech32Address(address)
+	check, _ := bech32.FromBech32Addr(bech32Addr)
 	if err != nil {
 		return nil, &types.Error{
 			Code:      0,
@@ -33,7 +36,7 @@ func (c *ConstructionAPIService) ConstructionDerive(
 	}
 
 	if meta == nil {
-		resp.AccountIdentifier.Address = bech32Addr
+		resp.AccountIdentifier.Address = check
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_HEX) {
 		resp.AccountIdentifier.Address = address
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_BECH32) {
@@ -42,6 +45,8 @@ func (c *ConstructionAPIService) ConstructionDerive(
 		return nil, config.InvalidAddressTypeError
 	}
 
+	meta = make(map[string]interface{}, 1)
+	meta[util.PUB_KEY] = hex.EncodeToString(pubKey)
 	resp.Metadata = meta
 	return resp, nil
 }

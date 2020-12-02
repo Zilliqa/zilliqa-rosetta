@@ -45,7 +45,6 @@ func (c *ConstructionAPIService) ConstructionParse(
 	senderBech32Addr := txnJson["senderAddr"].(string)
 	recipientBech32Addr := txnJson["toAddr"].(string)
 	amount := fmt.Sprintf("%.0f", txnJson["amount"])
-
 	// sender operation
 	idx := 0
 	senderOperation := new(types.Operation)
@@ -54,8 +53,12 @@ func (c *ConstructionAPIService) ConstructionParse(
 	}
 	senderOperation.Type = config.OpTypeTransfer
 	senderOperation.Status = new(string)
+	meta := make(map[string]interface{},1)
+	meta[rosettaUtil.PUB_KEY] = txnJson[rosettaUtil.PUB_KEY]
+
 	senderOperation.Account = &types.AccountIdentifier{
 		Address: senderBech32Addr,
+		Metadata: meta,
 	}
 	senderOperation.Amount = rosettaUtil.CreateRosAmount(amount, true)
 
@@ -109,8 +112,12 @@ func (c *ConstructionAPIService) ConstructionParse(
 	if req.Signed {
 		// txnJson is a signed transaction
 		// assume sender is signer
+		// remember to put metadata here
+		meta := make(map[string]interface{},1)
+		meta[rosettaUtil.PUB_KEY] = txnJson[rosettaUtil.PUB_KEY]
 		ai := &types.AccountIdentifier{
 			Address: resp.Operations[0].Account.Address,
+			Metadata: meta,
 		}
 		resp.AccountIdentifierSigners = append(resp.AccountIdentifierSigners, ai)
 	}

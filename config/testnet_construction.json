@@ -11,7 +11,7 @@
   "offline_url": "http://localhost:8080",
   "max_offline_connections": 5,
   "stale_depth": 1,
-  "broadcast_limit": 2,
+  "broadcast_limit": 1,
   "ignore_broadcast_failures": true,
   "clear_broadcasts": true,
   "broadcast_behind_tip": true,
@@ -22,7 +22,10 @@
    {
     "privkey": "b46e482c0d07be65138d734e15b9280fe619ebf571f4e656d744c591f9515022",
     "account_identifier": {
-     "address": "zil1cxp88j2aushtj70fn7yy92sv7u6redpwmth53v"
+     "address": "c18273C95DE42Eb979E99f8842aA0cF7343Cb42e",
+     "metadata": {
+      "pubKey": "03ac3d6f2fed0102253d7658de77d802ec6cd6d8f5bdd056ae342540be3d00ae3f"
+     }
     },
     "curve_type": "secp256k1",
     "currency": {

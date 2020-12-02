@@ -21,11 +21,13 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 		if operation.OperationIdentifier.Index == 0 {
 			preProcessResp.Options[rosettaUtil.SENDER_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
+			preProcessResp.Options[rosettaUtil.PUB_KEY] = operation.Account.Metadata[rosettaUtil.PUB_KEY]
 		}
 		if operation.OperationIdentifier.Index == 1 {
 			// if operation.Metadata == nil {
 			// 	return nil, config.ParamsError
 			// }
+
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 		}

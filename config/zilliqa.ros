@@ -93,7 +93,7 @@ transfer(1){
   }
 }
 
-return_funds(10){
+return_funds(1){
   // TODO: add suggested fee dry run to ensure account fully cleared
   transfer{
     transfer.network = {"network":"testnet", "blockchain":"zilliqa"};
