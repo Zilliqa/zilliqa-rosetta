@@ -32,7 +32,7 @@ const (
 	SENDER_ADDR = "senderAddr"
 
 	GAS_LIMIT_VALUE = "1"
-	GAS_PRICE_VALUE = "1000000000"
+	GAS_PRICE_VALUE = "2000000000"
 
 	// others
 	// set to ecdsa to bypass the signature type check for now
