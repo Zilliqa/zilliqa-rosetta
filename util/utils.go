@@ -74,7 +74,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		}
 		senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
 		senderBech32Addr, err := bech32.ToBech32Address(senderAddr)
-		checksum,_ := bech32.FromBech32Addr(senderBech32Addr)
+		checksum, _ := bech32.FromBech32Addr(senderBech32Addr)
 
 		if err != nil {
 			return nil, &types.Error{
@@ -87,11 +87,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		status := getTransactionStatus(ctx.Receipt.Success)
 		senderOperation.Type = config.OpTypeTransfer
 		senderOperation.Status = &status
-		meta := make(map[string]interface{},1)
-		meta[PUB_KEY] = RemoveHexPrefix(strings.ToLower(ctx.SenderPubKey))
+
 		senderOperation.Account = &types.AccountIdentifier{
 			Address: checksum,
-			Metadata: meta,
 		}
 		// deduct from sender account
 		// add negative sign
@@ -120,8 +118,7 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 			}
 		}
 
-		recipientChecksum,_ := bech32.FromBech32Addr(recipientBech32Addr)
-
+		recipientChecksum, _ := bech32.FromBech32Addr(recipientBech32Addr)
 
 		recipientStatus := getTransactionStatus(ctx.Receipt.Success)
 		recipientOperation.Type = config.OpTypeTransfer

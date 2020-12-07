@@ -22,10 +22,7 @@
    {
     "privkey": "b46e482c0d07be65138d734e15b9280fe619ebf571f4e656d744c591f9515022",
     "account_identifier": {
-     "address": "c18273C95DE42Eb979E99f8842aA0cF7343Cb42e",
-     "metadata": {
-      "pubKey": "03ac3d6f2fed0102253d7658de77d802ec6cd6d8f5bdd056ae342540be3d00ae3f"
-     }
+     "address": "c18273C95DE42Eb979E99f8842aA0cF7343Cb42e"
     },
     "curve_type": "secp256k1",
     "currency": {

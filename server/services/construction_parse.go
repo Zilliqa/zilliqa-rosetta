@@ -45,6 +45,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 	senderBech32Addr := txnJson["senderAddr"].(string)
 	recipientBech32Addr := txnJson["toAddr"].(string)
 	amount := fmt.Sprintf("%.0f", txnJson["amount"])
+
 	// sender operation
 	idx := 0
 	senderOperation := new(types.Operation)
@@ -53,12 +54,8 @@ func (c *ConstructionAPIService) ConstructionParse(
 	}
 	senderOperation.Type = config.OpTypeTransfer
 	senderOperation.Status = new(string)
-	meta := make(map[string]interface{},1)
-	meta[rosettaUtil.PUB_KEY] = txnJson[rosettaUtil.PUB_KEY]
-
 	senderOperation.Account = &types.AccountIdentifier{
 		Address: senderBech32Addr,
-		Metadata: meta,
 	}
 	senderOperation.Amount = rosettaUtil.CreateRosAmount(amount, true)
 
@@ -75,11 +72,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 
 	recipientOperation.Type = config.OpTypeTransfer
 	recipientOperation.Status = new(string)
-	//meta = make(map[string]interface{},1)
 
 	recipientOperation.Account = &types.AccountIdentifier{
 		Address: recipientBech32Addr,
-		//Metadata: meta,
 	}
 
 	recipientOperation.Amount = rosettaUtil.CreateRosAmount(amount, false)
@@ -90,14 +85,7 @@ func (c *ConstructionAPIService) ConstructionParse(
 		if txnJson["signature"] == nil || txnJson["signature"] == "" {
 			return nil, config.SignatureInvalidError
 		}
-		// zilliqaTransaction.Signature = txnJson["signature"].(string)
 	}
-
-	// convert to rosetta transaction object
-	// rosTransaction, err2 := rosettaUtil.CreateRosTransaction(rosettaUtil.ToCoreTransaction(zilliqaTransaction))
-	// if err2 != nil {
-	// 	return nil, err2
-	// }
 
 	resp := &types.ConstructionParseResponse{
 		AccountIdentifierSigners: make([]*types.AccountIdentifier, 0),
@@ -105,22 +93,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 		Metadata:                 make(map[string]interface{}),
 	}
 
-	// set all the operation status to success
-	// for _, operations := range rosTransaction.Operations {
-	// 	operations.Status = config.StatusSuccess.Status
-	// }
-
-	// resp.Operations = rosTransaction.Operations
-
 	if req.Signed {
-		// txnJson is a signed transaction
-		// assume sender is signer
-		// remember to put metadata here
-		meta := make(map[string]interface{},1)
-		meta[rosettaUtil.PUB_KEY] = txnJson[rosettaUtil.PUB_KEY]
 		ai := &types.AccountIdentifier{
 			Address: resp.Operations[0].Account.Address,
-			Metadata: meta,
 		}
 		resp.AccountIdentifierSigners = append(resp.AccountIdentifierSigners, ai)
 	}

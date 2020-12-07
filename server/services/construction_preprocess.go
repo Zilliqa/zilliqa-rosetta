@@ -15,13 +15,18 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 	req *types.ConstructionPreprocessRequest,
 ) (*types.ConstructionPreprocessResponse, *types.Error) {
 	preProcessResp := &types.ConstructionPreprocessResponse{
-		Options: make(map[string]interface{}),
+		Options:            make(map[string]interface{}),
+		RequiredPublicKeys: []*types.AccountIdentifier{},
 	}
 	for _, operation := range req.Operations {
 		if operation.OperationIdentifier.Index == 0 {
 			preProcessResp.Options[rosettaUtil.SENDER_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
-			preProcessResp.Options[rosettaUtil.PUB_KEY] = operation.Account.Metadata[rosettaUtil.PUB_KEY]
+			sender := &types.AccountIdentifier{
+				Address: rosettaUtil.RemoveHexPrefix(operation.Account.Address),
+			}
+			// to request sender public key, so we can remove pubKey from account identifier's meta data
+			preProcessResp.RequiredPublicKeys = append(preProcessResp.RequiredPublicKeys, sender)
 		}
 		if operation.OperationIdentifier.Index == 1 {
 			// if operation.Metadata == nil {
@@ -35,6 +40,7 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 		// 	preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
 		// }
 	}
+
 	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE_VALUE
 	preProcessResp.Options[rosettaUtil.GAS_LIMIT] = rosettaUtil.GAS_LIMIT_VALUE
 	return preProcessResp, nil

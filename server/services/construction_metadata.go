@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
@@ -32,9 +33,13 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 		return nil, config.ParamsError
 	}
 
-	// if req.Options[rosettaUtil.PUB_KEY] == nil {
-	// 	return nil, config.ParamsError
-	// }
+	// should contain sender public key
+	if len(req.PublicKeys) == 0 {
+		return nil, config.ParamsError
+	}
+
+	pubKey := hex.EncodeToString(req.PublicKeys[0].Bytes)
+	resp.Metadata[rosettaUtil.PUB_KEY] = pubKey
 
 	if req.Options[rosettaUtil.TO_ADDR] == nil {
 		return nil, config.ParamsError
@@ -70,7 +75,6 @@ func (c *ConstructionAPIService) ConstructionMetadata(
 	resp.Metadata[rosettaUtil.AMOUNT] = req.Options[rosettaUtil.AMOUNT]
 	resp.Metadata[rosettaUtil.GAS_LIMIT] = req.Options[rosettaUtil.GAS_LIMIT]
 	resp.Metadata[rosettaUtil.GAS_PRICE] = req.Options[rosettaUtil.GAS_PRICE]
-	resp.Metadata[rosettaUtil.PUB_KEY] = req.Options[rosettaUtil.PUB_KEY]
 	resp.Metadata[rosettaUtil.SENDER_ADDR] = senderBech32Addr
 	resp.Metadata[rosettaUtil.TO_ADDR] = req.Options[rosettaUtil.TO_ADDR]
 

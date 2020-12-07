@@ -94,11 +94,10 @@ transfer(1){
 }
 
 return_funds(1){
-  // TODO: add suggested fee dry run to ensure account fully cleared
   transfer{
     transfer.network = {"network":"testnet", "blockchain":"zilliqa"};
     currency = {"symbol":"ZIL", "decimals":12};
-    max_fee = "84000000000000";
+    max_fee = "1000000000000";
     sender = find_balance({
       "minimum_balance":{
         "value": {{max_fee}},
@@ -112,7 +111,7 @@ return_funds(1){
     sender_amount = 0 - {{available_amount}};
 
     // Provide a static address as the recipient and construct operations
-    faucet = {"address":"0xc18273C95DE42Eb979E99f8842aA0cF7343Cb42e"};
+    faucet = {"address":"c18273C95DE42Eb979E99f8842aA0cF7343Cb42e"};
     transfer.confirmation_depth = "1";
     transfer.operations = [
       {

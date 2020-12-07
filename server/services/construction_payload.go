@@ -81,11 +81,8 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 		}
 	}
 
-	meta := make(map[string]interface{},1)
-	meta[rosettaUtil.PUB_KEY] = req.Metadata[rosettaUtil.PUB_KEY]
 	ai := &types.AccountIdentifier{
 		Address: transactionJson[rosettaUtil.SENDER_ADDR].(string),
-		Metadata: meta,
 	}
 	signingPayload := &types.SigningPayload{
 		AccountIdentifier: ai,

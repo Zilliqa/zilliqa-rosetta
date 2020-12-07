@@ -2,11 +2,9 @@ package services
 
 import (
 	"context"
-	"encoding/hex"
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
-	"github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"strings"
 )
@@ -45,9 +43,6 @@ func (c *ConstructionAPIService) ConstructionDerive(
 		return nil, config.InvalidAddressTypeError
 	}
 
-	meta = make(map[string]interface{}, 1)
-	meta[util.PUB_KEY] = hex.EncodeToString(pubKey)
-	//resp.AccountIdentifier.Metadata = meta
 	resp.Metadata = meta
 	return resp, nil
 }
