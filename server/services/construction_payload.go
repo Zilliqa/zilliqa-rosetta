@@ -39,7 +39,7 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 			transactionJson[rosettaUtil.AMOUNT], _ = strconv.ParseInt(operation.Amount.Value, 10, 64)
 			transactionJson[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 			tx.Amount = operation.Amount.Value
-			tx.ToAddr = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
+			tx.ToAddr = rosettaUtil.RemoveHexPrefix(operation.Account.Metadata[rosettaUtil.Base16].(string))
 			tx.SenderPubKey = rosettaUtil.RemoveHexPrefix(req.Metadata[rosettaUtil.PUB_KEY].(string))
 		}
 	}
@@ -83,6 +83,9 @@ func (c *ConstructionAPIService) ConstructionPayloads(
 
 	ai := &types.AccountIdentifier{
 		Address: transactionJson[rosettaUtil.SENDER_ADDR].(string),
+		Metadata: map[string]interface{}{
+			rosettaUtil.Base16: rosettaUtil.ToChecksumAddr(transactionJson[rosettaUtil.SENDER_ADDR].(string)),
+		},
 	}
 	signingPayload := &types.SigningPayload{
 		AccountIdentifier: ai,

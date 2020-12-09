@@ -24,21 +24,17 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
 			sender := &types.AccountIdentifier{
 				Address: rosettaUtil.RemoveHexPrefix(operation.Account.Address),
+				Metadata: map[string]interface{}{
+					rosettaUtil.Base16: operation.Account.Metadata[rosettaUtil.Base16],
+				},
 			}
 			// to request sender public key, so we can remove pubKey from account identifier's meta data
 			preProcessResp.RequiredPublicKeys = append(preProcessResp.RequiredPublicKeys, sender)
 		}
 		if operation.OperationIdentifier.Index == 1 {
-			// if operation.Metadata == nil {
-			// 	return nil, config.ParamsError
-			// }
-
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
-			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
+			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Metadata[rosettaUtil.Base16].(string))
 		}
-		// if operation.Metadata != nil {
-		// 	preProcessResp.Options[rosettaUtil.PUB_KEY] = rosettaUtil.RemoveHexPrefix(operation.Metadata["senderPubKey"].(string))
-		// }
 	}
 
 	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE_VALUE

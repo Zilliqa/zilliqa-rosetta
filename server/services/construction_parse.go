@@ -56,6 +56,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 	senderOperation.Status = new(string)
 	senderOperation.Account = &types.AccountIdentifier{
 		Address: senderBech32Addr,
+		Metadata: map[string]interface{}{
+			rosettaUtil.Base16: rosettaUtil.ToChecksumAddr(senderBech32Addr),
+		},
 	}
 	senderOperation.Amount = rosettaUtil.CreateRosAmount(amount, true)
 
@@ -75,6 +78,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 
 	recipientOperation.Account = &types.AccountIdentifier{
 		Address: recipientBech32Addr,
+		Metadata: map[string]interface{}{
+			rosettaUtil.Base16: rosettaUtil.ToChecksumAddr(recipientBech32Addr),
+		},
 	}
 
 	recipientOperation.Amount = rosettaUtil.CreateRosAmount(amount, false)
@@ -96,6 +102,9 @@ func (c *ConstructionAPIService) ConstructionParse(
 	if req.Signed {
 		ai := &types.AccountIdentifier{
 			Address: resp.Operations[0].Account.Address,
+		}
+		ai.Metadata = map[string]interface{}{
+			rosettaUtil.Base16: rosettaUtil.ToChecksumAddr(ai.Address),
 		}
 		resp.AccountIdentifierSigners = append(resp.AccountIdentifierSigners, ai)
 	}

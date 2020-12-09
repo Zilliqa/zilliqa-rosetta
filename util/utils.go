@@ -16,20 +16,19 @@ import (
 
 const (
 	// metadata
-	AMOUNT    = "amount"
-	CODE      = "code"
-	DATA      = "data"
-	GAS_LIMIT = "gasLimit"
-	GAS_PRICE = "gasPrice"
-	NONCE     = "nonce"
-	PRIORITY  = "priority"
-	PUB_KEY   = "pubKey"
-	SIGNATURE = "signature"
-	TO_ADDR   = "toAddr"
-	VERSION   = "version"
-
-	SENDER_ADDR = "senderAddr"
-
+	AMOUNT          = "amount"
+	CODE            = "code"
+	DATA            = "data"
+	GAS_LIMIT       = "gasLimit"
+	GAS_PRICE       = "gasPrice"
+	NONCE           = "nonce"
+	PRIORITY        = "priority"
+	PUB_KEY         = "pubKey"
+	SIGNATURE       = "signature"
+	TO_ADDR         = "toAddr"
+	Base16          = "base16"
+	VERSION         = "version"
+	SENDER_ADDR     = "senderAddr"
 	GAS_LIMIT_VALUE = "1"
 	GAS_PRICE_VALUE = "2000000000"
 
@@ -74,7 +73,6 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		}
 		senderAddr := keytools.GetAddressFromPublic(util.DecodeHex(ctx.SenderPubKey))
 		senderBech32Addr, err := bech32.ToBech32Address(senderAddr)
-		checksum, _ := bech32.FromBech32Addr(senderBech32Addr)
 
 		if err != nil {
 			return nil, &types.Error{
@@ -89,7 +87,10 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		senderOperation.Status = &status
 
 		senderOperation.Account = &types.AccountIdentifier{
-			Address: checksum,
+			Address: senderBech32Addr,
+			Metadata: map[string]interface{}{
+				Base16: ToChecksumAddr(senderBech32Addr),
+			},
 		}
 		// deduct from sender account
 		// add negative sign
@@ -124,7 +125,10 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		recipientOperation.Type = config.OpTypeTransfer
 		recipientOperation.Status = &recipientStatus
 		recipientOperation.Account = &types.AccountIdentifier{
-			Address: recipientChecksum,
+			Address: recipientBech32Addr,
+			Metadata: map[string]interface{}{
+				Base16: ToChecksumAddr(recipientChecksum),
+			},
 		}
 
 		recipientOperation.Amount = CreateRosAmount(ctx.Amount, false)
