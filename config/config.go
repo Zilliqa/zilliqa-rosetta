@@ -167,6 +167,11 @@ var (
 		Message:   "signature provided in transaction is invalid",
 		Retriable: false,
 	}
+	InvalidOperation = &types.Error{
+		Code:      517,
+		Message:   "unsupported api operation",
+		Retriable: false,
+	}
 )
 
 var (

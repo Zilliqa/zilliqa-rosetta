@@ -172,6 +172,7 @@ func (s *NetworkAPIService) NetworkOptions(
 		config.PublicHexError,
 		config.InvalidAddressTypeError,
 		config.SignatureInvalidError,
+		config.InvalidOperation,
 	}
 
 	allow := &types.Allow{

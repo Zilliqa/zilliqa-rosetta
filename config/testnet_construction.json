@@ -1,0 +1,44 @@
+{
+ "network": {
+  "blockchain": "zilliqa",
+  "network": "testnet"
+ },
+ "online_url": "http://localhost:8080",
+ "data_directory": "",
+ "http_timeout": 10,
+ "tip_delay": 30000,
+ "construction": {
+  "offline_url": "http://localhost:8080",
+  "max_offline_connections": 5,
+  "stale_depth": 5,
+  "broadcast_limit": 1,
+  "ignore_broadcast_failures": true,
+  "clear_broadcasts": true,
+  "broadcast_behind_tip": true,
+  "block_broadcast_limit": 100,
+  "rebroadcast_all": false,
+  "constructor_dsl_file": "zilliqa.ros",
+  "prefunded_accounts": [
+   {
+    "privkey": "b46e482c0d07be65138d734e15b9280fe619ebf571f4e656d744c591f9515022",
+    "account_identifier": {
+     "address": "c18273C95DE42Eb979E99f8842aA0cF7343Cb42e"
+    },
+    "curve_type": "secp256k1",
+    "currency": {
+       "symbol":"ZIL",
+       "decimals":12
+    }
+   }
+  ]
+ },
+ "data": {
+  "historical_balance_enabled": false,
+  "reconciliation_disabled": true,
+  "inactive_discrepency_search_disabled": true,
+  "balance_tracking_disabled": true,
+  "end_conditions": {
+   "tip": true
+  }
+ }
+}
