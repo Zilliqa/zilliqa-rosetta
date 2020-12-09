@@ -93,8 +93,6 @@ func (pool *MemPool) Start() {
 			if err != nil {
 				log.Error("check confirm failed ", err.Error())
 			}
-
-			// 2. todo check if any transaction inside pending pool need to be sent out
 		}
 	}()
 }
