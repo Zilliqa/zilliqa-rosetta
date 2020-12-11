@@ -5,6 +5,7 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
+	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"strings"
 )
@@ -34,7 +35,7 @@ func (c *ConstructionAPIService) ConstructionDerive(
 	}
 
 	if meta == nil {
-		resp.AccountIdentifier.Address = check
+		resp.AccountIdentifier.Address = bech32Addr
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_HEX) {
 		resp.AccountIdentifier.Address = address
 	} else if meta[ADDRESS_TYPE] == strings.ToLower(ADDRESS_TYPE_BECH32) {
@@ -42,7 +43,8 @@ func (c *ConstructionAPIService) ConstructionDerive(
 	} else {
 		return nil, config.InvalidAddressTypeError
 	}
-
-	resp.Metadata = meta
+	resp.AccountIdentifier.Metadata = map[string]interface{}{
+		rosettaUtil.Base16: check,
+	}
 	return resp, nil
 }
