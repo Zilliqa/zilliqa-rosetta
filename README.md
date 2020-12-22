@@ -751,7 +751,10 @@ __Note__: The operation type is `contract_deployment`.
                 "type": "contract_deployment",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1a35lxvh38y3u8xe7kzxfkgdhmctj387zs92llt"
+                    "address": "zil1a35lxvh38y3u8xe7kzxfkgdhmctj387zs92llt",
+                    "metadata": {
+                        "base16": "ec69F332F13923C39B3eB08c9b21B7De17289FC2"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -834,7 +837,10 @@ __Note__: The operation type is `contract_call`.
                 "type": "contract_call",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1ha4z3qu69uxr6h2m7v9ggcjt332cjupzp7c2ae"
+                    "address": "zil1ha4z3qu69uxr6h2m7v9ggcjt332cjupzp7c2ae",
+                    "metadata": {
+                        "base16": "Bf6a28839a2f0c3d5d5Bf30A84624B8c55897022"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -931,7 +937,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil16ura3fhsf84h60s7w6xjy4u2wxel892n7sq5dp"
+                    "address": "zil16ura3fhsf84h60s7w6xjy4u2wxel892n7sq5dp",
+                    "metadata": {
+                        "base16": "d707D8a6F049Eb7d3E1e768D22578A71b3f39553"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -953,7 +962,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call_transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h"
+                    "address": "zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h",
+                    "metadata": {
+                        "base16": "8D1109594E019D9C4DEFe9b6A855F92691A9E4fA"
+                    }
                 },
                 "amount": {
                     "value": "-123073860347289351",
@@ -975,7 +987,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call_transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil12n6h5gqhlpw87gtzlqe5sq5r7pq2spj8x2g8pe"
+                    "address": "zil12n6h5gqhlpw87gtzlqe5sq5r7pq2spj8x2g8pe",
+                    "metadata": {
+                        "base16": "54F57A2017F85c7F2162f833480283f040a80647"
+                    }
                 },
                 "amount": {
                     "value": "123073860347289351",
