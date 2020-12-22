@@ -407,7 +407,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil14dzm27r68jpdjdnjrnw98ezs8unlp5mrhwal7x"
+                            "address": "zil14dzm27r68jpdjdnjrnw98ezs8unlp5mrhwal7x",
+                            "metadata": {
+                                "base16": "aB45b5787A3c82d936721cDC53E4503f27F0d363"
+                            }
                         },
                         "amount": {
                             "value": "-199999000000000000",
@@ -429,7 +432,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1dthkxpk6dh30lkjfjysn9xz75s4d5xtd6gmv04"
+                            "address": "zil1dthkxpk6dh30lkjfjysn9xz75s4d5xtd6gmv04",
+                            "metadata": {
+                                "base16": "6aeF6306DA6DE2FFDA49912132985Ea42ADa196d"
+                            }
                         },
                         "amount": {
                             "value": "199999000000000000",
@@ -471,7 +477,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw"
+                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw",
+                            "metadata": {
+                                "base16": "14456246cc53d31f0a2EB00FA0248F7aEbD3fa89"
+                            }
                         },
                         "amount": {
                             "value": "-103594390000000000",
@@ -493,7 +502,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1sfxppp4fvg9s20myeawzz6p5kqau448eh5npar"
+                            "address": "zil1sfxppp4fvg9s20myeawzz6p5kqau448eh5npar",
+                            "metadata": {
+                                "base16": "824C1086A9620B053f64cF5C216834B03bcaD4F9"
+                            }
                         },
                         "amount": {
                             "value": "103594390000000000",
@@ -535,7 +547,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw"
+                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw",
+                            "metadata": {
+                                "base16": "14456246cc53d31f0a2EB00FA0248F7aEbD3fa89"
+                            }
                         },
                         "amount": {
                             "value": "-1100888000000000",
@@ -557,7 +572,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil12xnu6zvlulr6qceqlxqr7pyznjfgsyd8a909t6"
+                            "address": "zil12xnu6zvlulr6qceqlxqr7pyznjfgsyd8a909t6",
+                            "metadata": {
+                                "base16": "51a7Cd099Fe7c7a06320F9803f04829c928811a7"
+                            }
                         },
                         "amount": {
                             "value": "1100888000000000",
@@ -633,7 +651,10 @@ __Note__: The operation type is `transfer`.
                 "type": "transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil17z645g0dr8nwgs5r8tafyekpv6kk882nxaqr70"
+                    "address": "zil17z645g0dr8nwgs5r8tafyekpv6kk882nxaqr70",
+                    "metadata": {
+                        "base16": "F0b55a21ED19E6E442833Afa9266C166aD639d53"
+                    }
                 },
                 "amount": {
                     "value": "-300000000000000",
@@ -655,7 +676,10 @@ __Note__: The operation type is `transfer`.
                 "type": "transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1yz8putzpxrjrlrcn9xukwe6fyeg9jlyjmnw70a"
+                    "address": "zil1yz8putzpxrjrlrcn9xukwe6fyeg9jlyjmnw70a",
+                    "metadata": {
+                        "base16": "208E1e2c4130E43F8F1329B96767492650597C92"
+                    }
                 },
                 "amount": {
                     "value": "300000000000000",
@@ -1535,6 +1559,14 @@ Sample
     "message": "transaction not pending",
     "retriable": false
 }
+```
+
+### Unsupported APIs
+
+These are the following lists of APIs not supported by Zilliqa blockchain:
+
+```
+/account/coins
 ```
 
 ## How to test

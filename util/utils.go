@@ -2,6 +2,9 @@ package util
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/bech32"
 	"github.com/Zilliqa/gozilliqa-sdk/core"
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
@@ -10,8 +13,6 @@ import (
 	"github.com/Zilliqa/gozilliqa-sdk/validator"
 	"github.com/Zilliqa/zilliqa-rosetta/config"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -166,6 +167,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		senderOperation.Status = &status
 		senderOperation.Account = &types.AccountIdentifier{
 			Address: senderBech32Addr,
+			Metadata: map[string]interface{}{
+				Base16: ToChecksumAddr(senderBech32Addr),
+			},
 		}
 		// deduct from sender account
 		// add negative sign
@@ -216,6 +220,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		initiatorOperation.Status = &status
 		initiatorOperation.Account = &types.AccountIdentifier{
 			Address: initiatorBech32Addr,
+			Metadata: map[string]interface{}{
+				Base16: ToChecksumAddr(initiatorBech32Addr),
+			},
 		}
 
 		// if it is not smart contract deposit, ie, no transition, means there is only one operation
@@ -260,6 +267,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 				fromOperation.Status = &status
 				fromOperation.Account = &types.AccountIdentifier{
 					Address: fromBech32Addr,
+					Metadata: map[string]interface{}{
+						Base16: ToChecksumAddr(fromBech32Addr),
+					},
 				}
 				fromOperation.Amount = CreateRosAmount(transition.Msg.Amount, true)
 				// fromOperation.Metadata = createMetadataContractCall(ctx)
@@ -294,6 +304,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 				toOperation.Status = &toStatus
 				toOperation.Account = &types.AccountIdentifier{
 					Address: toBech32Addr,
+					Metadata: map[string]interface{}{
+						Base16: ToChecksumAddr(toBech32Addr),
+					},
 				}
 				toOperation.Amount = CreateRosAmount(transition.Msg.Amount, false)
 				toOperation.Metadata = createMetadataContractCall(ctx)
@@ -335,6 +348,9 @@ func CreateRosTransaction(ctx *core.Transaction) (*types.Transaction, *types.Err
 		recipientOperation.Status = &receipientStatus
 		recipientOperation.Account = &types.AccountIdentifier{
 			Address: recipientBech32Addr,
+			Metadata: map[string]interface{}{
+				Base16: ToChecksumAddr(recipientBech32Addr),
+			},
 		}
 
 		recipientOperation.Amount = CreateRosAmount(ctx.Amount, false)
