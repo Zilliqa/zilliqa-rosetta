@@ -1111,20 +1111,25 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
     "signatures": [
         {
             "signing_payload": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
-                "hex_bytes": "088180b40a10ba011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
-                "signature_type": "ecdsa"
+                "account_identifier": {
+                    "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                    "metadata": {
+                        "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                    }
+                },
+                "hex_bytes": "088180b40a10bb011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a10000000000000000000000000773594003801",
+                "signature_type": "schnorr_1"
             },
             "public_key": {
                 "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
                 "curve_type": "secp256k1"
             },
-            "signature_type": "ecdsa",
-            "hex_bytes": "51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf"
+            "signature_type": "schnorr_1",
+            "hex_bytes": "fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7"
         }
     ]
 }
@@ -1136,7 +1141,7 @@ Sample
 
 ```json
 {
-    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"signature\":\"fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
 }
 ```
 
@@ -1279,15 +1284,21 @@ Sample
 
 ```json
 {
+    "signers": [
+        "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+    ],
     "operations": [
         {
             "operation_identifier": {
                 "index": 0
             },
             "type": "transfer",
-            "status": "SUCCESS",
+            "status": "",
             "account": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                "metadata": {
+                    "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                }
             },
             "amount": {
                 "value": "-2000000000000",
@@ -1307,9 +1318,12 @@ Sample
                 }
             ],
             "type": "transfer",
-            "status": "SUCCESS",
+            "status": "",
             "account": {
-                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
+                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
+                "metadata": {
+                    "base16": "4978075dd607933122f4355B220915EFa51E84c7"
+                }
             },
             "amount": {
                 "value": "2000000000000",
@@ -1317,30 +1331,16 @@ Sample
                     "symbol": "ZIL",
                     "decimals": 12
                 }
-            },
-            "metadata": {
-                "data": "",
-                "gasLimit": "1",
-                "gasPrice": "1000000000",
-                "nonce": "186",
-                "receipt": {
-                    "accept": false,
-                    "errors": null,
-                    "exceptions": null,
-                    "success": false,
-                    "cumulative_gas": "",
-                    "epoch_num": "",
-                    "event_logs": null,
-                    "transitions": null
-                },
-                "senderPubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
-                "signature": "51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf",
-                "version": "21823489"
             }
         }
     ],
-    "signers": [
-        "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+    "account_identifier_signers": [
+        {
+            "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+            "metadata": {
+                "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+            }
+        }
     ]
 }
 ```
@@ -1551,7 +1551,7 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"signature\":\"fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
 }
 ```
 
@@ -1562,7 +1562,7 @@ Sample
 ```json
 {
     "transaction_identifier": {
-        "hash": "a17367c8bcd83cdc2d9ede4571c8e27ad74278ae195263f13e10ba84f12ab13c"
+        "hash": "963a984ee255cfd881b337a52caf699d4f05799c45cc0948d8a8ce72a6a12d8e"
     }
 }
 ```
@@ -1642,15 +1642,9 @@ These are the following lists of APIs not supported by Zilliqa blockchain:
 ```
 
 ## How to test
-Install rosetta-cli@0.4.0 from https://github.com/coinbase/rosetta-cli/releases/tag/v0.4.0.
-```
-1. Extract the downloaded folder
-2. cd into the folder
-3. make deps
-4. make lint
-5. make release
-```
-The above should install `rosetta-cli` under your `$GOPATH/bin`.
+Install the latest rosetta-cli from https://github.com/coinbase/rosetta-cli.
+
+At the time of writing, we are using **rosetta-cli v0.6.6**.
 
 To begin testing:
 1. cd into zilliqa-rosetta folder
@@ -1661,12 +1655,12 @@ To begin testing:
 
 **Zilliqa Mainnet**
 ```
-rosetta-cli check:data --configuration-file config/mainnet_config.json
+rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/mainnet_config.json
 ```
 
 **Zilliqa Testnet**
 ```
-rosetta-cli check:data --configuration-file config/testnet_config.json
+rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/testnet_config.json
 ```
 
 Note: The `mainnet_config.json` specifically **disables** historical balance lookup and balance tracking options. This is due to the fact that historical balance lookup is not supported on Zilliqa blockchain. In addition, the blockchain rewards miners directly, which results in a single outflow transaction without prior inflow transactions. This will result in `negative balances` errors being raised incorrectly. Hence, both the historical balance lookup and balance tracking options are disabled.
@@ -1676,7 +1670,24 @@ For **testnet** tests, we begin the test from Block 1600000. Some of our much ea
 ### Testing Construction API
 
 ```
-rosetta-cli check:construction --configuration-file ./config/testnet_construction.json
+rosetta-cli check:construction --configuration-file ./config/testnet_config.json
 ```
 
-Note: prefund the address in `prefunded_accounts`
+#### How to execute
+First, prefund the address in `prefunded_accounts` section in the `testnet_config.json`.
+
+After executing the above line, rosetta-cli would create an address for testing and expecting a minimum amount:
+```
+looking for balance {"value":"100000000000000","currency":{"symbol":"ZIL","decimals":12}} on account {"address":"zil1xk5shden2xq4s5dp63v3vq4vyacpux0h3z3jx5","metadata":{"base16":"35A90BB73351815851a1D4591602Ac27701E19f7"}}
+```
+
+Fund the stated zil address with **at least** the (value + gas fees), e.g. the stated value here is `100000000000000 Qa` = `100 ZIL`, so we would send `120 ZIL` (100 for the minimum amount and 20 for the gas fees). Please adjust the gas fees accordingly if you see a "insufficent balance to broadcast transaction" in the console.
+
+Next, rosetta-cli would create a payment transaction from the created address to another created address.
+
+Lastly, the test is completed if you see this:
+```
+broadcast complete for job "transfer (13)" with transaction hash "ed81f9a4fab4759d9836e3ab6eeb550bab08880787f0ab0c5a464842a1662486"
+```
+
+The construction API test would continue until the funds of the created accounts are emptied. You may halt the test at any time.
