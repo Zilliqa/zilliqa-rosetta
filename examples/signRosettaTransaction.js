@@ -1,6 +1,6 @@
 const { BN, Long, bytes, units } = require('@zilliqa-js/util');
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
-const { schnorr } = require('@zilliqa-js/crypto');
+const { schnorr, fromBech32Address } = require('@zilliqa-js/crypto');
 const api = 'https://dev-api.zilliqa.com';
 const zilliqa = new Zilliqa(api);
 const privateKey = '{{ SENDER_PRIVATE_KEY }}'
@@ -9,12 +9,14 @@ async function sign() {
     try {
         zilliqa.wallet.addByPrivateKey(privateKey);
 
+        const recipientAddr = fromBech32Address("zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0");
+
         const rawTx = zilliqa.transactions.new({
             version: bytes.pack(333, 1),
             amount: new BN(units.toQa('2', units.Units.Zil)),
             gasLimit: Long.fromNumber(1), // normal (non-contract) transactions cost 1 gas
             gasPrice: new BN(units.toQa(2000, units.Units.Li)), // the minimum gas price is 1,000 li
-            toAddr: "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0", // toAddr is self-explanatory
+            toAddr: recipientAddr, // recipient address must be converted to checksum address, 
             pubKey: "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e", // this determines which account is used to send the tx
         });
         

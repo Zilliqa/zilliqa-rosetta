@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
 	"github.com/Zilliqa/gozilliqa-sdk/util"
 	goZilUtil "github.com/Zilliqa/gozilliqa-sdk/util"
+	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
@@ -50,7 +52,7 @@ func (c *ConstructionAPIService) ConstructionCombine(
 		Amount:       fmt.Sprintf("%.0f", unsignedTxnJson["amount"]),
 		GasPrice:     fmt.Sprintf("%.0f", unsignedTxnJson["gasPrice"]),
 		GasLimit:     fmt.Sprintf("%.0f", unsignedTxnJson["gasLimit"]),
-		ToAddr:       unsignedTxnJson["toAddr"].(string),
+		ToAddr:       rosettaUtil.ToChecksumAddr(unsignedTxnJson["toAddr"].(string)), // needs to be a checksum address
 		SenderPubKey: encodedPubKey,
 		Code:         unsignedTxnJson["code"].(string),
 		Data:         unsignedTxnJson["data"].(string),
