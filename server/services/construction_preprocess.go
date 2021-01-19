@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -33,7 +34,7 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 		}
 		if operation.OperationIdentifier.Index == 1 {
 			preProcessResp.Options[rosettaUtil.AMOUNT] = operation.Amount.Value
-			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Metadata[rosettaUtil.Base16].(string))
+			preProcessResp.Options[rosettaUtil.TO_ADDR] = rosettaUtil.RemoveHexPrefix(operation.Account.Address)
 		}
 	}
 

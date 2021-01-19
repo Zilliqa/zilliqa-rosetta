@@ -19,7 +19,7 @@ The default configuration file is config.local.yaml
 rosetta:
  host: "0.0.0.0"
  port: 8080
- version: "1.4.1"
+ version: "1.4.9"
  middleware_version: "0.0.1"
 
 networks:
@@ -108,7 +108,7 @@ Sample
 ```json
 {
     "version": {
-        "rosetta_version": "1.4.1",
+        "rosetta_version": "1.4.9",
         "node_version": "v6.3.0-alpha.0"
     },
     "allow": {
@@ -407,7 +407,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil14dzm27r68jpdjdnjrnw98ezs8unlp5mrhwal7x"
+                            "address": "zil14dzm27r68jpdjdnjrnw98ezs8unlp5mrhwal7x",
+                            "metadata": {
+                                "base16": "aB45b5787A3c82d936721cDC53E4503f27F0d363"
+                            }
                         },
                         "amount": {
                             "value": "-199999000000000000",
@@ -429,7 +432,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1dthkxpk6dh30lkjfjysn9xz75s4d5xtd6gmv04"
+                            "address": "zil1dthkxpk6dh30lkjfjysn9xz75s4d5xtd6gmv04",
+                            "metadata": {
+                                "base16": "6aeF6306DA6DE2FFDA49912132985Ea42ADa196d"
+                            }
                         },
                         "amount": {
                             "value": "199999000000000000",
@@ -471,7 +477,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw"
+                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw",
+                            "metadata": {
+                                "base16": "14456246cc53d31f0a2EB00FA0248F7aEbD3fa89"
+                            }
                         },
                         "amount": {
                             "value": "-103594390000000000",
@@ -493,7 +502,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1sfxppp4fvg9s20myeawzz6p5kqau448eh5npar"
+                            "address": "zil1sfxppp4fvg9s20myeawzz6p5kqau448eh5npar",
+                            "metadata": {
+                                "base16": "824C1086A9620B053f64cF5C216834B03bcaD4F9"
+                            }
                         },
                         "amount": {
                             "value": "103594390000000000",
@@ -535,7 +547,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw"
+                            "address": "zil1z3zky3kv20f37z3wkq86qfy00t4a875fxxw7sw",
+                            "metadata": {
+                                "base16": "14456246cc53d31f0a2EB00FA0248F7aEbD3fa89"
+                            }
                         },
                         "amount": {
                             "value": "-1100888000000000",
@@ -557,7 +572,10 @@ Sample
                         "type": "transfer",
                         "status": "SUCCESS",
                         "account": {
-                            "address": "zil12xnu6zvlulr6qceqlxqr7pyznjfgsyd8a909t6"
+                            "address": "zil12xnu6zvlulr6qceqlxqr7pyznjfgsyd8a909t6",
+                            "metadata": {
+                                "base16": "51a7Cd099Fe7c7a06320F9803f04829c928811a7"
+                            }
                         },
                         "amount": {
                             "value": "1100888000000000",
@@ -633,7 +651,10 @@ __Note__: The operation type is `transfer`.
                 "type": "transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil17z645g0dr8nwgs5r8tafyekpv6kk882nxaqr70"
+                    "address": "zil17z645g0dr8nwgs5r8tafyekpv6kk882nxaqr70",
+                    "metadata": {
+                        "base16": "F0b55a21ED19E6E442833Afa9266C166aD639d53"
+                    }
                 },
                 "amount": {
                     "value": "-300000000000000",
@@ -655,7 +676,10 @@ __Note__: The operation type is `transfer`.
                 "type": "transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1yz8putzpxrjrlrcn9xukwe6fyeg9jlyjmnw70a"
+                    "address": "zil1yz8putzpxrjrlrcn9xukwe6fyeg9jlyjmnw70a",
+                    "metadata": {
+                        "base16": "208E1e2c4130E43F8F1329B96767492650597C92"
+                    }
                 },
                 "amount": {
                     "value": "300000000000000",
@@ -727,7 +751,10 @@ __Note__: The operation type is `contract_deployment`.
                 "type": "contract_deployment",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1a35lxvh38y3u8xe7kzxfkgdhmctj387zs92llt"
+                    "address": "zil1a35lxvh38y3u8xe7kzxfkgdhmctj387zs92llt",
+                    "metadata": {
+                        "base16": "ec69F332F13923C39B3eB08c9b21B7De17289FC2"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -810,7 +837,10 @@ __Note__: The operation type is `contract_call`.
                 "type": "contract_call",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil1ha4z3qu69uxr6h2m7v9ggcjt332cjupzp7c2ae"
+                    "address": "zil1ha4z3qu69uxr6h2m7v9ggcjt332cjupzp7c2ae",
+                    "metadata": {
+                        "base16": "Bf6a28839a2f0c3d5d5Bf30A84624B8c55897022"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -907,7 +937,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil16ura3fhsf84h60s7w6xjy4u2wxel892n7sq5dp"
+                    "address": "zil16ura3fhsf84h60s7w6xjy4u2wxel892n7sq5dp",
+                    "metadata": {
+                        "base16": "d707D8a6F049Eb7d3E1e768D22578A71b3f39553"
+                    }
                 },
                 "amount": {
                     "value": "0",
@@ -929,7 +962,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call_transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h"
+                    "address": "zil135gsjk2wqxwecn00axm2s40ey6g6ne8668046h",
+                    "metadata": {
+                        "base16": "8D1109594E019D9C4DEFe9b6A855F92691A9E4fA"
+                    }
                 },
                 "amount": {
                     "value": "-123073860347289351",
@@ -951,7 +987,10 @@ In the sample, the sequence of operations are as follows:
                 "type": "contract_call_transfer",
                 "status": "SUCCESS",
                 "account": {
-                    "address": "zil12n6h5gqhlpw87gtzlqe5sq5r7pq2spj8x2g8pe"
+                    "address": "zil12n6h5gqhlpw87gtzlqe5sq5r7pq2spj8x2g8pe",
+                    "metadata": {
+                        "base16": "54F57A2017F85c7F2162f833480283f040a80647"
+                    }
                 },
                 "amount": {
                     "value": "123073860347289351",
@@ -1018,6 +1057,18 @@ In the sample, the sequence of operations are as follows:
 
 ### Construction
 
+## Construction Flow
+The construction flow is always in this sequence:
+1. /construction/derive
+2. /construction/preprocess
+3. /construction/metadata
+4. /construction/payloads
+5. /construction/parse
+6. /construction/combine
+7. /construction/parse (to confirm correctness)
+8. /construction/hash
+9. /construction/submit
+
 **/construction/combine**
 
 *Create Network Transaction from Signature*
@@ -1060,20 +1111,25 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
     "signatures": [
         {
             "signing_payload": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
-                "hex_bytes": "088180b40a10ba011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a100000000000000000000000003b9aca003801",
-                "signature_type": "ecdsa"
+                "account_identifier": {
+                    "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                    "metadata": {
+                        "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                    }
+                },
+                "hex_bytes": "088180b40a10bb011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a10000000000000000000000000773594003801",
+                "signature_type": "schnorr_1"
             },
             "public_key": {
                 "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
                 "curve_type": "secp256k1"
             },
-            "signature_type": "ecdsa",
-            "hex_bytes": "51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf"
+            "signature_type": "schnorr_1",
+            "hex_bytes": "fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7"
         }
     ]
 }
@@ -1085,7 +1141,7 @@ Sample
 
 ```json
 {
-    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"signature\":\"fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
 }
 ```
 
@@ -1105,10 +1161,16 @@ Request:
     "options": {
         "amount": "2000000000000",
         "gasLimit": "1",
-        "gasPrice": "1000000000",
-        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "gasPrice": "2000000000",
+        "senderAddr": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
         "toAddr": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
-    }
+    },
+    "public_keys": [
+        {
+            "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+            "curve_type": "secp256k1"
+        }
+    ]
 }
 ```
 
@@ -1121,9 +1183,10 @@ Sample
     "metadata": {
         "amount": "2000000000000",
         "gasLimit": "1",
-        "gasPrice": "1000000000",
-        "nonce": 186,
+        "gasPrice": "2000000000",
+        "nonce": 187,
         "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "senderAddr": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
         "toAddr": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
         "version": 21823489
     }
@@ -1159,8 +1222,11 @@ Sample
 ```json
 {
     "address": "zil1y9qmlzmdygfaf4eqfcka4wfx20wzghzl05xazc",
-    "metadata": {
-        "type": "bech32"
+    "account_identifier": {
+        "address": "zil1y9qmlzmdygfaf4eqfcka4wfx20wzghzl05xazc",
+        "metadata": {
+            "base16": "2141BF8B6D2213d4d7204E2DDAB92653dC245c5F"
+        }
     }
 }
 ```
@@ -1218,15 +1284,21 @@ Sample
 
 ```json
 {
+    "signers": [
+        "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+    ],
     "operations": [
         {
             "operation_identifier": {
                 "index": 0
             },
             "type": "transfer",
-            "status": "SUCCESS",
+            "status": "",
             "account": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                "metadata": {
+                    "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                }
             },
             "amount": {
                 "value": "-2000000000000",
@@ -1246,9 +1318,12 @@ Sample
                 }
             ],
             "type": "transfer",
-            "status": "SUCCESS",
+            "status": "",
             "account": {
-                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
+                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
+                "metadata": {
+                    "base16": "4978075dd607933122f4355B220915EFa51E84c7"
+                }
             },
             "amount": {
                 "value": "2000000000000",
@@ -1256,30 +1331,16 @@ Sample
                     "symbol": "ZIL",
                     "decimals": 12
                 }
-            },
-            "metadata": {
-                "data": "",
-                "gasLimit": "1",
-                "gasPrice": "1000000000",
-                "nonce": "186",
-                "receipt": {
-                    "accept": false,
-                    "errors": null,
-                    "exceptions": null,
-                    "success": false,
-                    "cumulative_gas": "",
-                    "epoch_num": "",
-                    "event_logs": null,
-                    "transitions": null
-                },
-                "senderPubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
-                "signature": "51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf",
-                "version": "21823489"
             }
         }
     ],
-    "signers": [
-        "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+    "account_identifier_signers": [
+        {
+            "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+            "metadata": {
+                "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+            }
+        }
     ]
 }
 ```
@@ -1305,7 +1366,10 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                "metadata": {
+                    "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                }
             },
             "amount": {
                 "value": "-2000000000000",
@@ -1327,7 +1391,10 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
+                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
+                "metadata": {
+                    "base16": "4978075dd607933122f4355B220915EFa51E84c7"
+                }
             },
             "amount": {
                 "value": "2000000000000",
@@ -1335,19 +1402,25 @@ Request:
                     "symbol": "ZIL",
                     "decimals": 12
                 }
-            },
-            "metadata": {
-		        "amount": "2000000000000",
-		        "gasLimit": "1",
-		        "gasPrice": "1000000000",
-		        "nonce": 186,
-		        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
-		        "toAddr": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
-		        "version": 21823489
             }
         }
     ],
-    "metadata": {}
+    "metadata": {       // from construction/metadata
+        "amount": "2000000000000",
+        "gasLimit": "1",
+        "gasPrice": "2000000000",
+        "nonce": 187,
+        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "senderAddr": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+        "toAddr": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
+        "version": 21823489
+    },
+    "public_keys": [
+        {
+            "hex_bytes": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+            "curve_type": "secp256k1"
+        }
+    ]
 }
 ```
 
@@ -1357,12 +1430,18 @@ Sample
 
 ```json
 {
-    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
+    "unsigned_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}",
     "payloads": [
         {
-            "hex_bytes": "7b22616d6f756e74223a323030303030303030303030302c22636f6465223a22222c2264617461223a22222c226761734c696d6974223a312c226761735072696365223a313030303030303030302c226e6f6e6365223a3138362c227075624b6579223a22303265343465663263356332303331333836666161366361666466356636373331386363363631383731623031313261323734353865363566333761333536353565222c22746f41646472223a227a696c31663975717768776b7137666e7a6768357834646a797a673461376a336170783864736e6e6330222c2276657273696f6e223a32313832333438397d",
             "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
-            "signature_type": "ecdsa"
+            "hex_bytes": "088180b40a10bb011a144978075dd607933122f4355b220915efa51e84c722230a2102e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e2a120a100000000000000000000001d1a94a200032120a10000000000000000000000000773594003801",
+            "account_identifier": {
+                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                "metadata": {
+                    "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                }
+            },
+            "signature_type": "schnorr_1"
         }
     ]
 }
@@ -1388,7 +1467,10 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r"
+                "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+                "metadata": {
+                    "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+                }
             },
             "amount": {
                 "value": "-2000000000000",
@@ -1410,7 +1492,10 @@ Request:
             "type": "transfer",
             "status": "",
             "account": {
-                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
+                "address": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0",
+                "metadata": {
+                    "base16": "4978075dd607933122f4355B220915EFa51E84c7"
+                }
             },
             "amount": {
                 "value": "2000000000000",
@@ -1437,10 +1522,18 @@ Sample
     "options": {
         "amount": "2000000000000",
         "gasLimit": "1",
-        "gasPrice": "1000000000",
-        "pubKey": "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e",
+        "gasPrice": "2000000000",
+        "senderAddr": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
         "toAddr": "zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0"
-    }
+    },
+    "required_public_keys": [
+        {
+            "address": "zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r",
+            "metadata": {
+                "base16": "99f9d482abbdC5F05272A3C34a77E5933Bb1c615"
+            }
+        }
+    ]
 }
 ```
 
@@ -1458,7 +1551,7 @@ Request:
         "blockchain": "zilliqa",
         "network": "testnet"
     },
-    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":1000000000,\"nonce\":186,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"signature\":\"51c69af638ad7afd39841a7abf937d5df99e20adedc4287f43c8070d497ba78136c951192b3920914feb83b9272ccb2ca7facd835dfad10eff2b848b13616daf\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
+    "signed_transaction": "{\"amount\":2000000000000,\"code\":\"\",\"data\":\"\",\"gasLimit\":1,\"gasPrice\":2000000000,\"nonce\":187,\"pubKey\":\"02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e\",\"senderAddr\":\"zil1n8uafq4thhzlq5nj50p55al9jvamr3s45hm49r\",\"signature\":\"fcb93583d963a7c11f52f04b1ecbd129aa3df896e618b47ff163dc18c53b59afc4289851fd2d5a50eaa7d7ae0763eb912797b0b34e1cf1e6d3865a218e1066b7\",\"toAddr\":\"zil1f9uqwhwkq7fnzgh5x4djyzg4a7j3apx8dsnnc0\",\"version\":21823489}"
 }
 ```
 
@@ -1469,7 +1562,7 @@ Sample
 ```json
 {
     "transaction_identifier": {
-        "hash": "a17367c8bcd83cdc2d9ede4571c8e27ad74278ae195263f13e10ba84f12ab13c"
+        "hash": "963a984ee255cfd881b337a52caf699d4f05799c45cc0948d8a8ce72a6a12d8e"
     }
 }
 ```
@@ -1537,16 +1630,21 @@ Sample
 }
 ```
 
+### Unsupported APIs
+
+These are the following lists of APIs not supported by Zilliqa blockchain:
+
+```
+/account/coins
+/events/blocks
+/search/transactions
+
+```
+
 ## How to test
-Install rosetta-cli@0.4.0 from https://github.com/coinbase/rosetta-cli/releases/tag/v0.4.0.
-```
-1. Extract the downloaded folder
-2. cd into the folder
-3. make deps
-4. make lint
-5. make release
-```
-The above should install `rosetta-cli` under your `$GOPATH/bin`.
+Install the latest rosetta-cli from https://github.com/coinbase/rosetta-cli.
+
+At the time of writing, we are using **rosetta-cli v0.6.6**.
 
 To begin testing:
 1. cd into zilliqa-rosetta folder
@@ -1557,12 +1655,12 @@ To begin testing:
 
 **Zilliqa Mainnet**
 ```
-rosetta-cli check:data --configuration-file config/mainnet_config.json
+rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/mainnet_config.json
 ```
 
 **Zilliqa Testnet**
 ```
-rosetta-cli check:data --configuration-file config/testnet_config.json
+rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/testnet_config.json
 ```
 
 Note: The `mainnet_config.json` specifically **disables** historical balance lookup and balance tracking options. This is due to the fact that historical balance lookup is not supported on Zilliqa blockchain. In addition, the blockchain rewards miners directly, which results in a single outflow transaction without prior inflow transactions. This will result in `negative balances` errors being raised incorrectly. Hence, both the historical balance lookup and balance tracking options are disabled.
@@ -1572,7 +1670,24 @@ For **testnet** tests, we begin the test from Block 1600000. Some of our much ea
 ### Testing Construction API
 
 ```
-rosetta-cli check:construction --configuration-file ./config/testnet_construction.json
+rosetta-cli check:construction --configuration-file ./config/testnet_config.json
 ```
 
-Note: prefund the address in `prefunded_accounts`
+#### How to execute
+First, prefund the address in `prefunded_accounts` section in the `testnet_config.json`.
+
+After executing the above line, rosetta-cli would create an address for testing and expecting a minimum amount:
+```
+looking for balance {"value":"100000000000000","currency":{"symbol":"ZIL","decimals":12}} on account {"address":"zil1xk5shden2xq4s5dp63v3vq4vyacpux0h3z3jx5","metadata":{"base16":"35A90BB73351815851a1D4591602Ac27701E19f7"}}
+```
+
+Fund the stated zil address with **at least** the (value + gas fees), e.g. the stated value here is `100000000000000 Qa` = `100 ZIL`, so we would send `120 ZIL` (100 for the minimum amount and 20 for the gas fees). Please adjust the gas fees accordingly if you see a "insufficent balance to broadcast transaction" in the console.
+
+Next, rosetta-cli would create a payment transaction from the created address to another created address.
+
+Lastly, the test is completed if you see this:
+```
+broadcast complete for job "transfer (13)" with transaction hash "ed81f9a4fab4759d9836e3ab6eeb550bab08880787f0ab0c5a464842a1662486"
+```
+
+The construction API test would continue until the funds of the created accounts are emptied. You may halt the test at any time.
