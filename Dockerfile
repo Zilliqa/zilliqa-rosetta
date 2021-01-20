@@ -5,6 +5,15 @@ FROM golang:1.14 as rosetta-build-stage
 WORKDIR /app
 COPY . ./
 RUN go build main.go
+RUN echo "================================================================================"
+RUN echo ""
+RUN echo ""
+RUN echo "Rosetta Build Stage Complete"
+RUN echo ""
+RUN echo ""
+RUN echo "================================================================================"
+
+
 
 # ====================
 # Scilla Build Stage
@@ -47,6 +56,15 @@ RUN make opamdep-ci \
     make
 
 RUN mkdir -p /scilla/0/bin2/ && cp -L /scilla/0/bin/* /scilla/0/bin2/ && strip /scilla/0/bin2/*
+RUN echo "================================================================================"
+RUN echo ""
+RUN echo ""
+RUN echo "Scilla Build Stage Complete"
+RUN echo ""
+RUN echo ""
+RUN echo "================================================================================"
+
+
 
 # ====================
 # Zilliqa Build Stage
@@ -135,6 +153,16 @@ RUN git clone ${REPO} ${SOURCE_DIR} \
        /usr/local/lib/libCommon.so \
        /usr/local/lib/libTrie.so
 
+RUN echo "================================================================================"
+RUN echo ""
+RUN echo ""
+RUN echo "Zilliqa Build Stage Complete"
+RUN echo ""
+RUN echo ""
+RUN echo "================================================================================"
+
+
+
 # ====================
 # Actual Container
 # ====================
@@ -213,6 +241,16 @@ ADD https://github.com/krallin/tini/releases/latest/download/tini /tini
 
 ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib:${MONGO_INSTALL_DIR}/lib
 
+RUN echo "================================================================================"
+RUN echo ""
+RUN echo ""
+RUN echo "Zilliqa Deployment Complete"
+RUN echo ""
+RUN echo ""
+RUN echo "================================================================================"
+
+
+
 # --------------------
 # Rosetta Deployment
 # --------------------
@@ -220,6 +258,13 @@ ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib:${MONGO_INSTALL_DIR}/lib
 COPY --from=rosetta-build-stage /app/main /rosetta/main
 COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
+RUN echo "================================================================================"
+RUN echo ""
+RUN echo ""
+RUN echo "Rosetta Deployment Complete"
+RUN echo ""
+RUN echo ""
+RUN echo "================================================================================"
 
 # --------------------
 # Seed node setup

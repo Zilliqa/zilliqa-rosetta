@@ -1,3 +1,4 @@
 .idea
 secrets/*
 data
+build.log
