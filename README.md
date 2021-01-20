@@ -1,13 +1,44 @@
 # zilliqa-rosetta
 Zilliqa node which follows Rosetta Blockchain Standard
 
-## Build docker image
+`
 
+## Docker Administration
+### Docker build variables
+|Variable|Description|
+|---|---|
+|SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
+|COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+
+### Building the docker image
 ```shell script
 sh ./build_docker.sh
 ```
 
-## Running docker image
+### Building the docker image with a specific scilla and zilliqa tag
+```shell script
+docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+```
+
+### Docker run environment variables
+|Variable|Description|
+|---|---|
+|IP_ADDRESS|The seed node's host public ip address|
+|SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
+|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
+|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|TESTNET_NAME|The name of the testnet|
+|BUCKET_NAME|The bucket to use for persistence|
+
+### Seed node preparation
+You need to generate 2 sets of keys:
+* seed node keypair
+* whitelisting keypair (if key based whitelisting is selected)
+
+### Seed node launch
+```shell script
+docker run -d --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
+```
 
 ## How to use
 
@@ -1668,6 +1699,7 @@ Note: The `mainnet_config.json` specifically **disables** historical balance loo
 For **testnet** tests, we begin the test from Block 1600000. Some of our much earlier testnet blocks, e.g. Block 270000++, cannot be fetch. Hence, it is recommended to skip certain sections of the testnet blocks.
 
 ### Testing Construction API
+
 
 ```
 rosetta-cli check:construction --configuration-file ./config/testnet_config.json
