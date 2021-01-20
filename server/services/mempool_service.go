@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/Zilliqa/gozilliqa-sdk/keytools"
 	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	"github.com/Zilliqa/gozilliqa-sdk/transaction"
@@ -13,7 +15,6 @@ import (
 	"github.com/Zilliqa/zilliqa-rosetta/mempool"
 	"github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
-	"strings"
 )
 
 type MemoryPoolAPIService struct {
@@ -124,11 +125,7 @@ func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *type
 		if localTxn != nil {
 			rosettaTx, err0 := util.CreateRosTransaction(util.ToCoreTransaction(localTxn.Txn))
 			if err0 != nil {
-				return nil, &types.Error{
-					Code:      0,
-					Message:   err0.Error(),
-					Retriable: false,
-				}
+				return nil, err0
 			}
 			return &types.MempoolTransactionResponse{
 				Transaction: rosettaTx,

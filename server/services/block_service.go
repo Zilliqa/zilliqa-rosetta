@@ -80,14 +80,52 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 			transactionsList, err1 := rpcClient.GetTxnBodiesForTxBlock(inputTxBlock)
 
 			if err1 != nil {
-				return nil, &types.Error{
-					Code:      0,
-					Message:   err1.Error(),
-					Retriable: false,
+				if err1.Error() == "-20:Txn Hash not Present" {
+					// one of the shard is null
+					// use GetTransactionsForTxBlock instead
+					shardList, err2 := rpcClient.GetTransactionsForTxBlock(inputTxBlock)
+
+					if err2 != nil {
+						return nil, &types.Error{
+							Code:      0,
+							Message:   err2.Error(),
+							Retriable: false,
+						}
+					}
+
+					for _, shardTxnList := range shardList {
+						for _, shardTxn := range shardTxnList {
+							txnDetails, err3 := rpcClient.GetTransaction(shardTxn)
+							if err3 != nil {
+								if err3.Error() == "-20:Txn Hash not Present" {
+									// TODO remove this once the block is fixed
+									// there are some issues with some of the blocks on mainnet
+									// where we cannot retrieve transactions
+									// skip these txn hash for now
+									continue
+								} else {
+									return nil, &types.Error{
+										Code:      0,
+										Message:   err3.Error(),
+										Retriable: false,
+									}
+								}
+							}
+							rosettaTxn, _ := util.CreateRosTransaction(txnDetails)
+							transactions = append(transactions, rosettaTxn)
+						}
+					}
+
+				} else {
+					return nil, &types.Error{
+						Code:      0,
+						Message:   err1.Error(),
+						Retriable: false,
+					}
 				}
 			}
 
-			// TODO fetch all the operations for each transaction?
+			// transactionList length would be zero if GetTxnBodiesForTxBlock has Txn Hash not Present error
 			for _, txnBody := range transactionsList {
 				currTransaction, _ := util.CreateRosTransaction(&txnBody)
 				transactions = append(transactions, currTransaction)
@@ -175,11 +213,7 @@ func (s *BlockAPIService) BlockTransaction(ctx context.Context, request *types.B
 		rosTransaction, err2 := util.CreateRosTransaction(transactionDetails)
 
 		if err2 != nil {
-			return nil, &types.Error{
-				Code:      0,
-				Message:   err2.Error(),
-				Retriable: false,
-			}
+			return nil, err2
 		}
 
 		rosBlockTransactionReponse := new(types.BlockTransactionResponse)

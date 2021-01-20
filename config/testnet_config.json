@@ -4,83 +4,45 @@
   "network": "testnet"
  },
  "online_url": "http://localhost:8080",
- "data_directory": "",
+ "data_directory": "data/",
  "http_timeout": 10,
- "block_concurrency": 8,
- "transaction_concurrency": 16,
  "tip_delay": 300,
  "construction": {
-  "offline_url": "http://localhost:8080",
-  "currency": {
-   "symbol": "ZIL",
-   "decimals": 12
-  },
-  "minimum_balance": "0",
-  "maximum_fee": "5000000000000000",
-  "curve_type": "secp256k1",
-  "accounting_model": "account",
-  "scenario": [
-   {
-    "operation_identifier": {
-     "index": 0
-    },
-    "type": "transfer",
-    "status": "",
-    "account": {
-     "address": "{{ SENDER }}"
-    },
-    "amount": {
-     "value": "{{ SENDER_VALUE }}",
-     "currency": null
-    }
-   },
-   {
-    "operation_identifier": {
-     "index": 1
-    },
-    "related_operations": [
+    "offline_url": "http://localhost:8080",
+    "max_offline_connections": 5,
+    "stale_depth": 5,
+    "broadcast_limit": 1,
+    "ignore_broadcast_failures": true,
+    "clear_broadcasts": true,
+    "broadcast_behind_tip": true,
+    "block_broadcast_limit": 100,
+    "rebroadcast_all": false,
+    "constructor_dsl_file": "zilliqa.ros",
+    "prefunded_accounts": [
      {
-      "index": 0
+      "privkey": "b46e482c0d07be65138d734e15b9280fe619ebf571f4e656d744c591f9515022",
+      "account_identifier": {
+       "address": "zil1cxp88j2aushtj70fn7yy92sv7u6redpwmth53v",
+       "metadata": {
+         "base16": "c18273C95DE42Eb979E99f8842aA0cF7343Cb42e"
+       }
+      },
+      "curve_type": "secp256k1",
+      "currency": {
+         "symbol":"ZIL",
+         "decimals":12
+      }
      }
-    ],
-    "type": "transfer",
-    "status": "",
-    "account": {
-     "address": "{{ RECIPIENT }}"
-    },
-    "amount": {
-     "value": "{{ RECIPIENT_VALUE }}",
-     "currency": null
-    }
-   }
-  ],
-  "confirmation_depth": 10,
-  "stale_depth": 30,
-  "broadcast_limit": 3,
-  "ignore_broadcast_failures": false,
-  "change_scenario": null,
-  "clear_broadcasts": false,
-  "broadcast_behind_tip": false,
-  "block_broadcast_limit": 5,
-  "rebroadcast_all": false,
-  "new_account_probability": 0.5,
-  "max_addresses": 200
- },
+    ]
+},
  "data": {
-  "active_reconciliation_concurrency": 16,
-  "inactive_reconciliation_concurrency": 4,
-  "inactive_reconciliation_frequency": 250,
-  "log_blocks": true,
-  "log_transactions": true,
-  "log_balance_changes": false,
-  "log_reconciliations": false,
-  "ignore_reconciliation_error": false,
-  "exempt_accounts": "",
-  "bootstrap_balances": "",
-  "historical_balance_disabled": true,
-  "interesting_accounts": "",
-  "reconciliation_disabled": false,
-  "inactive_discrepency_search_disabled": false,
-  "balance_tracking_disabled": true
+  "historical_balance_enabled": false,
+  "reconciliation_disabled": true,
+  "inactive_discrepency_search_disabled": true,
+  "start_index": 2152500,
+  "balance_tracking_disabled": true,
+  "end_conditions": {
+   "tip": true
+  }
  }
 }

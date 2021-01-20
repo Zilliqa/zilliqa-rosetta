@@ -166,6 +166,13 @@ func (s *NetworkAPIService) NetworkOptions(
 		config.ContractAddressError,
 		config.PreExecuteError,
 		config.QueryBalanceError,
+		config.TxNotExistInMem,
+		config.HeightHistoricalLessThanCurrent,
+		config.StoreDbError,
+		config.PublicHexError,
+		config.InvalidAddressTypeError,
+		config.SignatureInvalidError,
+		config.InvalidOperation,
 	}
 
 	allow := &types.Allow{
