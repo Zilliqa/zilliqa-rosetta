@@ -227,15 +227,15 @@ ARG INSTALL_DIR=/usr/local
 ARG MONGO_INSTALL_DIR=/build/mongo
 
 # pour in scilla binaries
-COPY --from=scilla  /scilla/0/bin2            /scilla/0/bin
+COPY --from=scilla-build-stage  /scilla/0/bin2            /scilla/0/bin
 # pour in scilla conntract stdlibs
-COPY --from=scilla  /scilla/0/src/stdlib     /scilla/0/src/stdlib
+COPY --from=scilla-build-stage  /scilla/0/src/stdlib     /scilla/0/src/stdlib
 # pour in zilliqa scripts
-COPY --from=builder /zilliqa/scripts         /zilliqa/scripts
+COPY --from=zilliqa-build-stage /zilliqa/scripts         /zilliqa/scripts
 # pour in zilliqa binaries and dynnamic libs
-COPY --from=builder ${INSTALL_DIR}/bin/*     ${INSTALL_DIR}/bin/
-COPY --from=builder ${INSTALL_DIR}/lib/*.so* ${INSTALL_DIR}/lib/
-COPY --from=builder ${MONGO_INSTALL_DIR}/lib/*.so* ${INSTALL_DIR}/lib/
+COPY --from=zilliqa-build-stage ${INSTALL_DIR}/bin/*     ${INSTALL_DIR}/bin/
+COPY --from=zilliqa-build-stage ${INSTALL_DIR}/lib/*.so* ${INSTALL_DIR}/lib/
+COPY --from=zilliqa-build-stage ${MONGO_INSTALL_DIR}/lib/*.so* ${INSTALL_DIR}/lib/
 
 ADD https://github.com/krallin/tini/releases/latest/download/tini /tini
 
