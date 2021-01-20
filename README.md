@@ -34,6 +34,7 @@ docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR
 You need to generate 2 sets of keys:
 * seed node keypair
 * whitelisting keypair (if key based whitelisting is selected)
+* Keypair will be in format: <public key> <private key>
 
 ### Seed node launch
 ```shell script
