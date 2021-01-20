@@ -1,7 +1,7 @@
 # ====================
 # Rosetta Build Stage
 # ====================
-FROM golang:1.14 as rosetta-build-stage
+FROM golang:1.15 as rosetta-build-stage
 WORKDIR /app
 COPY . ./
 RUN go build main.go
