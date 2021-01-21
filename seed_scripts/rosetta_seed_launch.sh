@@ -79,7 +79,10 @@ cd "$cwd"
 # RUN MONGO START
 # ========================================
 function run_mongo() {
+echo "Configuring Mongo"
 nohup /usr/bin/mongod --config /etc/mongod.conf &
+sleep 10
+mongo "admin" --eval 'db.createUser({ user: "'$DOCUMENTDB_USER'", pwd: "'$DOCUMENTDB_PASSWORD'", roles: [{ role: "dbOwner", db: "'$DOCUMENTDB_DB'" }]})'
 }
 
 
