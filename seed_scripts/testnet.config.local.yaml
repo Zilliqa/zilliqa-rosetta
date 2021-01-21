@@ -1,0 +1,11 @@
+rosetta:
+ host: "0.0.0.0"
+ port: 8080
+ version: "1.4.9"
+ middleware_version: "0.0.1"
+
+networks:
+ testnet_seed_node:
+    api: "http://localhost:4201"
+    chain_id: 333
+    node_version: "v7.1.0"

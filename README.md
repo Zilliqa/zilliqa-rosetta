@@ -9,6 +9,7 @@ Zilliqa node which follows Rosetta Blockchain Standard
 |---|---|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 
 ### Building the docker image
 ```shell script
@@ -17,7 +18,7 @@ sh ./build_docker.sh
 
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
-docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
 ```
 
 ### Docker run environment variables
@@ -34,6 +35,7 @@ docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR
 You need to generate 2 sets of keys:
 * seed node keypair
 * whitelisting keypair (if key based whitelisting is selected)
+* Keypair will be in format: <public key> <private key>
 
 ### Seed node launch
 ```shell script
