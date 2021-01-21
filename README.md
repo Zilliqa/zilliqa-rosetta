@@ -7,6 +7,7 @@ Zilliqa node which follows Rosetta Blockchain Standard
 ### Docker build variables
 |Variable|Description|
 |---|---|
+|APOLLO_COMMIT_OR_TAG|Override this to download a specific apollo commit or version tag|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
@@ -18,7 +19,7 @@ sh ./build_docker.sh
 
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
-docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg APOLLO_COMMIT_OR_TAG=<APOLLO_TAG> --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
 ```
 
 ### Docker run environment variables
