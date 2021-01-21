@@ -150,6 +150,16 @@ RUN printf "====================================================================
 # ====================
 FROM ubuntu:18.04
 
+
+# --------------------
+# Mongo Deployment
+# --------------------
+RUN apt-get update && apt-get install -y wget ca-certificates gnupg
+RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
+RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list && apt-get update && apt-get install -y mongodb-org
+RUN printf "================================================================================\n\n\nMongo Deployment Complete\n\n\n================================================================================\n"
+
+
 # --------------------
 # Zilliqa Deployment
 # --------------------
@@ -226,7 +236,6 @@ ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib:${MONGO_INSTALL_DIR}/lib
 RUN printf "================================================================================\n\n\nZilliqa Deployment Complete\n\n\n================================================================================\n"
 
 
-
 # --------------------
 # Rosetta Deployment
 # --------------------
@@ -235,6 +244,7 @@ COPY --from=rosetta-build-stage /app/main /rosetta/main
 COPY --from=rosetta-build-stage /app/seed_scripts/${BLOCKCHAIN_NETWORK}.config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
 RUN printf "================================================================================\n\n\nRosetta Deployment Complete\n\n\n================================================================================\n"
+
 
 # --------------------
 # Seed node setup

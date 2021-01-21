@@ -75,11 +75,20 @@ cd "$cwd"
 
 }
 
+# ========================================
+# RUN MONGO START
+# ========================================
+function run_mongo() {
+nohup /usr/bin/mongod --config /etc/mongod.conf &
+}
+
+
 
 # ========================================
 # SCRIPT START
 # ========================================
 run_rosetta
+run_mongo
 run
 
 #touch /zilliqa/zilliqa-00001-log.txt
