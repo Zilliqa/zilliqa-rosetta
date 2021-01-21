@@ -18,7 +18,7 @@ sh ./build_docker.sh
 
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
-docker build --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
 ```
 
 ### Docker run environment variables
