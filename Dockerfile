@@ -231,7 +231,7 @@ RUN printf "====================================================================
 # Rosetta Deployment
 # --------------------
 COPY --from=rosetta-build-stage /app/main /rosetta/main
-COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
+COPY --from=rosetta-build-stage /app/seed_scripts/config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
 RUN printf "================================================================================\n\n\nRosetta Deployment Complete\n\n\n================================================================================\n"
 
