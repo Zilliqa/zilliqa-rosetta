@@ -64,11 +64,22 @@ echo "Use 'tail -f zilliqa-00001-log.txt' to see the runtime log"
 }
 
 
+# ========================================
+# RUN ROSETTA START
+# ========================================
+function run_rosetta() {
+cwd=$(pwd)
+cd "/rosetta"
+nohup ./main &
+cd "$cwd"
+
+}
 
 
 # ========================================
 # SCRIPT START
 # ========================================
+run_rosetta
 run
 
 #touch /zilliqa/zilliqa-00001-log.txt
