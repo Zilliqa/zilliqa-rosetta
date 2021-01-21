@@ -9,6 +9,7 @@ Zilliqa node which follows Rosetta Blockchain Standard
 |---|---|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 
 ### Building the docker image
 ```shell script
