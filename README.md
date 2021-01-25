@@ -24,6 +24,8 @@ docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg APOLLO_COMMIT_
 
 ### Docker run environment variables
 #### Apollo Environment Variables
+|Variable|Description|
+|---|---|
 |DOCUMENTDB_HOST|Host of mongo database|
 |DOCUMENTDB_PORT|Port of mongo database|
 |DOCUMENTDB_DB|Name of mongo database|
