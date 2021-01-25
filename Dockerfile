@@ -151,6 +151,47 @@ RUN printf "====================================================================
 FROM ubuntu:18.04
 
 # --------------------
+# Mongo Deployment
+# --------------------
+RUN apt-get update && apt-get install -y wget ca-certificates gnupg
+RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
+RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list && apt-get update && apt-get install -y mongodb-org
+RUN printf "================================================================================\n\n\nMongo Deployment Complete\n\n\n================================================================================\n"
+
+
+# --------------------
+# Node 12.x Deployment
+# --------------------
+RUN apt-get update && apt-get install -y curl gnupg git build-essential autoconf automake g++ libtool
+RUN curl -s -O https://deb.nodesource.com/node_12.x/pool/main/n/nodejs/nodejs_12.18.3-deb-1nodesource1_amd64.deb && \
+    apt-get install -y rlwrap && \
+    dpkg -i nodejs_12.18.3-deb-1nodesource1_amd64.deb
+RUN node -v
+
+#RUN apt-get update && apt-get install curl gnupg -y && \
+#    curl -sL https://deb.nodesource.com/setup_12.x | bash && \
+#    apt-get install -y nodejs git curl
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && \
+    apt-get install yarn
+RUN printf "================================================================================\n\n\nNode 12.x Deployment Complete\n\n\n================================================================================\n"
+
+
+# --------------------
+# Apollo Deployment
+# --------------------
+ARG APOLLO_COMMIT_OR_TAG=v1.0.0
+RUN apt-get update && apt-get install -y python
+WORKDIR /apollo
+RUN git clone https://github.com/zilliqa/devex-apollo .
+RUN git checkout ${APOLLO_COMMIT_OR_TAG}
+RUN git status
+RUN yarn install
+RUN printf "================================================================================\n\n\nApollo Deployment Complete\n\n\n================================================================================\n"
+
+
+# --------------------
 # Zilliqa Deployment
 # --------------------
 # install all necessary libraries
@@ -226,7 +267,6 @@ ENV LD_LIBRARY_PATH=${INSTALL_DIR}/lib:${MONGO_INSTALL_DIR}/lib
 RUN printf "================================================================================\n\n\nZilliqa Deployment Complete\n\n\n================================================================================\n"
 
 
-
 # --------------------
 # Rosetta Deployment
 # --------------------
@@ -235,6 +275,17 @@ COPY --from=rosetta-build-stage /app/main /rosetta/main
 COPY --from=rosetta-build-stage /app/seed_scripts/${BLOCKCHAIN_NETWORK}.config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
 RUN printf "================================================================================\n\n\nRosetta Deployment Complete\n\n\n================================================================================\n"
+
+
+# --------------------
+# Apollo Environments
+# --------------------
+EXPOSE 5000
+ENV NODE_ENV="dev"
+ENV NETWORK_URL="http://localhost:4201/"
+ENV BLOCKS_PER_REQUEST=50
+ENV FAST_SYNC=false
+
 
 # --------------------
 # Seed node setup

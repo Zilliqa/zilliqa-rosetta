@@ -7,6 +7,7 @@ Zilliqa node which follows Rosetta Blockchain Standard
 ### Docker build variables
 |Variable|Description|
 |---|---|
+|APOLLO_COMMIT_OR_TAG|Override this to download a specific apollo commit or version tag|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
@@ -18,10 +19,25 @@ sh ./build_docker.sh
 
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
-docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> -t rosetta:1.0 .
+docker build \
+--build-arg BLOCKCHAIN_NETWORK=<NETWORK> \
+--build-arg APOLLO_COMMIT_OR_TAG=<APOLLO_TAG> \
+--build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> \
+--build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> \
+-t rosetta:1.0 .
 ```
 
 ### Docker run environment variables
+#### Apollo Environment Variables
+|Variable|Description|
+|---|---|
+|DOCUMENTDB_HOST|Host of mongo database|
+|DOCUMENTDB_PORT|Port of mongo database|
+|DOCUMENTDB_DB|Name of mongo database|
+|DOCUMENTDB_USER|Name of mongo user|
+|DOCUMENTDB_PASSWORD|Password of mongo user|
+
+#### Container Environment Variables
 |Variable|Description|
 |---|---|
 |IP_ADDRESS|The seed node's host public ip address|
@@ -39,7 +55,21 @@ You need to generate 2 sets of keys:
 
 ### Seed node launch
 ```shell script
-docker run -d --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
+docker run -d \
+--env DOCUMENTDB_HOST="<MONGO_DATABASE_HOST>" \
+--env DOCUMENTDB_PORT="<MONGO_DATABASE_PORT>" \
+--env DOCUMENTDB_DB="<MONGO_DATABASE_NAME>" \
+--env DOCUMENTDB_USER="<MONGO_USERNAME>" \
+--env DOCUMENTDB_PASSWORD="<MONGO_USER_PASSWORD>" \
+--env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
+--env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" \
+--env MULTIPLIER_SYNC="<Y_or_N>" \
+--env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
+--env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
+--env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
+-v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
+-p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 -p 5000:5000 \
+--name rosetta rosetta:1.0
 ```
 
 ## How to use
