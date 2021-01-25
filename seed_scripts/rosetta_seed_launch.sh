@@ -85,13 +85,23 @@ sleep 10
 mongo "admin" --eval 'db.createUser({ user: "'$DOCUMENTDB_USER'", pwd: "'$DOCUMENTDB_PASSWORD'", roles: [{ role: "dbOwner", db: "'$DOCUMENTDB_DB'" }]})'
 }
 
+# ========================================
+# RUN APOLLO START
+# ========================================
+function run_apollo() {
+cwd=$(pwd)
+cd "/apollo"
+nohup yarn start &
+cd "$cwd"
 
+}
 
 # ========================================
 # SCRIPT START
 # ========================================
 run_rosetta
 run_mongo
+run_apollo
 run
 
 #touch /zilliqa/zilliqa-00001-log.txt
