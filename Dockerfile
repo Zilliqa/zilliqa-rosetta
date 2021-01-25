@@ -278,6 +278,15 @@ RUN printf "====================================================================
 
 
 # --------------------
+# Apollo Environments
+# --------------------
+ENV NODE_ENV="dev"
+ENV NETWORK_URL="http://localhost/"
+ENV BLOCKS_PER_REQUEST=50
+ENV FAST_SYNC=false
+
+
+# --------------------
 # Seed node setup
 # --------------------
 EXPOSE 4201

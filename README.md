@@ -23,11 +23,16 @@ docker build --build-arg BLOCKCHAIN_NETWORK=<NETWORK> --build-arg APOLLO_COMMIT_
 ```
 
 ### Docker run environment variables
+#### Apollo Environment Variables
+|DOCUMENTDB_HOST|Host of mongo database|
+|DOCUMENTDB_PORT|Port of mongo database|
+|DOCUMENTDB_DB|Name of mongo database|
+|DOCUMENTDB_USER|Name of mongo user|
+|DOCUMENTDB_PASSWORD|Password of mongo user|
+
+#### Container Environment Variables
 |Variable|Description|
 |---|---|
-|DOCUMENTDB_DB|name of mongo database|
-|DOCUMENTDB_USER|name of mongo user|
-|DOCUMENTDB_PASSWORD|password of mongo user|
 |IP_ADDRESS|The seed node's host public ip address|
 |SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
@@ -43,7 +48,7 @@ You need to generate 2 sets of keys:
 
 ### Seed node launch
 ```shell script
-docker run -d --env DOCUMENTDB_DB="<MONGO_DATABASE_NAME>" --env DOCUMENTDB_USER="<MONGO_USERNAME>" --env DOCUMENTDB_PASSWORD="<MONGO_USER_PASSWORD>" --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
+docker run -d --env DOCUMENTDB_HOST="<MONGO_DATABASE_HOST>" --env DOCUMENTDB_PORT="<MONGO_DATABASE_PORT>" --env DOCUMENTDB_DB="<MONGO_DATABASE_NAME>" --env DOCUMENTDB_USER="<MONGO_USERNAME>" --env DOCUMENTDB_PASSWORD="<MONGO_USER_PASSWORD>" --env IP_ADDRESS="<SEED_NODE_HOST_IP>" --env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" --env MULTIPLIER_SYNC="<Y_or_N>" --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 --name rosetta rosetta:1.0
 ```
 
 ## How to use
