@@ -280,6 +280,7 @@ RUN printf "====================================================================
 # --------------------
 # Apollo Environments
 # --------------------
+EXPOSE 5000
 ENV NODE_ENV="dev"
 ENV NETWORK_URL="http://localhost:4201/"
 ENV BLOCKS_PER_REQUEST=50
