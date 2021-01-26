@@ -2,8 +2,13 @@
 # Rosetta Build Stage
 # ====================
 FROM golang:1.15 as rosetta-build-stage
+
+ARG ROSETTA_COMMIT_OR_TAG=v1.0.0
+
 WORKDIR /app
-COPY . ./
+RUN git clone https://github.com/zilliqa/zilliqa-rosetta .
+RUN git checkout ${ROSETTA_COMMIT_OR_TAG}
+RUN git status
 RUN go build main.go
 RUN printf "================================================================================\n\n\nRosetta Build Stage Complete\n\n\n================================================================================\n"
 
