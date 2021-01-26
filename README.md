@@ -1,7 +1,9 @@
 # zilliqa-rosetta
 Zilliqa node which follows Rosetta Blockchain Standard
 
-`
+## Pre-requisite
+To run Zilliqa-rosetta, docker is required. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
+
 
 ## Docker Administration
 ### Docker build variables
@@ -42,6 +44,8 @@ You need to generate 2 sets of keys:
 * whitelisting keypair (if key based whitelisting is selected)
 * Keypair will be in format: `<public key> <private key>`
 
+### Seed node whitelisting
+
 ### Seed node launch
 ```shell script
 docker run -d \
@@ -73,11 +77,11 @@ networks:
  mainnet:
     api: "https://api.zilliqa.com"
     chain_id: 1
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v7.1.0"
  testnet:
     api: "https://dev-api.zilliqa.com"
     chain_id: 333
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v7.1.0"
 ```
 
 * rosetta:
@@ -94,6 +98,8 @@ networks:
     * api: api endpoint of community testnet
     * chain_id: chain id of community testnet
     * node_version: zilliqa node verion
+
+To use the Zilliqa seed node inside zilliqa-rosetta, please use `testnet.config.local.yaml` for Zilliqa testnet and `mainnet.config.local.yaml` for Zilliqa mainnet.
     
 ## Restful API
 
