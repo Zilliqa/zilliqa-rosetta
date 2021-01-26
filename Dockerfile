@@ -2,8 +2,13 @@
 # Rosetta Build Stage
 # ====================
 FROM golang:1.15 as rosetta-build-stage
+
+ARG ROSETTA_COMMIT_OR_TAG=v1.0.0
+
 WORKDIR /app
-COPY . ./
+RUN git clone https://github.com/zilliqa/zilliqa-rosetta .
+RUN git checkout ${ROSETTA_COMMIT_OR_TAG}
+RUN git status
 RUN go build main.go
 RUN printf "================================================================================\n\n\nRosetta Build Stage Complete\n\n\n================================================================================\n"
 
@@ -43,6 +48,7 @@ ENV OCAML_VERSION 4.08.1
 
 RUN git clone --recurse-submodules https://github.com/zilliqa/scilla .
 RUN git checkout ${SCILLA_COMMIT_OR_TAG}
+RUN git submodule update --init --recursive
 RUN git status
 RUN make opamdep-ci \
     && echo '. ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ' >> ~/.bashrc \
@@ -232,7 +238,7 @@ RUN printf "====================================================================
 # --------------------
 ARG BLOCKCHAIN_NETWORK=testnet
 COPY --from=rosetta-build-stage /app/main /rosetta/main
-COPY --from=rosetta-build-stage /app/seed_scripts/${BLOCKCHAIN_NETWORK}.config.local.yaml /rosetta/config.local.yaml
+COPY --from=rosetta-build-stage /app/${BLOCKCHAIN_NETWORK}.config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
 RUN printf "================================================================================\n\n\nRosetta Deployment Complete\n\n\n================================================================================\n"
 
@@ -248,3 +254,4 @@ EXPOSE 33133
 WORKDIR /run/zilliqa
 COPY --from=rosetta-build-stage /app/seed_scripts/rosetta_seed_launch.sh /run/zilliqa/rosetta_seed_launch.sh
 ENTRYPOINT ["/bin/bash", "rosetta_seed_launch.sh"]
+#CMD ["/bin/bash"]
