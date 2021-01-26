@@ -68,8 +68,8 @@ docker run -d \
 --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
 --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
 -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
--v $(pwd)/mounted/persistence:/run/zilliqa/mykey.txt \
--v $(pwd)/mounted/mongo:/var/lib/mongodb \
+-v $(pwd)/mounted/persistence:/run/zilliqa/persistence/ \
+-v $(pwd)/mounted/mongo:/var/lib/mongodb/ \
 -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 -p 5000:5000 \
 --name rosetta rosetta:1.0
 ```
