@@ -106,6 +106,13 @@ docker run -d \
 --name rosetta rosetta:1.0
 ```
 
+### Restarting Roseta
+
+```
+docker stop <container name>
+docker start <container name>
+```
+
 ## Restful API
 
 Based on rosetta protocol, zilliqa-rosetta node provides following Restful APIs:
