@@ -40,7 +40,7 @@ docker build \
 
 ## Running `Zilliqa-rosetta`
 
-### Configuring Rosetta
+### Configuring `Zilliqa-rosetta`
 `Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa's network and endpoint to connect to. 
 
 ```yaml
