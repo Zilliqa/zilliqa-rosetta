@@ -155,7 +155,7 @@ These are the following lists of APIs not supported by Zilliqa blockchain:
 ## How to test
 Install the latest rosetta-cli from https://github.com/coinbase/rosetta-cli.
 
-At the time of writing, we are using **rosetta-cli v0.6.7**.
+At the time of writing, we are using [rosetta-cli v0.6.7](https://github.com/coinbase/rosetta-cli/releases/tag/v0.6.7).
 
 To begin testing:
 1. cd into zilliqa-rosetta folder
