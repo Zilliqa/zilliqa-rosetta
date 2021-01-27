@@ -89,7 +89,7 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 						return nil, &types.Error{
 							Code:      0,
 							Message:   err2.Error(),
-							Retriable: false,
+							Retriable: true,
 						}
 					}
 
@@ -107,7 +107,7 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 									return nil, &types.Error{
 										Code:      0,
 										Message:   err3.Error(),
-										Retriable: false,
+										Retriable: true,
 									}
 								}
 							}
@@ -120,7 +120,7 @@ func (s *BlockAPIService) Block(ctx context.Context, request *types.BlockRequest
 					return nil, &types.Error{
 						Code:      0,
 						Message:   err1.Error(),
-						Retriable: false,
+						Retriable: true,
 					}
 				}
 			}
