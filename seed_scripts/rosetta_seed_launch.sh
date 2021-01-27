@@ -17,7 +17,8 @@ multiplier_sync="$MULTIPLIER_SYNC"
 extseedprivk="$SEED_PRIVATE_KEY"
 testnet_name="$TESTNET_NAME"
 bucket_name="$BUCKET_NAME"
-seed_configuration_url="$SEED_CONFIGURATION_URL"
+# abstracted outside of run function in preparation of 7.2.0 seed configuration launch.sh scripts
+#seed_configuration_url="$SEED_CONFIGURATION_URL"
 
 name="zilliqa"
 port="33133"
@@ -70,6 +71,8 @@ echo "Use 'tail -f zilliqa-00001-log.txt' to see the runtime log"
 function run_rosetta() {
 cwd=$(pwd)
 cd "/rosetta"
+echo $BLOCKCHAIN_NETWORK
+mv "$BLOCKCHAIN_NETWORK.config.local.yaml" "config.local.yaml"
 nohup ./main &
 cd "$cwd"
 
@@ -80,6 +83,17 @@ cd "$cwd"
 # SCRIPT START
 # ========================================
 run_rosetta
+if [ "$BLOCKCHAIN_NETWORK" = "testnet" ]
+then
+    seed_configuration_url="https://testnet-join.zilliqa.com/seed-configuration.tar.gz"
+elif [ "$BLOCKCHAIN_NETWORK" = "mainnet" ]
+then
+    seed_configuration_url="https://mainnet-join.zilliqa.com/seed-configuration.tar.gz"
+else
+    echo "Error, unknown $BLOCKCHAIN_NETWORK, terminating."
+    exit 1
+fi
+echo $seed_configuration_url
 run
 
 #touch /zilliqa/zilliqa-00001-log.txt

@@ -1,15 +1,17 @@
 # zilliqa-rosetta
 Zilliqa node which follows Rosetta Blockchain Standard
 
-`
+## Pre-requisite
+To run Zilliqa-rosetta, docker is required. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
+
 
 ## Docker Administration
 ### Docker build variables
 |Variable|Description|
 |---|---|
+|ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
-|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 
 ### Building the docker image
 ```shell script
@@ -19,7 +21,7 @@ sh ./build_docker.sh
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
 docker build \
---build-arg BLOCKCHAIN_NETWORK=<NETWORK> \
+--build-arg ROSETTA_COMMIT_OR_TAG=<ROSETTA_TAG> \
 --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> \
 --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> \
 -t rosetta:1.0 .
@@ -29,37 +31,17 @@ docker build \
 #### Container Environment Variables
 |Variable|Description|
 |---|---|
+|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|TESTNET_NAME|The name of the testnet|
-|BUCKET_NAME|The bucket to use for persistence|
+|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|[DEPRECATED]TESTNET_NAME|The name of the testnet|
+|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
-### Seed node preparation
-You need to generate 2 sets of keys:
-* seed node keypair
-* whitelisting keypair (if key based whitelisting is selected)
-* Keypair will be in format: `<public key> <private key>`
 
-### Seed node launch
-```shell script
-docker run -d \
---env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
---env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" \
---env MULTIPLIER_SYNC="<Y_or_N>" \
---env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
---env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
---env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
--v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
--p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 -p 5000:5000 \
---name rosetta rosetta:1.0
-```
+## Getting started
 
-## How to use
-
-### configuration
-
+### Configuration files for Rosetta
 The default configuration file is config.local.yaml
 
 ```shell script
@@ -73,11 +55,11 @@ networks:
  mainnet:
     api: "https://api.zilliqa.com"
     chain_id: 1
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v7.1.0"
  testnet:
     api: "https://dev-api.zilliqa.com"
     chain_id: 333
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v7.1.0"
 ```
 
 * rosetta:
@@ -94,7 +76,43 @@ networks:
     * api: api endpoint of community testnet
     * chain_id: chain id of community testnet
     * node_version: zilliqa node verion
-    
+
+Default configuration files for Zilliqa testnet and mainnet has also been included in Rosetta root directory.
+| Network | config file |
+| ------- | ----------- |
+| Testnet | `testnet.config.local.yaml` |
+| Mainnet | `mainnet.config.local.yaml` |
+
+### Seed node preparation
+You need to generate 2 sets of keys:
+* seed node keypair
+* whitelisting keypair (if key based whitelisting only)
+* Keypair will be in format: `<public key> <private key>`
+
+### Seed node whitelisting
+Seed node IP or public need to be whitelisted by the Zilliqa team in order receive network data. To get whitelist, please reach out to maintainers[at]zilliqa.com and provide the IP or public key for whitelisting purpose.
+
+### Seed node launch
+```shell script
+docker run -d \
+--env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
+--env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
+--env MULTIPLIER_SYNC="<Y_or_N>" \
+--env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
+--env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
+--env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
+-v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
+-p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
+--name rosetta rosetta:1.0
+```
+
+### Restarting Roseta
+
+```
+docker stop <container name>
+docker start <container name>
+```
+
 ## Restful API
 
 Based on rosetta protocol, zilliqa-rosetta node provides following Restful APIs:
