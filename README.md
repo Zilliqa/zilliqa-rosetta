@@ -203,3 +203,8 @@ broadcast complete for job "transfer (13)" with transaction hash "ed81f9a4fab475
 ```
 
 The construction API test would continue until the funds of the created accounts are emptied. You may halt the test at any time.
+
+License
+This project is available open source under the terms of the [GNU Lesser General Public License 3.0](LICENSE.md).
+
+© 2020 Coinbase
