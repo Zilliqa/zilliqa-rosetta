@@ -1,19 +1,15 @@
-# zilliqa-rosetta
-Zilliqa node which follows Rosetta Blockchain Standard
+# zilliqa-rosetta-
+`zilliqa-rosetta` provides a reference implementation of the [Rosetta API](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
 
 ## Pre-requisite
-To run Zilliqa-rosetta, docker is required. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
+To run Zilliqa-rosetta, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
 
+System Requirements
+`zilliqa-rosetta` has been tested on an [AWS t2.large](https://aws.amazon.com/ec2/instance-types/t2/) instance. This instance type has 2 vCPU and 8 GB of RAM.
 
-## Docker Administration
-### Docker build variables
-|Variable|Description|
-|---|---|
-|ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
-|SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
-|COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+## Building `Zilliqa-rosetta`
 
-### Building the docker image
+### Building the docker image with the current Zilliqa and Scilla release
 ```shell script
 sh ./build_docker.sh
 ```
@@ -27,7 +23,13 @@ docker build \
 -t rosetta:1.0 .
 ```
 
-### Docker run environment variables
+|Variable|Description|
+|---|---|
+|ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
+|SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
+|COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
+
+### Running `Zilliqa-rosetta`
 #### Container Environment Variables
 |Variable|Description|
 |---|---|
@@ -41,10 +43,39 @@ docker build \
 
 ## Getting started
 
-### Configuration files for Rosetta
-The default configuration file is config.local.yaml
+## Configurations
 
-```shell script
+### Configuration files for Rosetta
+`Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa network and endpoint to connect to. 
+
+```yaml
+* rosetta:
+  * host: rosetta restful api host
+  * port: resetta restful api port
+  * version: rosetta sdk version
+  * middleware_version: middleware version
+* networks:
+  * <network_name>:
+    * api: api endpoint of mainnet
+    * chain_id: chain id of mainnet
+    * node_version: zilliqa node verion
+* networks:
+  * <network_name>:
+    * api: api endpoint of mainnet
+    * chain_id: chain id of mainnet
+    * node_version: zilliqa node verion
+```
+
+Default configuration files for Zilliqa testnet and mainnet has been included in Rosetta root directory.
+| Network | config file |
+| ------- | ----------- |
+| Testnet | `testnet.config.local.yaml` |
+| Mainnet | `mainnet.config.local.yaml` |
+
+If you do not wish to use Zilliqa seed node inside `Zilliqa-rosetta`, you can choose to connect Rosetta to any existing Zilliqa public endpoints. 
+A sample of this configuration can be found in `config.local.yaml`.
+
+```yaml
 rosetta:
  host: "0.0.0.0"
  port: 8080
@@ -61,27 +92,6 @@ networks:
     chain_id: 333
     node_version: "v7.1.0"
 ```
-
-* rosetta:
-  * host: rosetta restful api host
-  * port: resetta restful api port
-  * version: rosetta sdk version
-  * middleware_version: middleware version
-* networks:
-  * mainnet:
-    * api: api endpoint of mainnet
-    * chain_id: chain id of mainnet
-    * node_version: zilliqa node verion
-  * testnet:
-    * api: api endpoint of community testnet
-    * chain_id: chain id of community testnet
-    * node_version: zilliqa node verion
-
-Default configuration files for Zilliqa testnet and mainnet has also been included in Rosetta root directory.
-| Network | config file |
-| ------- | ----------- |
-| Testnet | `testnet.config.local.yaml` |
-| Mainnet | `mainnet.config.local.yaml` |
 
 ### Seed node preparation
 You need to generate 2 sets of keys:
