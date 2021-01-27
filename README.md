@@ -198,7 +198,7 @@ Next, `rosetta-cli` would create a payment transaction from the created address 
 
 Lastly, the test is completed if you see this:
 ```
-broadcast complete for job "transfer (13)" with transaction hash "ed81f9a4fab4759d9836e3ab6eeb550bab08880787f0ab0c5a464842a1662486"
+[STATS] Transactions Confirmed: 360 (Created: 370, In Progress: 1, Stale: 6, Failed: 9) Addresses Created: 99
 ```
 
 The construction API test would continue until the funds of the created accounts are emptied. You may halt the test at any time.
