@@ -100,7 +100,7 @@ networks:
     node_version: "v7.1.0"
 ```
 
-### Seed node preparation
+### Zilliqa Seed node keypair generation
 You need to generate 2 sets of keys:
 * seed node keypair
 * whitelisting keypair (if key based whitelisting only)
@@ -116,10 +116,10 @@ docker run --rm \
 rosetta:1.0 > secrets/mykey.txt
 ```
 
-### Seed node whitelisting
-Seed node IP or public need to be whitelisted by the Zilliqa team in order receive network data. To get whitelist, please reach out to maintainers[at]zilliqa.com and provide the IP or public key for whitelisting purpose.
+### Zilliqa seed node whitelisting
+Seed node IP or public key need to be whitelisted by the Zilliqa team in order receive network data. To get whitelisted, please reach out to maintainers[at]zilliqa.com and provide the IP or public key and reason for whitelisting.
 
-### Seed node launch
+### Running `Zilliqa-rosetta`
 ```shell script
 docker run -d \
 --env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
@@ -133,12 +133,14 @@ docker run -d \
 --name rosetta rosetta:1.0
 ```
 
-### Restarting Roseta
+### Restarting `Zilliqa-rosetta`
 
 ```
 docker stop <container name>
 docker start <container name>
 ```
+
+## Restful APIs
 
 ### Rosetta restful APIs
 Suppored APIs and documentation can be found over at [API.md](API.md).
@@ -163,7 +165,7 @@ To begin testing:
 2. `go run main.go`
 3. Open another terminal and run one of the following depending on the network:
 
-### Testing Data API
+## Testing Data API
 
 **Zilliqa Mainnet**
 ```
