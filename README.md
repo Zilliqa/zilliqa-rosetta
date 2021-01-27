@@ -185,7 +185,7 @@ For **testnet** tests, we begin the test from Block 1600000. Some of our much ea
 rosetta-cli check:construction --configuration-file ./config/testnet_config.json
 ```
 
-#### How to execute
+#### Testing instructions
 First, prefund the address in `prefunded_accounts` section in the `testnet_config.json`.
 
 After executing the above line, rosetta-cli would create an address for testing and expecting a minimum amount:
