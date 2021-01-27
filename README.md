@@ -33,8 +33,10 @@ docker build \
 |---|---|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|IP_WHITELISTING|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|WHITELIST_PRIVATEKEY|The private key used for key based whitelisting|
+|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
+|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|[DEPRECATED]TESTNET_NAME|The name of the testnet|
+|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
 
 ## Getting started
@@ -95,8 +97,10 @@ Seed node IP or public need to be whitelisted by the Zilliqa team in order recei
 docker run -d \
 --env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
 --env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
---env IP_WHITELISTING="<Y_or_N>" \
---env WHITELIST_PRIVATEKEY="<SEED_PRIVATE_KEY>" \
+--env MULTIPLIER_SYNC="<Y_or_N>" \
+--env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
+--env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
+--env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
 -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
 -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
 --name rosetta rosetta:1.0
