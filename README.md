@@ -7,8 +7,8 @@
    Zilliqa Rosetta
 </h3>
 
-## overview
-`zilliqa-rosetta` provides a reference implementation of the [Rosetta specification](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
+## Overview
+`Zilliqa-rosetta` provides a reference implementation of the [Rosetta specification](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
 
 ## Pre-requisite
 To run `Zilliqa-rosetta`, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
@@ -67,7 +67,7 @@ Default configuration files for Zilliqa testnet and mainnet has been included in
 | Testnet | `testnet.config.local.yaml` |
 | Mainnet | `mainnet.config.local.yaml` |
 
-If you do not wish to use Zilliqa seed node inside `Zilliqa-rosetta`, you can choose to connect Rosetta to any existing Zilliqa public endpoints. 
+If you do not wish to use Zilliqa seed node inside `Zilliqa-rosetta`, you can choose to connect `Zilliqa-rosetta` to any existing Zilliqa public endpoints. 
 A sample of this configuration can be found in `config.local.yaml`.
 
 ```yaml
@@ -94,7 +94,7 @@ You need to generate 2 sets of keys:
 * whitelisting keypair (if key based whitelisting only)
 * Keypair will be in format: `<public key> <private key>`
 
-You can generate the seednode keypair after building the dockerfile by running the following command<br />
+You can generate the seed node keypair after building the `dockerfile` by running the following command<br />
 Note that you can run the docker command without the output redirection if you want to generate the whitelisting keypair, but do store the output in a secure location
 ```shell script
 mkdir secrets
@@ -105,7 +105,7 @@ rosetta:1.0 > secrets/mykey.txt
 ```
 
 ### Zilliqa seed node whitelisting
-Seed node IP or public key need to be whitelisted by the Zilliqa team in order receive network data. To get whitelisted, please reach out to maintainers[at]zilliqa.com and provide the IP or public key and reason for whitelisting.
+Zilliqa seed node IP or public key need to be whitelisted by the Zilliqa team in order receive network data. To get whitelisted, please reach out to maintainers[at]zilliqa.com and provide the IP or public key and reason for whitelisting.
 
 ### Running `Zilliqa-rosetta`
 ```shell script
@@ -149,7 +149,6 @@ These are the following lists of APIs not supported by Zilliqa blockchain:
 /account/coins
 /events/blocks
 /search/transactions
-
 ```
 
 ## How to test
@@ -180,12 +179,12 @@ For **testnet** tests, we begin the test from Block 1600000. Some of our much ea
 
 ### Testing Construction API
 
-
 ```
 rosetta-cli check:construction --configuration-file ./config/testnet_config.json
 ```
 
 #### Testing instructions
+
 First, prefund the address in `prefunded_accounts` section in the `testnet_config.json`.
 
 After executing the above line, rosetta-cli would create an address for testing and expecting a minimum amount:
@@ -193,9 +192,9 @@ After executing the above line, rosetta-cli would create an address for testing 
 looking for balance {"value":"100000000000000","currency":{"symbol":"ZIL","decimals":12}} on account {"address":"zil1xk5shden2xq4s5dp63v3vq4vyacpux0h3z3jx5","metadata":{"base16":"35A90BB73351815851a1D4591602Ac27701E19f7"}}
 ```
 
-Fund the stated zil address with **at least** the (value + gas fees), e.g. the stated value here is `100000000000000 Qa` = `100 ZIL`, so we would send `120 ZIL` (100 for the minimum amount and 20 for the gas fees). Please adjust the gas fees accordingly if you see a "insufficent balance to broadcast transaction" in the console.
+Fund the stated `zil` address with **at least** the (value + gas fees), e.g. the stated value here is `100000000000000 Qa` = `100 ZIL`, so we would send `120 ZIL` (100 for the minimum amount and 20 for the gas fees). Please adjust the gas fees accordingly if you see a "insufficent balance to broadcast transaction" in the console.
 
-Next, rosetta-cli would create a payment transaction from the created address to another created address.
+Next, `rosetta-cli` would create a payment transaction from the created address to another created address.
 
 Lastly, the test is completed if you see this:
 ```
