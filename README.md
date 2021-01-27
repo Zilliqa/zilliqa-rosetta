@@ -1,10 +1,19 @@
-# zilliqa-rosetta-
+<p align="center">
+  <a href="https://www.rosetta-api.org">
+    <img width="90%" alt="Rosetta" src="https://www.rosetta-api.org/img/rosetta_header.png">
+  </a>
+</p>
+<h3 align="center">
+   Zilliqa Rosetta
+</h3>
+
+## overview
 `zilliqa-rosetta` provides a reference implementation of the [Rosetta API](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
 
 ## Pre-requisite
 To run Zilliqa-rosetta, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
 
-System Requirements
+## System Requirements
 `zilliqa-rosetta` has been tested on an [AWS t2.large](https://aws.amazon.com/ec2/instance-types/t2/) instance. This instance type has 2 vCPU and 8 GB of RAM.
 
 ## Building `Zilliqa-rosetta`
@@ -29,7 +38,7 @@ docker build \
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 
-### Running `Zilliqa-rosetta`
+## Running `Zilliqa-rosetta`
 #### Container Environment Variables
 |Variable|Description|
 |---|---|
@@ -43,10 +52,8 @@ docker build \
 
 ## Getting started
 
-## Configurations
-
-### Configuration files for Rosetta
-`Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa network and endpoint to connect to. 
+### Configuring Rosetta
+`Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa's network and endpoint to connect to. 
 
 ```yaml
 * rosetta:
