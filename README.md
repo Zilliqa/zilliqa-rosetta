@@ -8,7 +8,7 @@
 </h3>
 
 ## overview
-`zilliqa-rosetta` provides a reference implementation of the [Rosetta API](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
+`zilliqa-rosetta` provides a reference implementation of the [Rosetta specification](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
 
 ## Pre-requisite
 To run `Zilliqa-rosetta`, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
@@ -156,7 +156,7 @@ These are the following lists of APIs not supported by Zilliqa blockchain:
 ## How to test
 Install the latest rosetta-cli from https://github.com/coinbase/rosetta-cli.
 
-At the time of writing, we are using **rosetta-cli v0.6.6**.
+At the time of writing, we are using **rosetta-cli v0.6.7**.
 
 To begin testing:
 1. cd into zilliqa-rosetta folder
