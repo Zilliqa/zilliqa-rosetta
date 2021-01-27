@@ -1,8 +1,8 @@
-## `Zilliqa-rosetta` Restful API
+# `Zilliqa-rosetta` Restful API
 
 Based on rosetta specification `v1.4.9`, `zilliqa-rosetta` provides following Restful APIs:
 
-### Network
+## Network
 
 **/network/list**
 
@@ -307,7 +307,7 @@ Sample
 }
 ```
 
-### Block
+## Block
 
 **/block**
 
@@ -739,7 +739,7 @@ __Note__: The operation type is `contract_deployment`.
 }
 ```
 
-#### Displaying Contract Calls Information for Block Transactions
+### Displaying Contract Calls Information for Block Transactions
 A contract call can be defined in the either one of the following two forms:
 1. An account has invoked a function in a contract
 2. An account has invoked a function in a contract which further invokes another function in a different contract (a.k.a Chain Calling)
@@ -1005,9 +1005,9 @@ In the sample, the sequence of operations are as follows:
 }
 ```
 
-### Construction
+## Construction
 
-## Construction Flow
+### Construction Flow
 The construction flow is always in this sequence:
 1. /construction/derive
 2. /construction/preprocess
