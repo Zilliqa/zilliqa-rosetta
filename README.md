@@ -12,7 +12,6 @@ To run Zilliqa-rosetta, docker is required. Please refer to [Docker offical docu
 |ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
-|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 
 ### Building the docker image
 ```shell script
@@ -34,11 +33,11 @@ docker build \
 |---|---|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|<DEPRECATED>SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
+|[DEPRECATED]SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|<DEPRECATED>SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|<DEPRECATED>TESTNET_NAME|The name of the testnet|
-|<DEPRECATED>BUCKET_NAME|The bucket to use for persistence|
+|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|[DEPRECATED]TESTNET_NAME|The name of the testnet|
+|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
 
 ## Getting started
