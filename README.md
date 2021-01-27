@@ -39,18 +39,6 @@ docker build \
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 
 ## Running `Zilliqa-rosetta`
-#### Container Environment Variables
-|Variable|Description|
-|---|---|
-|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
-|IP_ADDRESS|The seed node's host public ip address|
-|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|[DEPRECATED]TESTNET_NAME|The name of the testnet|
-|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
-
-
-## Getting started
 
 ### Configuring Rosetta
 `Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa's network and endpoint to connect to. 
@@ -132,6 +120,15 @@ docker run -d \
 -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
 --name rosetta rosetta:1.0
 ```
+
+|Variable|Description|
+|---|---|
+|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
+|IP_ADDRESS|The seed node's host public ip address|
+|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
+|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|[DEPRECATED]TESTNET_NAME|The name of the testnet|
+|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
 ### Restarting `Zilliqa-rosetta`
 
