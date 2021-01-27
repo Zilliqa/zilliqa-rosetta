@@ -35,7 +35,7 @@ ZILLIQA_PATH="/zilliqa"
 curl -O "$seed_configuration_url"
 tar -zxvf seed-configuration.tar.gz
 
-#./launch.sh
+export NONINTERACTIVE ZILLIQA_PATH && ./launch.sh
 
 }
 
