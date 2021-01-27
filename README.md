@@ -9,6 +9,7 @@ To run Zilliqa-rosetta, docker is required. Please refer to [Docker offical docu
 ### Docker build variables
 |Variable|Description|
 |---|---|
+|ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
 |SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
@@ -21,7 +22,7 @@ sh ./build_docker.sh
 ### Building the docker image with a specific scilla and zilliqa tag
 ```shell script
 docker build \
---build-arg BLOCKCHAIN_NETWORK=<NETWORK> \
+--build-arg ROSETTA_COMMIT_OR_TAG=<ROSETTA_TAG> \
 --build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> \
 --build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> \
 -t rosetta:1.0 .
@@ -31,12 +32,13 @@ docker build \
 #### Container Environment Variables
 |Variable|Description|
 |---|---|
+|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
+|<DEPRECATED>SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|TESTNET_NAME|The name of the testnet|
-|BUCKET_NAME|The bucket to use for persistence|
+|<DEPRECATED>SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|<DEPRECATED>TESTNET_NAME|The name of the testnet|
+|<DEPRECATED>BUCKET_NAME|The bucket to use for persistence|
 
 
 ## Getting started
@@ -102,7 +104,7 @@ docker run -d \
 --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
 --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
 -v $(pwd)/secrets/mykey.txt:/zilliqa/mykey.txt \
--p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 -p 5000:5000 \
+-p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
 --name rosetta rosetta:1.0
 ```
 
