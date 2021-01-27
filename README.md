@@ -89,7 +89,7 @@ You need to generate 2 sets of keys:
 * whitelisting keypair (if key based whitelisting only)
 * Keypair will be in format: `<public key> <private key>`
 
-You can generate the seednode keypair after building the dockerfile by running the following command
+You can generate the seednode keypair after building the dockerfile by running the following command<br />
 Note that you can run the docker command without the output redirection if you want to generate the whitelisting keypair, but do store the output in a secure location
 ```shell script
 mkdir secrets
