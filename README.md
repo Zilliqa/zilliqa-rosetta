@@ -170,12 +170,12 @@ To begin testing:
 
 **Zilliqa Mainnet**
 ```
-rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/mainnet_config.json
+rosetta-cli check:data --configuration-file ./config/mainnet_config.json
 ```
 
 **Zilliqa Testnet**
 ```
-rosetta-cli check:data --configuration-file <zilliqa-rosetta>/config/testnet_config.json
+rosetta-cli check:data --configuration-file ./config/testnet_config.json
 ```
 
 Note: The `mainnet_config.json` specifically **disables** historical balance lookup and balance tracking options. This is due to the fact that historical balance lookup is not supported on Zilliqa blockchain. In addition, the blockchain rewards miners directly, which results in a single outflow transaction without prior inflow transactions. This will result in `negative balances` errors being raised incorrectly. Hence, both the historical balance lookup and balance tracking options are disabled.
