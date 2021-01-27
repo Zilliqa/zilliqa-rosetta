@@ -62,7 +62,7 @@ docker build \
 ```
 
 Default configuration files for Zilliqa testnet and mainnet has been included in Rosetta root directory.
-| Network | config file |
+| Network | Config file |
 | ------- | ----------- |
 | Testnet | `testnet.config.local.yaml` |
 | Mainnet | `mainnet.config.local.yaml` |
