@@ -70,6 +70,8 @@ echo "Use 'tail -f zilliqa-00001-log.txt' to see the runtime log"
 function run_rosetta() {
 cwd=$(pwd)
 cd "/rosetta"
+echo $BLOCKCHAIN_NETWORK
+mv "$BLOCKCHAIN_NETWORK.config.local.yaml" "config.local.yaml"
 nohup ./main &
 cd "$cwd"
 
