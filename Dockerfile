@@ -236,9 +236,9 @@ RUN printf "====================================================================
 # --------------------
 # Rosetta Deployment
 # --------------------
-ARG BLOCKCHAIN_NETWORK=testnet
 COPY --from=rosetta-build-stage /app/main /rosetta/main
-COPY --from=rosetta-build-stage /app/${BLOCKCHAIN_NETWORK}.config.local.yaml /rosetta/config.local.yaml
+COPY --from=rosetta-build-stage /app/testnet.config.local.yaml /rosetta/testnet.config.local.yaml
+COPY --from=rosetta-build-stage /app/mainnet.config.local.yaml /rosetta/mainnet.config.local.yaml
 EXPOSE 8080
 RUN printf "================================================================================\n\n\nRosetta Deployment Complete\n\n\n================================================================================\n"
 
