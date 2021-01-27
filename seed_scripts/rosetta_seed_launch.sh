@@ -82,19 +82,22 @@ cd "$cwd"
 # ========================================
 # SCRIPT START
 # ========================================
-run_rosetta
-if [ "$BLOCKCHAIN_NETWORK" = "testnet" ]
+if [ "$GENKEYPAIR" = "true" ]
 then
-    seed_configuration_url="https://testnet-join.zilliqa.com/seed-configuration.tar.gz"
-elif [ "$BLOCKCHAIN_NETWORK" = "mainnet" ]
-then
-    seed_configuration_url="https://mainnet-join.zilliqa.com/seed-configuration.tar.gz"
+    genkeypair
+    exit 0
 else
-    echo "Error, unknown $BLOCKCHAIN_NETWORK, terminating."
-    exit 1
+    run_rosetta
+    if [ "$BLOCKCHAIN_NETWORK" = "testnet" ]
+    then
+        seed_configuration_url="https://testnet-join.zilliqa.com/seed-configuration.tar.gz"
+    elif [ "$BLOCKCHAIN_NETWORK" = "mainnet" ]
+    then
+        seed_configuration_url="https://mainnet-join.zilliqa.com/seed-configuration.tar.gz"
+    else
+        echo "Error, unknown $BLOCKCHAIN_NETWORK, terminating."
+        exit 1
+    fi
 fi
 echo $seed_configuration_url
 run
-
-#touch /zilliqa/zilliqa-00001-log.txt
-#tail -f /zilliqa/zilliqa-00001-log.txt

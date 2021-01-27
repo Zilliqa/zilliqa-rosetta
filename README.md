@@ -99,6 +99,16 @@ You need to generate 2 sets of keys:
 * whitelisting keypair (if key based whitelisting only)
 * Keypair will be in format: `<public key> <private key>`
 
+You can generate the seednode keypair after building the dockerfile by running the following command<br />
+Note that you can run the docker command without the output redirection if you want to generate the whitelisting keypair, but do store the output in a secure location
+```shell script
+mkdir secrets
+
+docker run --rm \
+--env GENKEYPAIR="true" \
+rosetta:1.0 > secrets/mykey.txt
+```
+
 ### Seed node whitelisting
 Seed node IP or public need to be whitelisted by the Zilliqa team in order receive network data. To get whitelist, please reach out to maintainers[at]zilliqa.com and provide the IP or public key for whitelisting purpose.
 
