@@ -33,7 +33,6 @@ docker build \
 |---|---|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|[DEPRECATED]SEED_CONFIGURATION_URL|The url to download the seed node configuration files.<br />Testnet: https://testnet-join.zilliqa.com/seed-configuration.tar.gz<br />Mainnet: https://mainnet-join.zilliqa.com/seed-configuration.tar.gz|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
 |[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
 |[DEPRECATED]TESTNET_NAME|The name of the testnet|
@@ -96,8 +95,8 @@ Seed node IP or public need to be whitelisted by the Zilliqa team in order recei
 ### Seed node launch
 ```shell script
 docker run -d \
+--env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
 --env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
---env SEED_CONFIGURATION_URL="<SEED CONFIGURATION DOWNLOAD URL>" \
 --env MULTIPLIER_SYNC="<Y_or_N>" \
 --env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
 --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
