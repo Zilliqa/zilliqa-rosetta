@@ -130,6 +130,11 @@ docker run -d \
 |[DEPRECATED]TESTNET_NAME|The name of the testnet|
 |[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
+**Note:**
+- If your node is going for IP based whitelisting, you will need to set `MULTIPLIER_SYNC` to `Y`. `SEED_PRIVATE_KEY` will not be required
+- If your node is going for public key based whitelisting, you will need to set `MULTIPLIER_SYNC` to `N`. `SEED_PRIVATE_KEY` is required
+- For `TESTNET_NAME` and `BUCKET_NAME`, you can refer to [network_meta](network_meta.md). For future version of `Zilliqa-rosetta`, these environment variables will not be neccessary.
+
 ### Restarting `Zilliqa-rosetta`
 
 ```
