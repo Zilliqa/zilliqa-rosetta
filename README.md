@@ -126,7 +126,7 @@ docker run -d \
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
 |MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|[DEPRECATED]SEED_PRIVATE_KEY|The private key used for key based whitelisting|
+|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
 |[DEPRECATED]TESTNET_NAME|The name of the testnet|
 |[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
 
