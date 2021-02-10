@@ -4,47 +4,28 @@
   </a>
 </p>
 <h3 align="center">
-   Zilliqa Rosetta
+   Zilliqa Rosetta Standalone
 </h3>
 
-## Overview
-`Zilliqa-rosetta` provides a reference implementation of the [Rosetta specification](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
-
-## Pre-requisite
-To run `Zilliqa-rosetta`, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
-
-## System Requirements
-`zilliqa-rosetta` has been tested on an [AWS t2.large](https://aws.amazon.com/ec2/instance-types/t2/) instance. This instance type has 2 vCPU and 8 GB of RAM.
-
-## Building `Zilliqa-rosetta`
-
-### Building the zilliqa-rosetta standalone image
-Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
-
-### Building the docker image with the current Zilliqa and Scilla release
+## Building `Zilliqa-rosetta standalone image`
+### Building the standalone image with current rosetta release
 ```shell script
-sh ./build_docker.sh
+sh ./rosetta_standalone/build_standalone.sh
 ```
 
-### Building the docker image with a specific scilla and zilliqa tag
+### Building the docker image with a specific rosetta tag
 ```shell script
 docker build \
 --build-arg ROSETTA_COMMIT_OR_TAG=<ROSETTA_TAG> \
---build-arg SCILLA_COMMIT_OR_TAG=<SCILLA_TAG> \
---build-arg COMMIT_OR_TAG=<ZILLIQA_TAG> \
--t rosetta:1.0 .
+-f rosetta_standalone/Dockerfile_standalone
+-t rosetta_standalone:1.0 .
 ```
 
 |Variable|Description|
 |---|---|
 |ROSETTA_COMMIT_OR_TAG|Override this to download a specific rosetta commit or version tag|
-|SCILLA_COMMIT_OR_TAG|Override this to download a specific scilla commit or version tag|
-|COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 
-## Running `Zilliqa-rosetta`
-
-### Running the zilliqa-rosetta standalone image
-Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
+## Running `Zilliqa-rosetta standalone`
 
 ### Configuring `Zilliqa-rosetta`
 `Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa's network and endpoint to connect to. 
@@ -66,14 +47,12 @@ Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
     * node_version: zilliqa node verion
 ```
 
-Default configuration files for Zilliqa testnet and mainnet has been included in Rosetta root directory.
+Default configuration files for Zilliqa testnet and mainnet combined has been included in Rosetta root directory.
 | Network | Config file |
 | ------- | ----------- |
-| Testnet | `testnet.config.local.yaml` |
-| Mainnet | `mainnet.config.local.yaml` |
+| Testnet, Mainnet | `config.local.yaml` |
 
-If you do not wish to use Zilliqa seed node inside `Zilliqa-rosetta`, you can choose to connect `Zilliqa-rosetta` to any existing Zilliqa public endpoints. 
-A sample of this configuration can be found in `config.local.yaml`.
+If you choose to connect `Zilliqa-rosetta` to any existing Zilliqa public endpoints, you can follow the configuration below. <br />A sample of this configuration can be found in `config.local.yaml`.
 
 ```yaml
 rosetta:
@@ -93,52 +72,16 @@ networks:
     node_version: "v7.1.0"
 ```
 
-### Zilliqa Seed node keypair generation
-You need to generate 2 sets of keys:
-* seed node keypair
-* whitelisting keypair (if key based whitelisting only)
-* Keypair will be in format: `<public key> <private key>`
 
-You can generate the seed node keypair after building the `dockerfile` by running the following command<br />
-Note that you can run the docker command without the output redirection if you want to generate the whitelisting keypair, but do store the output in a secure location
+### Running `Zilliqa-rosetta standalone`
 ```shell script
-mkdir secrets
-
-docker run --rm \
---env GENKEYPAIR="true" \
-rosetta:1.0 > secrets/mykey.txt
+sh ./rosetta_standalone/run_standalone.sh
 ```
 
-### Zilliqa seed node whitelisting
-Zilliqa seed node IP or public key need to be whitelisted by the Zilliqa team in order receive network data. To get whitelisted, please reach out to maintainers[at]zilliqa.com and provide the IP or public key and reason for whitelisting.
-
-### Running `Zilliqa-rosetta`
+### Running `Zilliqa-rosetta standalone with custom config.local.yaml`
 ```shell script
-docker run -d \
---env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
---env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
---env MULTIPLIER_SYNC="<Y_or_N>" \
---env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
---env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
---env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
--v $(pwd)/secrets/mykey.txt:/run/zilliqa/mykey.txt \
--p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
---name rosetta rosetta:1.0
+docker run -d -p 8080:8080 -v <absolute directory of config.local.yaml>:/rosetta/config.local.yaml --name rosetta_standalone rosetta_standalone:1.0
 ```
-
-|Variable|Description|
-|---|---|
-|BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
-|IP_ADDRESS|The seed node's host public ip address|
-|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|[DEPRECATED]TESTNET_NAME|The name of the testnet|
-|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
-
-**Note:**
-- If your node is going for IP based whitelisting, you will need to set `MULTIPLIER_SYNC` to `Y`. `SEED_PRIVATE_KEY` will not be required
-- If your node is going for public key based whitelisting, you will need to set `MULTIPLIER_SYNC` to `N`. `SEED_PRIVATE_KEY` is required
-- For `TESTNET_NAME` and `BUCKET_NAME`, you can refer to [network_meta](network_meta.md). For future version of `Zilliqa-rosetta`, these environment variables will not be neccessary.
 
 ### Restarting `Zilliqa-rosetta`
 

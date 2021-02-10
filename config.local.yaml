@@ -13,3 +13,4 @@ networks:
     api: "https://dev-api.zilliqa.com"
     chain_id: 333
     node_version: "v6.3.0-alpha.0"
+
