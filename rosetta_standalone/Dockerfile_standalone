@@ -22,6 +22,7 @@ FROM ubuntu:18.04
 # --------------------
 # Rosetta Deployment
 # --------------------
+RUN apt-get update && apt-get install -y ca-certificates
 COPY --from=rosetta-build-stage /app/main /rosetta/main
 COPY --from=rosetta-build-stage /app/config.local.yaml /rosetta/config.local.yaml
 EXPOSE 8080
