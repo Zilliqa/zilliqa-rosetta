@@ -60,7 +60,6 @@ Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
     * api: api endpoint of mainnet
     * chain_id: chain id of mainnet
     * node_version: zilliqa node verion
-* networks:
   * <network_name>:
     * api: api endpoint of mainnet
     * chain_id: chain id of mainnet
