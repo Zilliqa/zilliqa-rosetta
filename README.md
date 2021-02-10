@@ -145,7 +145,7 @@ docker start <container name>
 ## Restful APIs
 
 ### Rosetta restful APIs
-Suppored APIs and documentation can be found over at [API.md](API.md).
+Suppored APIs and documentation can be found over at [developer portal]https://dev.zilliqa.com/docs/exchanges/rosetta-introduction).
 
 ### Unsupported APIs
 
