@@ -18,6 +18,9 @@ To run `Zilliqa-rosetta`, you must install Docker. Please refer to [Docker offic
 
 ## Building `Zilliqa-rosetta`
 
+### Building the zilliqa-rosetta standalone image
+Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
+
 ### Building the docker image with the current Zilliqa and Scilla release
 ```shell script
 sh ./build_docker.sh
@@ -39,6 +42,9 @@ docker build \
 |COMMIT_OR_TAG|Override this to download a specific zilliqa commit of version tag|
 
 ## Running `Zilliqa-rosetta`
+
+### Running the zilliqa-rosetta standalone image
+Please refer to [rosetta-standalone](rosetta_standalone/README.md) readme
 
 ### Configuring `Zilliqa-rosetta`
 `Zilliqa-rosetta` configurations yaml allow you to configure which Zilliqa's network and endpoint to connect to. 
@@ -213,3 +219,4 @@ The construction API test would continue until the funds of the created accounts
 This project is available open source under the terms of the [GNU Lesser General Public License 3.0](LICENSE.md).
 
 © 2020 Zilliqa
+
