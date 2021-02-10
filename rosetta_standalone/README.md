@@ -78,6 +78,11 @@ networks:
 sh ./rosetta_standalone/run_standalone.sh
 ```
 
+### Running `Zilliqa-rosetta standalone with custom config.local.yaml`
+```shell script
+docker run -d -p 8080:8080 -v <absolute directory of config.local.yaml>:/rosetta/config.local.yaml --name rosetta_standalone rosetta_standalone:1.0
+```
+
 ### Restarting `Zilliqa-rosetta`
 
 ```
