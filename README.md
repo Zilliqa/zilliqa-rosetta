@@ -10,6 +10,9 @@
 ## Overview
 `Zilliqa-rosetta` provides a reference implementation of the [Rosetta specification](https://github.com/coinbase/rosetta-specifications) for Zilliqa in Golang.
 
+## Documentation
+Documentation of Zilliqa-rosetta can be found at [Zilliqa developers portal](https://dev.zilliqa.com/docs/exchanges/rosetta-introduction).
+
 ## Pre-requisite
 To run `Zilliqa-rosetta`, you must install Docker. Please refer to [Docker offical documentation](https://docs.docker.com/get-docker/) on installation instruction.
 
@@ -150,7 +153,7 @@ docker start <container name>
 ## Restful APIs
 
 ### Rosetta restful APIs
-Suppored APIs and documentation can be found over at [developer portal]https://dev.zilliqa.com/docs/exchanges/rosetta-introduction).
+Suppored APIs and documentation can be found over at [developer portal](https://dev.zilliqa.com/docs/exchanges/rosetta-introduction).
 
 ### Unsupported APIs
 
