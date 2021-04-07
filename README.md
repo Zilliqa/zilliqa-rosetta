@@ -102,14 +102,18 @@ You need to generate 2 sets of keys:
 * whitelisting keypair (if key based whitelisting only)
 * Keypair will be in format: `<public key> <private key>`
 
-You can generate the seed node keypair after building the `dockerfile` by running the following command<br />
-Note that you can run the docker command without the output redirection if you want to generate the whitelisting keypair, but do store the output in a secure location
+You can generate the seed node and whitelisting keypair after building the `dockerfile` by running the following command<br />
+Note that you can run the docker command without the output redirection if you want to generate another keypair, but do store the output in a secure location
 ```shell script
 mkdir secrets
 
 docker run --rm \
 --env GENKEYPAIR="true" \
 rosetta:1.0 > secrets/mykey.txt
+
+docker run --rm \
+--env GENKEYPAIR="true" \
+rosetta:1.0 > secrets/whitelistkey.txt
 ```
 
 ### Zilliqa seed node whitelisting
