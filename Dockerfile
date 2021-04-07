@@ -103,6 +103,17 @@ RUN apt-get update \
     libsecp256k1-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install cmake 3.19
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.19.3/cmake-3.19.3-Linux-x86_64.sh \	
+    && mkdir -p "${HOME}"/.local \	
+    && bash ./cmake-3.19.3-Linux-x86_64.sh --skip-license --prefix="${HOME}"/.local/	
+
+# Include path to refer to latest version of cmake	
+ENV PATH="/root/.local/bin:${PATH}"	
+
+RUN cmake --version \	
+    && rm cmake-3.19.3-Linux-x86_64.sh
+
 # Manually input tag or commit, can be overwritten by docker build-args
 ARG COMMIT_OR_TAG=v7.1.0
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
@@ -142,7 +153,7 @@ RUN git clone ${REPO} ${SOURCE_DIR} \
     #   /usr/local/bin/zilliqa \
     #   /usr/local/bin/data_migrate \
        /usr/local/lib/libSchnorr.so \
-       /usr/local/lib/libethash.so \
+       /usr/local/lib/libCryptoUtils.so \
        /usr/local/lib/libNAT.so \
        /usr/local/lib/libCommon.so \
        /usr/local/lib/libTrie.so
