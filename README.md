@@ -129,6 +129,7 @@ docker run -d \
 --env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
 --env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
 -v $(pwd)/secrets/mykey.txt:/run/zilliqa/mykey.txt \
+-v $(pwd)/secrets/whitelistkey.txt:/run/zilliqa/whitelistkey.txt \
 -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
 --name rosetta rosetta:1.0
 ```
