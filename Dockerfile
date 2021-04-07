@@ -73,6 +73,7 @@ RUN apt-get update \
     build-essential \
     ca-certificates \
     cmake \
+    wget \
     # curl is not a build dependency
     curl \
     git \
