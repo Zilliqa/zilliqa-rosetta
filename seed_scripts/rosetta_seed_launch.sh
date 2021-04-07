@@ -45,5 +45,11 @@ export NONINTERACTIVE ZILLIQA_PATH && ./launch.sh
 # ========================================
 # SCRIPT START
 # ========================================
-run_rosetta
-run_seednode
+if [ "" = "true" ]
+then
+    genkeypair
+    exit 0
+else
+    run_rosetta
+    run_seednode
+fi
