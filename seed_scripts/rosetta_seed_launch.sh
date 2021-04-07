@@ -45,7 +45,7 @@ export NONINTERACTIVE ZILLIQA_PATH && ./launch.sh
 # ========================================
 # SCRIPT START
 # ========================================
-if [ "" = "true" ]
+if [ "$GENKEYPAIR" = "true" ]
 then
     genkeypair
     exit 0
