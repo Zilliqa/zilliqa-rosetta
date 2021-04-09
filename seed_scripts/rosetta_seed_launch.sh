@@ -39,6 +39,8 @@ tar -zxvf seed-configuration.tar.gz
 
 export NONINTERACTIVE ZILLIQA_PATH && ./launch.sh
 
+tail -f zilliqa-00001-log.txt
+
 }
 
 
@@ -50,6 +52,8 @@ then
     genkeypair
     exit 0
 else
+    echo "starting rosetta"
     run_rosetta
+    echo "starting seed node"
     run_seednode
 fi
