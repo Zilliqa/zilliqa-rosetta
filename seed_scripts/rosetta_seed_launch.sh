@@ -28,7 +28,7 @@ function run_seednode() {
 #    exit 1
 #fi
 
-seed_configuration_url="https://joel-refactor3-join.dev.z7a.xyz/seed-configuration.tar.gz"
+seed_configuration_url="https://joel-refactor4-join.dev.z7a.xyz/seed-configuration.tar.gz"
 echo $seed_configuration_url
 
 NONINTERACTIVE="true"
