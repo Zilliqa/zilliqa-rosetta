@@ -17,18 +17,17 @@ cd "$cwd"
 # RUN SEEDNODE START
 # ========================================
 function run_seednode() {
-#if [ "$BLOCKCHAIN_NETWORK" = "testnet" ]
-#then
-#    seed_configuration_url="https://testnet-join.zilliqa.com/seed-configuration.tar.gz"
-#elif [ "$BLOCKCHAIN_NETWORK" = "mainnet" ]
-#then
-#    seed_configuration_url="https://mainnet-join.zilliqa.com/seed-configuration.tar.gz"
-#else
-#    echo "Error, unknown $BLOCKCHAIN_NETWORK, terminating."
-#    exit 1
-#fi
+if [ "$BLOCKCHAIN_NETWORK" = "testnet" ]
+then
+    seed_configuration_url="https://testnet-join.zilliqa.com/seed-configuration.tar.gz"
+elif [ "$BLOCKCHAIN_NETWORK" = "mainnet" ]
+then
+    seed_configuration_url="https://mainnet-join.zilliqa.com/seed-configuration.tar.gz"
+else
+    echo "Error, unknown $BLOCKCHAIN_NETWORK, terminating."
+    exit 1
+fi
 
-seed_configuration_url="https://joel-refactor4-join.dev.z7a.xyz/seed-configuration.tar.gz"
 echo $seed_configuration_url
 
 NONINTERACTIVE="true"
