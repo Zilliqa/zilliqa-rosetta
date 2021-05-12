@@ -20,7 +20,7 @@ RUN printf "====================================================================
 FROM ubuntu:18.04 as scilla-build-stage
 
 ARG MAJOR_VERSION=0
-ARG SCILLA_COMMIT_OR_TAG=v0.9.1
+ARG SCILLA_COMMIT_OR_TAG=v0.10.0
 
 WORKDIR /scilla/${MAJOR_VERSION}
 
@@ -29,6 +29,7 @@ RUN apt-get update \
     && add-apt-repository ppa:avsm/ppa -y \
     && apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    wget \
     cmake \
     build-essential \
     m4 \
@@ -41,16 +42,20 @@ RUN apt-get update \
     libssl-dev \
     libsecp256k1-dev \
     libboost-system-dev \
+    libboost-test-dev \
     libpcre3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV OCAML_VERSION 4.08.1
 
+ENV PATH="/root/.local/bin:${PATH}"
+
 RUN git clone --recurse-submodules https://github.com/zilliqa/scilla .
 RUN git checkout ${SCILLA_COMMIT_OR_TAG}
 RUN git submodule update --init --recursive
 RUN git status
-RUN make opamdep-ci \
+RUN bash scripts/install_cmake_ubuntu.sh \
+    && make opamdep-ci \
     && echo '. ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ' >> ~/.bashrc \
     && eval $(opam env) && \
     make
@@ -73,6 +78,7 @@ RUN apt-get update \
     build-essential \
     ca-certificates \
     cmake \
+    wget \
     # curl is not a build dependency
     curl \
     git \
@@ -103,8 +109,19 @@ RUN apt-get update \
     libsecp256k1-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Install cmake 3.19
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.19.3/cmake-3.19.3-Linux-x86_64.sh \	
+    && mkdir -p "${HOME}"/.local \	
+    && bash ./cmake-3.19.3-Linux-x86_64.sh --skip-license --prefix="${HOME}"/.local/	
+
+# Include path to refer to latest version of cmake	
+ENV PATH="/root/.local/bin:${PATH}"	
+
+RUN cmake --version \	
+    && rm cmake-3.19.3-Linux-x86_64.sh
+
 # Manually input tag or commit, can be overwritten by docker build-args
-ARG COMMIT_OR_TAG=v7.1.0
+ARG COMMIT_OR_TAG=v8.0.0
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
 ARG BUILD_DIR=/build
@@ -142,7 +159,7 @@ RUN git clone ${REPO} ${SOURCE_DIR} \
     #   /usr/local/bin/zilliqa \
     #   /usr/local/bin/data_migrate \
        /usr/local/lib/libSchnorr.so \
-       /usr/local/lib/libethash.so \
+       /usr/local/lib/libCryptoUtils.so \
        /usr/local/lib/libNAT.so \
        /usr/local/lib/libCommon.so \
        /usr/local/lib/libTrie.so
