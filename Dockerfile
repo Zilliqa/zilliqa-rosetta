@@ -29,6 +29,7 @@ RUN apt-get update \
     && add-apt-repository ppa:avsm/ppa -y \
     && apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    wget \
     cmake \
     build-essential \
     m4 \
@@ -41,6 +42,7 @@ RUN apt-get update \
     libssl-dev \
     libsecp256k1-dev \
     libboost-system-dev \
+    libboost-test-dev \
     libpcre3-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -50,7 +52,8 @@ RUN git clone --recurse-submodules https://github.com/zilliqa/scilla .
 RUN git checkout ${SCILLA_COMMIT_OR_TAG}
 RUN git submodule update --init --recursive
 RUN git status
-RUN make opamdep-ci \
+RUN bash scripts/install_cmake_ubuntu.sh \
+    && make opamdep-ci \
     && echo '. ~/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true ' >> ~/.bashrc \
     && eval $(opam env) && \
     make
@@ -116,7 +119,7 @@ RUN cmake --version \
     && rm cmake-3.19.3-Linux-x86_64.sh
 
 # Manually input tag or commit, can be overwritten by docker build-args
-ARG COMMIT_OR_TAG=v7.1.0
+ARG COMMIT_OR_TAG=v8.0.0
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
 ARG BUILD_DIR=/build
