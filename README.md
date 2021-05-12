@@ -119,15 +119,14 @@ rosetta:1.0 > secrets/whitelistkey.txt
 ### Zilliqa seed node whitelisting
 Zilliqa seed node IP or public key need to be whitelisted by the Zilliqa team in order receive network data. To get whitelisted, please reach out to maintainers[at]zilliqa.com and provide the IP or public key and reason for whitelisting.
 
+Note that IP based whitelisting will be deprecated soon. It's better to start implementing key-based whitelisting.
+
 ### Running `Zilliqa-rosetta`
 ```shell script
 docker run -d \
 --env BLOCKCHAIN_NETWORK="<NETWORK_TO_USE>" \
 --env IP_ADDRESS="<SEED_NODE_HOST_IP>" \
---env MULTIPLIER_SYNC="<Y_or_N>" \
---env SEED_PRIVATE_KEY="<SEED_PRIVATE_KEY>" \
---env TESTNET_NAME="<NAME_OF_THE_TESTNET>" \
---env BUCKET_NAME="<NAME_OF_THE_PERSISTENCE_BUCKET>" \
+--env IP_WHITELISTING="<Y_or_N>" \
 -v $(pwd)/secrets/mykey.txt:/run/zilliqa/mykey.txt \
 -v $(pwd)/secrets/whitelistkey.txt:/run/zilliqa/whitelistkey.txt \
 -p 4201:4201 -p 4301:4301 -p 4501:4501 -p 33133:33133 -p 8080:8080 \
@@ -138,14 +137,11 @@ docker run -d \
 |---|---|
 |BLOCKCHAIN_NETWORK|Use either testnet or mainnet no capitals|
 |IP_ADDRESS|The seed node's host public ip address|
-|MULTIPLIER_SYNC|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
-|SEED_PRIVATE_KEY|The private key used for key based whitelisting|
-|[DEPRECATED]TESTNET_NAME|The name of the testnet|
-|[DEPRECATED]BUCKET_NAME|The bucket to use for persistence|
+|IP_WHITELISTING|Y if you chose IP based seed node whitelisting<br />N if you chose Key based seed node whitelisting|
 
 **Note:**
-- If your node is going for IP based whitelisting, you will need to set `MULTIPLIER_SYNC` to `Y`. `SEED_PRIVATE_KEY` will not be required
-- If your node is going for public key based whitelisting, you will need to set `MULTIPLIER_SYNC` to `N`. `SEED_PRIVATE_KEY` is required
+- If your node is going for IP based whitelisting, you will need to set `IP_WHITELISTING` to `Y`.
+- If your node is going for public key based whitelisting, you will need to set `IP_WHITELISTING` to `N`.
 - For `TESTNET_NAME` and `BUCKET_NAME`, you can refer to [network_meta](network_meta.md). For future version of `Zilliqa-rosetta`, these environment variables will not be neccessary.
 
 ### Restarting `Zilliqa-rosetta`
