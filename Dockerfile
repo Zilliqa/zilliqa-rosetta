@@ -20,7 +20,7 @@ RUN printf "====================================================================
 FROM ubuntu:18.04 as scilla-build-stage
 
 ARG MAJOR_VERSION=0
-ARG SCILLA_COMMIT_OR_TAG=v0.9.1
+ARG SCILLA_COMMIT_OR_TAG=v0.10.0
 
 WORKDIR /scilla/${MAJOR_VERSION}
 
@@ -47,6 +47,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV OCAML_VERSION 4.08.1
+
+ENV PATH="/root/.local/bin:${PATH}"
 
 RUN git clone --recurse-submodules https://github.com/zilliqa/scilla .
 RUN git checkout ${SCILLA_COMMIT_OR_TAG}
