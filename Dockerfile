@@ -20,7 +20,7 @@ RUN printf "====================================================================
 FROM ubuntu:18.04 as scilla-build-stage
 
 ARG MAJOR_VERSION=0
-ARG SCILLA_COMMIT_OR_TAG=v0.10.0
+ARG SCILLA_COMMIT_OR_TAG=v0.10.1
 
 WORKDIR /scilla/${MAJOR_VERSION}
 
