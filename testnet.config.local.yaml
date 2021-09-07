@@ -8,4 +8,4 @@ networks:
  testnet:
     api: "http://localhost:4201"
     chain_id: 333
-    node_version: "v8.0.4"
+    node_version: "v8.1.0"
