@@ -20,7 +20,7 @@ RUN printf "====================================================================
 FROM ubuntu:18.04 as scilla-build-stage
 
 ARG MAJOR_VERSION=0
-ARG SCILLA_COMMIT_OR_TAG=v0.10.1
+ARG SCILLA_COMMIT_OR_TAG=v0.11.0
 
 WORKDIR /scilla/${MAJOR_VERSION}
 
@@ -121,7 +121,7 @@ RUN cmake --version \
     && rm cmake-3.19.3-Linux-x86_64.sh
 
 # Manually input tag or commit, can be overwritten by docker build-args
-ARG COMMIT_OR_TAG=v8.0.4
+ARG COMMIT_OR_TAG=v8.1.0
 ARG REPO=https://github.com/Zilliqa/Zilliqa.git
 ARG SOURCE_DIR=/zilliqa
 ARG BUILD_DIR=/build
