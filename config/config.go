@@ -185,10 +185,10 @@ var (
 	}
 )
 
-const OpTypeTransfer = "transfer"
-const OpTypeContractDeployment = "contract_deployment"
-const OpTypeContractCall = "contract_call"
-const OpTypeContractCallTransfer = "contract_call_transfer"
+const OpTypeTransfer = "TRANSFER"
+const OpTypeContractDeployment = "CONTRACT_DEPLOYMENT"
+const OpTypeContractCall = "CONTRACT_CALL"
+const OpTypeContractCallTransfer = "CONTRACT_CALL_TRANSFER"
 
 type Rosetta struct {
 	Host string
