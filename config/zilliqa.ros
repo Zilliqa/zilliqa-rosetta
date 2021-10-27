@@ -73,7 +73,7 @@ transfer(1){
     transfer.operations = [
       {
         "operation_identifier":{"index":0},
-        "type":"transfer",
+        "type":"TRANSFER",
         "account":{{sender.account_identifier}},
         "amount":{
           "value":{{sender_amount}},
@@ -82,7 +82,7 @@ transfer(1){
       },
       {
         "operation_identifier":{"index":1},
-        "type":"transfer",
+        "type":"TRANSFER",
         "account":{{recipient.account_identifier}},
         "amount":{
           "value":{{recipient_amount}},
@@ -116,7 +116,7 @@ return_funds(1){
     transfer.operations = [
       {
         "operation_identifier":{"index":0},
-        "type":"transfer",
+        "type":"TRANSFER",
         "account":{{sender.account_identifier}},
         "amount":{
           "value":{{sender_amount}},
@@ -125,7 +125,7 @@ return_funds(1){
       },
       {
         "operation_identifier":{"index":1},
-        "type":"transfer",
+        "type":"TRANSFER",
         "account":{{faucet}},
         "amount":{
           "value":{{available_amount}},

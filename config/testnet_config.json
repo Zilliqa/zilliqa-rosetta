@@ -5,7 +5,7 @@
  },
  "online_url": "http://localhost:8080",
  "data_directory": "data/",
- "http_timeout": 10,
+ "http_timeout": 300,
  "tip_delay": 300,
  "construction": {
     "offline_url": "http://localhost:8080",
