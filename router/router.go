@@ -24,14 +24,15 @@ func NewBlockchainRouter(
 	accountAPIService := services.NewAccountAPIService(cfg)
 	accountAPIController := server.NewAccountAPIController(accountAPIService, asserter)
 
-	memoryPoolAPIService := services.NewMemoryPoolAPIService(cfg)
-	memoryPoolController := server.NewMempoolAPIController(memoryPoolAPIService, asserter)
+	// @deprecated
+	// memoryPoolAPIService := services.NewMemoryPoolAPIService(cfg)
+	// memoryPoolController := server.NewMempoolAPIController(memoryPoolAPIService, asserter)
 
 	blockAPIService := services.NewBlockAPIService(cfg)
 	blockAPIController := server.NewBlockAPIController(blockAPIService, asserter)
 
-	constructionAPIService := services.NewConstructionAPIService(cfg, memoryPoolAPIService)
+	constructionAPIService := services.NewConstructionAPIService(cfg)
 	ConstructionAPIController := server.NewConstructionAPIController(constructionAPIService, asserter)
 
-	return server.NewRouter(networkAPIController, accountAPIController, blockAPIController, memoryPoolController, ConstructionAPIController)
+	return server.NewRouter(networkAPIController, accountAPIController, blockAPIController, ConstructionAPIController)
 }
