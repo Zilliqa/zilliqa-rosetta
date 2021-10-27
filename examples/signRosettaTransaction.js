@@ -14,7 +14,7 @@ async function sign() {
         const rawTx = zilliqa.transactions.new({
             version: bytes.pack(333, 1),
             amount: new BN(units.toQa('2', units.Units.Zil)),
-            gasLimit: Long.fromNumber(1), // normal (non-contract) transactions cost 1 gas
+            gasLimit: Long.fromNumber(50), // normal (non-contract) transactions cost 1 gas
             gasPrice: new BN(units.toQa(2000, units.Units.Li)), // the minimum gas price is 1,000 li
             toAddr: recipientAddr, // recipient address must be converted to checksum address, 
             pubKey: "02e44ef2c5c2031386faa6cafdf5f67318cc661871b0112a27458e65f37a35655e", // this determines which account is used to send the tx
