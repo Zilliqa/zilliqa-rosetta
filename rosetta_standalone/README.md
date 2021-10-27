@@ -58,7 +58,7 @@ If you choose to connect `Zilliqa-rosetta` to any existing Zilliqa public endpoi
 rosetta:
  host: "0.0.0.0"
  port: 8080
- version: "1.4.9"
+ version: "1.4.10"
  middleware_version: "0.0.1"
 
 networks:

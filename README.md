@@ -82,7 +82,7 @@ A sample of this configuration can be found in `config.local.yaml`.
 rosetta:
  host: "0.0.0.0"
  port: 8080
- version: "1.4.9"
+ version: "1.4.10"
  middleware_version: "0.0.1"
 
 networks:
