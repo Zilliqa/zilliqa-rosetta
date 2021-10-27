@@ -30,7 +30,7 @@ const (
 	Base16          = "base16"
 	VERSION         = "version"
 	SENDER_ADDR     = "senderAddr"
-	GAS_LIMIT_VALUE = "1"
+	GAS_LIMIT_VALUE = "50"
 	GAS_PRICE_VALUE = "2000000000"
 
 	// others

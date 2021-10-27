@@ -2,7 +2,9 @@ package services
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
@@ -38,7 +40,20 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 		}
 	}
 
-	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE_VALUE
+	api := c.Config.NodeAPI(req.NetworkIdentifier.Network)
+	rpcClient := provider.NewProvider(api)
+	minGasPrice, err := rpcClient.GetMinimumGasPrice()
+
+	if err != nil {
+		fmt.Println("error fetching min gas price")
+		return nil, &types.Error{
+			Code:      0,
+			Message:   err.Error(),
+			Retriable: true,
+		}
+	}
+
+	preProcessResp.Options[rosettaUtil.GAS_PRICE] = minGasPrice
 	preProcessResp.Options[rosettaUtil.GAS_LIMIT] = rosettaUtil.GAS_LIMIT_VALUE
 	return preProcessResp, nil
 }
