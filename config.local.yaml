@@ -8,9 +8,9 @@ networks:
  mainnet:
     api: "https://api.zilliqa.com"
     chain_id: 1
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v8.1.0"
  testnet:
     api: "https://dev-api.zilliqa.com"
     chain_id: 333
-    node_version: "v6.3.0-alpha.0"
+    node_version: "v8.1.0"
 
