@@ -1,5 +1,9 @@
 package services
 
+// @deprecated due to disabling of GetPendingTxns since Zilliqa V8.0.0
+// https://github.com/Zilliqa/Zilliqa/releases/tag/v8.0.0
+// https://www.rosetta-api.org/docs/all_methods.html
+
 import (
 	"context"
 	"encoding/json"
@@ -69,6 +73,7 @@ func (m *MemoryPoolAPIService) AddTransaction(ctx context.Context, network *type
 	}
 }
 
+// @deprecated
 func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.NetworkRequest) (*types.MempoolResponse,
 	*types.Error) {
 
@@ -115,6 +120,7 @@ func (m *MemoryPoolAPIService) Mempool(ctx context.Context, req *types.NetworkRe
 	return resp, nil
 }
 
+// @deprecated
 func (m *MemoryPoolAPIService) MempoolTransaction(ctx context.Context, req *types.MempoolTransactionRequest,
 ) (*types.MempoolTransactionResponse, *types.Error) {
 	hash := req.TransactionIdentifier.Hash

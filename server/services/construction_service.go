@@ -13,13 +13,11 @@ const (
 )
 
 type ConstructionAPIService struct {
-	Config         *config.Config
-	MemPoolService *MemoryPoolAPIService
+	Config *config.Config
 }
 
-func NewConstructionAPIService(config *config.Config, memPoolService *MemoryPoolAPIService) *ConstructionAPIService {
+func NewConstructionAPIService(config *config.Config) *ConstructionAPIService {
 	return &ConstructionAPIService{
-		Config:         config,
-		MemPoolService: memPoolService,
+		Config: config,
 	}
 }

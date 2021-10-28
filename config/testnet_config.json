@@ -5,7 +5,7 @@
  },
  "online_url": "http://localhost:8080",
  "data_directory": "data/",
- "http_timeout": 10,
+ "http_timeout": 300,
  "tip_delay": 300,
  "construction": {
     "offline_url": "http://localhost:8080",
@@ -18,6 +18,10 @@
     "block_broadcast_limit": 100,
     "rebroadcast_all": false,
     "constructor_dsl_file": "zilliqa.ros",
+    "end_conditions": {
+       "create_account": 10,
+       "transfer": 10
+    },
     "prefunded_accounts": [
      {
       "privkey": "b46e482c0d07be65138d734e15b9280fe619ebf571f4e656d744c591f9515022",
@@ -42,7 +46,7 @@
   "start_index": 2152500,
   "balance_tracking_disabled": true,
   "end_conditions": {
-   "tip": true
+   "duration": 600
   }
  }
 }

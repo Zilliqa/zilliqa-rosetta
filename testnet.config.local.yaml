@@ -1,7 +1,7 @@
 rosetta:
  host: "0.0.0.0"
  port: 8080
- version: "1.4.9"
+ version: "1.4.10"
  middleware_version: "0.0.1"
 
 networks:
