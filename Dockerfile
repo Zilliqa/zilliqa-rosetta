@@ -3,7 +3,7 @@
 # ====================
 FROM golang:1.15 as rosetta-build-stage
 
-ARG ROSETTA_COMMIT_OR_TAG=v1.0.0
+ARG ROSETTA_COMMIT_OR_TAG=v2.2.0
 
 WORKDIR /app
 RUN git clone https://github.com/zilliqa/zilliqa-rosetta .
