@@ -107,7 +107,7 @@ These are the following lists of APIs not supported by Zilliqa blockchain:
 ## How to test
 Install the latest rosetta-cli from https://github.com/coinbase/rosetta-cli.
 
-At the time of writing, we are using [rosetta-cli v0.6.7](https://github.com/coinbase/rosetta-cli/releases/tag/v0.6.7).
+At the time of writing, we are using [rosetta-cli v0.7.1](https://github.com/coinbase/rosetta-cli/releases/tag/v0.7.1).
 
 To begin testing:
 1. cd into zilliqa-rosetta folder
@@ -130,6 +130,64 @@ Note: The `mainnet_config.json` specifically **disables** historical balance loo
 
 For **testnet** tests, we begin the test from Block 1600000. Some of our much earlier testnet blocks, e.g. Block 270000++, cannot be fetch. Hence, it is recommended to skip certain sections of the testnet blocks.
 
+### End Conditions
+
+The end conditions for `check:data` on testnet is set to 600 seconds. Once the duration is up, the tests will terminate and a report would be displayed:
+```
+Success: Duration End Condition [Seconds: 600]
+
++--------------------+--------------------------------+------------+
+|  CHECK:DATA TESTS  |          DESCRIPTION           |   STATUS   |
++--------------------+--------------------------------+------------+
+| Request/Response   | Rosetta implementation         | PASSED     |
+|                    | serviced all requests          |            |
++--------------------+--------------------------------+------------+
+| Response Assertion | All responses are correctly    | PASSED     |
+|                    | formatted                      |            |
++--------------------+--------------------------------+------------+
+| Block Syncing      | Blocks are connected into a    | PASSED     |
+|                    | single canonical chain         |            |
++--------------------+--------------------------------+------------+
+| Balance Tracking   | Account balances did not go    | NOT TESTED |
+|                    | negative                       |            |
++--------------------+--------------------------------+------------+
+| Reconciliation     | No balance discrepencies were  | NOT TESTED |
+|                    | found between computed and     |            |
+|                    | live balances                  |            |
++--------------------+--------------------------------+------------+
+
++--------------------------+--------------------------------+-----------+
+|     CHECK:DATA STATS     |          DESCRIPTION           |   VALUE   |
++--------------------------+--------------------------------+-----------+
+| Blocks                   | # of blocks synced             |    101524 |
++--------------------------+--------------------------------+-----------+
+| Orphans                  | # of blocks orphaned           |         0 |
++--------------------------+--------------------------------+-----------+
+| Transactions             | # of transaction processed     |      5930 |
++--------------------------+--------------------------------+-----------+
+| Operations               | # of operations processed      |     10674 |
++--------------------------+--------------------------------+-----------+
+| Accounts                 | # of accounts seen             |         0 |
++--------------------------+--------------------------------+-----------+
+| Active Reconciliations   | # of reconciliations performed |         0 |
+|                          | after seeing an account in a   |           |
+|                          | block                          |           |
++--------------------------+--------------------------------+-----------+
+| Inactive Reconciliations | # of reconciliations performed |         0 |
+|                          | on randomly selected accounts  |           |
++--------------------------+--------------------------------+-----------+
+| Exempt Reconciliations   | # of reconciliation failures   |         0 |
+|                          | considered exempt              |           |
++--------------------------+--------------------------------+-----------+
+| Failed Reconciliations   | # of reconciliation failures   |         0 |
++--------------------------+--------------------------------+-----------+
+| Skipped Reconciliations  | # of reconciliations skipped   |         0 |
++--------------------------+--------------------------------+-----------+
+| Reconciliation Coverage  | % of accounts that have been   | 0.000000% |
+|                          | reconciled                     |           |
++--------------------------+--------------------------------+-----------+
+```
+
 ### Testing Construction API
 
 ```
@@ -149,12 +207,46 @@ Fund the stated `zil` address with **at least** the (value + gas fees), e.g. the
 
 Next, `rosetta-cli` would create a payment transaction from the created address to another created address.
 
-Lastly, the test is completed if you see this:
+### End Conditions
+
+The end conditions for `check:construction` is set to:
 ```
-[STATS] Transactions Confirmed: 360 (Created: 370, In Progress: 1, Stale: 6, Failed: 9) Addresses Created: 99
+  "create_account": 10,
+  "transfer": 10
 ```
 
-The construction API test would continue until the funds of the created accounts are emptied. You may halt the test at any time.
+Once the tests created 10 new accounts and peform a transfer operation on each account, the tests will terminate and a report would be displayed:
+```
+Success: {"create_account":10,"transfer":10}
+
++--------------------------+--------------------------------+-------+
+| CHECK:CONSTRUCTION STATS |          DESCRIPTION           | VALUE |
++--------------------------+--------------------------------+-------+
+| Addresses Created        | # of addresses created         |    11 |
++--------------------------+--------------------------------+-------+
+| Transactions Created     | # of transactions created      |    11 |
++--------------------------+--------------------------------+-------+
+| Stale Broadcasts         | # of broadcasts missing after  |     0 |
+|                          | stale depth                    |       |
++--------------------------+--------------------------------+-------+
+| Transactions Confirmed   | # of transactions seen         |    10 |
+|                          | on-chain                       |       |
++--------------------------+--------------------------------+-------+
+| Failed Broadcasts        | # of transactions that         |     0 |
+|                          | exceeded broadcast limit       |       |
++--------------------------+--------------------------------+-------+
++------------------------------+-------+
+| CHECK:CONSTRUCTION WORKFLOWS | COUNT |
++------------------------------+-------+
+| request_funds                |     0 |
++------------------------------+-------+
+| create_account               |    11 |
++------------------------------+-------+
+| transfer                     |    10 |
++------------------------------+-------+
+| return_funds                 |     0 |
++------------------------------+-------+
+```
 
 ## License
 
