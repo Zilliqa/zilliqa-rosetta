@@ -89,11 +89,11 @@ networks:
  mainnet:
     api: "https://api.zilliqa.com"
     chain_id: 1
-    node_version: "v8.0.4"
+    node_version: "v8.1.0"
  testnet:
     api: "https://dev-api.zilliqa.com"
     chain_id: 333
-    node_version: "v8.0.4"
+    node_version: "v8.1.0"
 ```
 
 ### Zilliqa Seed node keypair generation
