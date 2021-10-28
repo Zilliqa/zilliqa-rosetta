@@ -2,17 +2,16 @@ package services
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/Zilliqa/gozilliqa-sdk/provider"
 	rosettaUtil "github.com/Zilliqa/zilliqa-rosetta/util"
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
 // ConstructionPreprocess /construction/preprocess
 // create a request to fetch metadata
-// TODO - support contract deployment and contract call operations
-// support payment operation
+// gas price is obtained from config file as this api must be available in offline mode
+// @TODO - support contract deployment and contract call operations
+// @TODO - support payment operation
 func (c *ConstructionAPIService) ConstructionPreprocess(
 	ctx context.Context,
 	req *types.ConstructionPreprocessRequest,
@@ -40,20 +39,7 @@ func (c *ConstructionAPIService) ConstructionPreprocess(
 		}
 	}
 
-	api := c.Config.NodeAPI(req.NetworkIdentifier.Network)
-	rpcClient := provider.NewProvider(api)
-	minGasPrice, err := rpcClient.GetMinimumGasPrice()
-
-	if err != nil {
-		fmt.Println("error fetching min gas price")
-		return nil, &types.Error{
-			Code:      0,
-			Message:   err.Error(),
-			Retriable: true,
-		}
-	}
-
-	preProcessResp.Options[rosettaUtil.GAS_PRICE] = minGasPrice
+	preProcessResp.Options[rosettaUtil.GAS_PRICE] = rosettaUtil.GAS_PRICE
 	preProcessResp.Options[rosettaUtil.GAS_LIMIT] = rosettaUtil.GAS_LIMIT_VALUE
 	return preProcessResp, nil
 }
